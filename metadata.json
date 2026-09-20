@@ -1,0 +1,6 @@
+{
+  "name": "DukaanAI",
+  "description": "AI-powered business copilot for small shops in India with voice & Hinglish support, POS billing, inventory, digital khata, and smart analytics.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
