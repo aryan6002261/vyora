@@ -151,14 +151,43 @@ function processLocalAssistantQuery(query: string, context: any) {
     };
   }
 
+  // 7. Supplier Queries: pending payments, supplier details, purchase orders
+  const suppliers: any[] = context?.suppliers || [];
+  if (q.includes("supplier") || q.includes("distributor") || q.includes("dealer") || q.includes("wholesaler") || q.includes("po ")) {
+    if (q.includes("pending") || q.includes("payment") || q.includes("baki") || q.includes("due") || q.includes("kitna dena")) {
+      const pendingSuppliers = suppliers.filter((s: any) => (s.totalPendingPayment || 0) > 0);
+      const totalPending = pendingSuppliers.reduce((sum: number, s: any) => sum + (s.totalPendingPayment || 0), 0);
+      const list = pendingSuppliers.map((s: any) => `• **${s.companyName}** (${s.name}): ₹${(s.totalPendingPayment || 0).toLocaleString("en-IN")} due (Due date: ${s.nextPaymentDueDate || 'Soon'})`).join("\n");
+
+      return {
+        reply: `Sethji, suppliers ko kul **₹${totalPending.toLocaleString("en-IN")}** ka bhugtan pending hai:\n\n${list}\n\n💡 *Munimji Tip:* Aap 'Suppliers' tab mein jaa kar 1-click UPI ya Bank Transfer se payment record kar sakte hain.`,
+      };
+    }
+
+    const supplierNames = suppliers.map((s: any) => `• **${s.companyName}** (${s.category}) - 📞 ${s.phone}`).join("\n");
+    return {
+      reply: `Aapke registered wholesale suppliers:\n\n${supplierNames}\n\nAap kisi bhi supplier ko naya Purchase Order generate kar sakte hain!`,
+    };
+  }
+
+  // 8. Nearby / Map Queries: nearby shops, mandi, dairy, client vs merchant
+  const nearbyMerchants: any[] = context?.nearbyMerchants || [];
+  if (q.includes("nearby") || q.includes("paas") || q.includes("map") || q.includes("location") || q.includes("mandi") || q.includes("dukaan")) {
+    const list = nearbyMerchants.slice(0, 3).map((m: any) => `• **${m.storeName}** (${m.category}) - ${m.distanceKm} km door (⭐ ${m.rating})`).join("\n");
+    return {
+      reply: `Aapke aas-paas ke verified dukaandar aur mandi points:\n\n${list}\n\n📍 Inka exact visual location dekhne ke liye **Nearby Map** tab kholein. Wahan se direct Call ya WhatsApp bhi kar sakte hain!`,
+    };
+  }
+
   // Default friendly copilot response
   return {
-    reply: `Namaste Sethji! 🙏 Mai aapka DukaanAI Munimji hoon. Aap mujhse bol kar ya likh kar poohein:\n` +
+    reply: `Namaste Sethji! 🙏 Mai aapka DukaanAI Munimji hoon. Aap mujhse bol kar ya likh kar poochhein:\n` +
       `• *"Aaj kya bik raha hai?"*\n` +
       `• *"Atta kitna bacha hai?"*\n` +
       `• *"Ramesh ka 850 rupaye udhaar hai, reminder bana do."*\n` +
-      `• *"Aaj kitni sale hui?"*\n` +
-      `• *"Kya stock khatam hone wala hai?"*`,
+      `• *"Suppliers ka kitna payment baki hai?"*\n` +
+      `• *"Aas-paas konsi dukaanein hain?"*\n` +
+      `• *"Aaj kitni sale hui?"*`,
   };
 }
 
@@ -207,6 +236,25 @@ Current Store Context provided by the POS & Khata system:
           amount: s.totalAmount,
           mode: s.paymentMode,
           items: s.items?.map((i: any) => `${i.quantity}x ${i.productName}`).join(", "),
+        }))
+      )}
+- Wholesale Suppliers & Pending Payments: ${JSON.stringify(
+        (context?.suppliers || []).map((s: any) => ({
+          name: s.name,
+          company: s.companyName,
+          category: s.category,
+          phone: s.phone,
+          pendingAmount: s.totalPendingPayment,
+          nextDueDate: s.nextPaymentDueDate,
+        }))
+      )}
+- Nearby Shops / Directory: ${JSON.stringify(
+        (context?.nearbyMerchants || []).slice(0, 5).map((m: any) => ({
+          storeName: m.storeName,
+          category: m.category,
+          distance: `${m.distanceKm} km`,
+          rating: m.rating,
+          phone: m.phone,
         }))
       )}
 

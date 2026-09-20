@@ -8,9 +8,25 @@ import {
   ActionProposal, 
   Language, 
   PaymentMode, 
-  SaleItem 
+  SaleItem,
+  Supplier,
+  PurchaseOrder,
+  PurchaseOrderItem,
+  SupplierPayment,
+  UserProfile,
+  UserRole,
+  NearbyMerchant,
+  PaymentGatewayConfig
 } from '../types';
-import { INITIAL_PRODUCTS, INITIAL_CUSTOMERS, INITIAL_SALES } from '../data/initialData';
+import { 
+  INITIAL_PRODUCTS, 
+  INITIAL_CUSTOMERS, 
+  INITIAL_SALES,
+  INITIAL_SUPPLIERS,
+  INITIAL_NEARBY_MERCHANTS,
+  DEFAULT_USER_PROFILE,
+  INITIAL_PAYMENT_CONFIG
+} from '../data/initialData';
 
 interface DukaanContextType {
   language: Language;
@@ -43,6 +59,29 @@ interface DukaanContextType {
   stopSpeaking: () => void;
   resetToDemoData: () => void;
   openWhatsApp: (phone: string, message: string) => void;
+
+  // New Supplier & Purchase Order state & actions
+  suppliers: Supplier[];
+  addNewSupplier: (supplierData: Omit<Supplier, 'id' | 'totalOrdersCount' | 'totalPurchases' | 'totalPendingPayment' | 'purchaseOrders'>) => Supplier;
+  createPurchaseOrder: (supplierId: string, items: PurchaseOrderItem[], dueDate?: string) => PurchaseOrder;
+  recordSupplierPayment: (supplierId: string, orderId: string, amount: number, method: 'UPI' | 'NEFT' | 'CASH' | 'CHEQUE', refId?: string, note?: string) => void;
+  updatePurchaseOrderStatus: (supplierId: string, orderId: string, status: PurchaseOrder['status']) => void;
+  totalPendingSupplierPayments: number;
+  overdueSupplierPaymentsCount: number;
+  getPendingSupplierPaymentsCount: () => number;
+  getTotalSupplierPendingAmount: () => number;
+
+  // User Auth & Role state & actions
+  currentUser: UserProfile;
+  loginUser: (role: UserRole, authProvider: 'google' | 'phone', name?: string, phoneOrEmail?: string) => void;
+  logoutUser: () => void;
+  switchRole: (newRole: UserRole) => void;
+  updateUserProfile: (profile: Partial<UserProfile>) => void;
+  nearbyMerchants: NearbyMerchant[];
+
+  // Payment Gateway Configuration
+  paymentConfig: PaymentGatewayConfig;
+  updatePaymentConfig: (config: Partial<PaymentGatewayConfig>) => void;
 }
 
 const DukaanContext = createContext<DukaanContextType | undefined>(undefined);
@@ -53,6 +92,9 @@ const STORAGE_KEYS = {
   SALES: 'dukaan_sales_v1',
   CHAT: 'dukaan_chat_v1',
   LANG: 'dukaan_lang_v1',
+  SUPPLIERS: 'dukaan_suppliers_v1',
+  USER: 'dukaan_user_v1',
+  PAYMENT_CONFIG: 'dukaan_pay_config_v1',
 };
 
 export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -104,6 +146,34 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     ];
   });
 
+  const [suppliers, setSuppliers] = useState<Supplier[]>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.SUPPLIERS);
+      return saved ? JSON.parse(saved) : INITIAL_SUPPLIERS;
+    } catch {
+      return INITIAL_SUPPLIERS;
+    }
+  });
+
+  const [currentUser, setCurrentUser] = useState<UserProfile>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.USER);
+      return saved ? JSON.parse(saved) : DEFAULT_USER_PROFILE;
+    } catch {
+      return DEFAULT_USER_PROFILE;
+    }
+  });
+
+  const [paymentConfig, setPaymentConfig] = useState<PaymentGatewayConfig>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.PAYMENT_CONFIG);
+      return saved ? JSON.parse(saved) : INITIAL_PAYMENT_CONFIG;
+    } catch {
+      return INITIAL_PAYMENT_CONFIG;
+    }
+  });
+
+  const [nearbyMerchants] = useState<NearbyMerchant[]>(INITIAL_NEARBY_MERCHANTS);
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [cart, setCart] = useState<{ product: Product; quantity: number }[]>([]);
@@ -124,6 +194,18 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.CHAT, JSON.stringify(chatMessages));
   }, [chatMessages]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.SUPPLIERS, JSON.stringify(suppliers));
+  }, [suppliers]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(currentUser));
+  }, [currentUser]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.PAYMENT_CONFIG, JSON.stringify(paymentConfig));
+  }, [paymentConfig]);
 
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
@@ -479,6 +561,9 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             customers,
             sales,
             summary,
+            suppliers,
+            currentUser,
+            nearbyMerchants,
           },
         }),
       });
@@ -563,11 +648,221 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
   }, []);
 
+  // Supplier helper computations
+  const totalPendingSupplierPayments = useMemo(() => {
+    return suppliers.reduce((sum, supp) => sum + (supp.totalPendingPayment || 0), 0);
+  }, [suppliers]);
+
+  const overdueSupplierPaymentsCount = useMemo(() => {
+    const today = new Date().toISOString().split('T')[0];
+    let count = 0;
+    suppliers.forEach(s => {
+      s.purchaseOrders?.forEach(po => {
+        if (po.paymentStatus === 'OVERDUE' || (po.paymentStatus !== 'PAID' && po.dueDate && po.dueDate < today)) {
+          count++;
+        }
+      });
+    });
+    return count;
+  }, [suppliers]);
+
+  const getPendingSupplierPaymentsCount = useCallback(() => {
+    let count = 0;
+    suppliers.forEach(s => {
+      s.purchaseOrders?.forEach(po => {
+        if (po.paymentStatus !== 'PAID') {
+          count++;
+        }
+      });
+    });
+    return count;
+  }, [suppliers]);
+
+  const getTotalSupplierPendingAmount = useCallback(() => {
+    return suppliers.reduce((sum, supp) => sum + (supp.totalPendingPayment || 0), 0);
+  }, [suppliers]);
+
+  // Supplier action methods
+  const addNewSupplier = useCallback((supplierData: Omit<Supplier, 'id' | 'totalOrdersCount' | 'totalPurchases' | 'totalPendingPayment' | 'purchaseOrders'>): Supplier => {
+    const newSupplier: Supplier = {
+      ...supplierData,
+      id: `supp-${Date.now()}`,
+      totalOrdersCount: 0,
+      totalPurchases: 0,
+      totalPendingPayment: 0,
+      purchaseOrders: [],
+    };
+    setSuppliers(prev => [newSupplier, ...prev]);
+    return newSupplier;
+  }, []);
+
+  const createPurchaseOrder = useCallback((supplierId: string, items: PurchaseOrderItem[], dueDate?: string): PurchaseOrder => {
+    const totalAmount = items.reduce((sum, item) => sum + item.subtotal, 0);
+    const orderNumber = `PO-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const due = dueDate || new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
+
+    const targetSupplier = suppliers.find(s => s.id === supplierId);
+    const supplierName = targetSupplier ? targetSupplier.companyName : 'Supplier';
+
+    const newPO: PurchaseOrder = {
+      id: `po-${Date.now()}`,
+      orderNumber,
+      supplierId,
+      supplierName,
+      items,
+      totalAmount,
+      paidAmount: 0,
+      pendingAmount: totalAmount,
+      orderDate: new Date().toISOString(),
+      dueDate: due,
+      status: 'ORDERED',
+      paymentStatus: 'PENDING',
+      payments: []
+    };
+
+    setSuppliers(prev => prev.map(s => {
+      if (s.id === supplierId) {
+        return {
+          ...s,
+          totalOrdersCount: (s.totalOrdersCount || 0) + 1,
+          totalPurchases: (s.totalPurchases || 0) + totalAmount,
+          totalPendingPayment: (s.totalPendingPayment || 0) + totalAmount,
+          nextPaymentDueDate: due,
+          purchaseOrders: [newPO, ...(s.purchaseOrders || [])]
+        };
+      }
+      return s;
+    }));
+
+    return newPO;
+  }, [suppliers]);
+
+  const recordSupplierPayment = useCallback((
+    supplierId: string, 
+    orderId: string, 
+    amount: number, 
+    method: 'UPI' | 'NEFT' | 'CASH' | 'CHEQUE', 
+    refId?: string, 
+    note?: string
+  ) => {
+    const newPayment: SupplierPayment = {
+      id: `sp-${Date.now()}`,
+      amount,
+      date: new Date().toISOString(),
+      paymentMethod: method,
+      referenceId: refId || `REF-${Math.floor(100000 + Math.random() * 900000)}`,
+      note
+    };
+
+    setSuppliers(prev => prev.map(s => {
+      if (s.id === supplierId) {
+        let orderFound = false;
+        const updatedOrders = (s.purchaseOrders || []).map(po => {
+          if (po.id === orderId) {
+            orderFound = true;
+            const newPaid = po.paidAmount + amount;
+            const newPending = Math.max(0, po.totalAmount - newPaid);
+            const status: PurchaseOrder['paymentStatus'] = newPending === 0 ? 'PAID' : newPaid > 0 ? 'PARTIAL' : 'PENDING';
+            return {
+              ...po,
+              paidAmount: newPaid,
+              pendingAmount: newPending,
+              paymentStatus: status,
+              payments: [newPayment, ...(po.payments || [])]
+            };
+          }
+          return po;
+        });
+
+        const newTotalPending = Math.max(0, (s.totalPendingPayment || 0) - amount);
+
+        return {
+          ...s,
+          totalPendingPayment: newTotalPending,
+          purchaseOrders: updatedOrders
+        };
+      }
+      return s;
+    }));
+  }, []);
+
+  const updatePurchaseOrderStatus = useCallback((supplierId: string, orderId: string, status: PurchaseOrder['status']) => {
+    setSuppliers(prev => prev.map(s => {
+      if (s.id === supplierId) {
+        return {
+          ...s,
+          purchaseOrders: (s.purchaseOrders || []).map(po => {
+            if (po.id === orderId) {
+              return { ...po, status };
+            }
+            return po;
+          })
+        };
+      }
+      return s;
+    }));
+  }, []);
+
+  // User Auth & Switch actions
+  const loginUser = useCallback((role: UserRole, authProvider: 'google' | 'phone', name?: string, phoneOrEmail?: string) => {
+    const isGoogle = authProvider === 'google';
+    const profile: UserProfile = {
+      id: `user-${Date.now()}`,
+      name: name || (isGoogle ? 'Priya Verma (Client)' : 'Sharma General Kirana'),
+      phone: !isGoogle ? (phoneOrEmail || '+91 98765 43210') : '+91 98991 22334',
+      email: isGoogle ? (phoneOrEmail || 'user.demo@gmail.com') : undefined,
+      role,
+      authProvider,
+      storeName: role === 'MERCHANT' ? 'Sharma General Kirana Store' : undefined,
+      storeCategory: role === 'MERCHANT' ? 'Kirana & Daily Needs' : undefined,
+      address: role === 'MERCHANT' ? 'Shop 14, Pocket B Market, Mayur Vihar, Delhi' : 'Sector 15, Vasundhara Enclave, Delhi',
+      latitude: 28.6089,
+      longitude: 77.2965,
+    };
+    setCurrentUser(profile);
+    // If client, default to nearby merchants view
+    if (role === 'CLIENT') {
+      setActiveTab('nearby');
+    } else {
+      setActiveTab('dashboard');
+    }
+  }, []);
+
+  const logoutUser = useCallback(() => {
+    // Reset to default merchant
+    setCurrentUser(DEFAULT_USER_PROFILE);
+    setActiveTab('dashboard');
+  }, []);
+
+  const switchRole = useCallback((newRole: UserRole) => {
+    setCurrentUser(prev => ({
+      ...prev,
+      role: newRole,
+      storeName: newRole === 'MERCHANT' ? 'Sharma General Kirana Store' : undefined,
+    }));
+    if (newRole === 'CLIENT') {
+      setActiveTab('nearby');
+    } else {
+      setActiveTab('dashboard');
+    }
+  }, []);
+
+  const updateUserProfile = useCallback((profile: Partial<UserProfile>) => {
+    setCurrentUser(prev => ({ ...prev, ...profile }));
+  }, []);
+
+  const updatePaymentConfig = useCallback((config: Partial<PaymentGatewayConfig>) => {
+    setPaymentConfig(prev => ({ ...prev, ...config }));
+  }, []);
+
   // Reset to initial hackathon state
   const resetToDemoData = useCallback(() => {
     setProducts(INITIAL_PRODUCTS);
     setCustomers(INITIAL_CUSTOMERS);
     setSales(INITIAL_SALES);
+    setSuppliers(INITIAL_SUPPLIERS);
+    setCurrentUser(DEFAULT_USER_PROFILE);
+    setPaymentConfig(INITIAL_PAYMENT_CONFIG);
     setCart([]);
     setChatMessages([
       {
@@ -581,6 +876,9 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     localStorage.removeItem(STORAGE_KEYS.CUSTOMERS);
     localStorage.removeItem(STORAGE_KEYS.SALES);
     localStorage.removeItem(STORAGE_KEYS.CHAT);
+    localStorage.removeItem(STORAGE_KEYS.SUPPLIERS);
+    localStorage.removeItem(STORAGE_KEYS.USER);
+    localStorage.removeItem(STORAGE_KEYS.PAYMENT_CONFIG);
   }, []);
 
   return (
@@ -616,6 +914,23 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         stopSpeaking,
         resetToDemoData,
         openWhatsApp,
+        suppliers,
+        addNewSupplier,
+        createPurchaseOrder,
+        recordSupplierPayment,
+        updatePurchaseOrderStatus,
+        totalPendingSupplierPayments,
+        overdueSupplierPaymentsCount,
+        getPendingSupplierPaymentsCount,
+        getTotalSupplierPendingAmount,
+        currentUser,
+        loginUser,
+        logoutUser,
+        switchRole,
+        updateUserProfile,
+        nearbyMerchants,
+        paymentConfig,
+        updatePaymentConfig,
       }}
     >
       {children}

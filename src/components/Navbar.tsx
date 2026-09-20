@@ -10,16 +10,23 @@ import {
   Sparkles, 
   RotateCcw,
   Store,
-  HelpCircle
+  HelpCircle,
+  Truck,
+  MapPin,
+  User,
+  LogIn,
+  LogOut,
+  ChevronDown
 } from 'lucide-react';
 import { useDukaan } from '../context/DukaanContext';
 import { Language } from '../types';
 
 interface NavbarProps {
   onOpenDemoGuide: () => void;
+  onOpenLoginModal: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenDemoGuide }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenDemoGuide, onOpenLoginModal }) => {
   const { 
     activeTab, 
     setActiveTab, 
@@ -27,17 +34,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDemoGuide }) => {
     summary, 
     language, 
     setLanguage, 
-    resetToDemoData 
+    resetToDemoData,
+    currentUser,
+    logoutUser,
+    switchRole,
+    getPendingSupplierPaymentsCount
   } = useDukaan();
 
   const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
+  const pendingSupplierPaymentsCount = getPendingSupplierPaymentsCount();
 
   const tabs = [
     { 
       id: 'dashboard', 
       label: 'Dashboard', 
       labelHindi: 'डैशबोर्ड', 
-      icon: LayoutDashboard 
+      icon: LayoutDashboard,
+      hideForClient: true
     },
     { 
       id: 'sales', 
@@ -45,7 +58,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDemoGuide }) => {
       labelHindi: 'नयी बिक्री', 
       icon: ShoppingBag, 
       badge: cartItemCount > 0 ? cartItemCount : null,
-      badgeColor: 'bg-emerald-600'
+      badgeColor: 'bg-emerald-600',
+      hideForClient: true
     },
     { 
       id: 'inventory', 
@@ -53,28 +67,49 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDemoGuide }) => {
       labelHindi: 'स्टॉक / सामान', 
       icon: Package,
       badge: summary.lowStockItemsCount > 0 ? summary.lowStockItemsCount : null,
-      badgeColor: 'bg-amber-500'
+      badgeColor: 'bg-amber-500',
+      hideForClient: true
     },
     { 
       id: 'khata', 
       label: 'Digital Khata', 
       labelHindi: 'उधार खाता', 
-      icon: BookOpen 
+      icon: BookOpen,
+      hideForClient: true
+    },
+    { 
+      id: 'suppliers', 
+      label: 'Suppliers', 
+      labelHindi: 'सप्लायर्स & थोक', 
+      icon: Truck,
+      badge: pendingSupplierPaymentsCount > 0 ? pendingSupplierPaymentsCount : null,
+      badgeColor: 'bg-rose-500',
+      hideForClient: true
+    },
+    { 
+      id: 'nearby', 
+      label: currentUser.role === 'CLIENT' ? 'Nearby Shops & Map' : 'Nearby & Map', 
+      labelHindi: currentUser.role === 'CLIENT' ? 'आस-पास की दुकानें' : 'आस-पास के सप्लायर्स', 
+      icon: MapPin,
+      highlight: currentUser.role === 'CLIENT'
     },
     { 
       id: 'assistant', 
       label: 'AI Assistant', 
       labelHindi: 'AI मुनीमजी', 
       icon: Bot,
-      highlight: true
+      highlight: currentUser.role === 'MERCHANT'
     },
     { 
       id: 'analytics', 
       label: 'Analytics', 
       labelHindi: 'रिपोर्ट & मुनाफा', 
-      icon: BarChart3 
+      icon: BarChart3,
+      hideForClient: true
     },
   ];
+
+  const visibleTabs = tabs.filter(t => !(currentUser.role === 'CLIENT' && t.hideForClient));
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs">
@@ -90,7 +125,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDemoGuide }) => {
                 Dukaan<span className="text-emerald-600">AI</span>
               </h1>
               <span className="hidden sm:inline-flex text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full">
-                🇮🇳 Made for Bharat Kirana
+                🇮🇳 {currentUser.role === 'MERCHANT' ? 'Merchant Portal' : 'Customer Directory'}
               </span>
             </div>
             <p className="text-xs text-slate-500 font-medium">
@@ -101,15 +136,56 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDemoGuide }) => {
 
         {/* Right Action Bar */}
         <div className="flex items-center gap-2">
+          {/* User Profile / Login Toggle */}
+          {currentUser.isLoggedIn ? (
+            <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 text-xs">
+              <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-[11px]">
+                {currentUser.role === 'MERCHANT' ? '🏪' : '👤'}
+              </div>
+              <div className="hidden sm:block text-left">
+                <div className="font-extrabold text-slate-800 leading-tight">
+                  {currentUser.name}
+                </div>
+                <div className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">
+                  {currentUser.role}
+                </div>
+              </div>
+
+              <button
+                onClick={() => switchRole(currentUser.role === 'MERCHANT' ? 'CLIENT' : 'MERCHANT')}
+                className="ml-1 text-[10px] font-bold text-slate-600 hover:text-emerald-700 px-1.5 py-0.5 bg-white border border-slate-200 rounded shadow-2xs"
+                title="Switch view mode between Merchant and Client"
+              >
+                Switch
+              </button>
+
+              <button
+                onClick={logoutUser}
+                className="text-slate-400 hover:text-rose-600 p-1"
+                title="Logout"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={onOpenLoginModal}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-xs transition-all"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Login</span>
+            </button>
+          )}
+
           {/* Demo Guide Button */}
           <button
             id="btn-demo-guide"
             onClick={onOpenDemoGuide}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 rounded-lg transition-colors shadow-2xs"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 rounded-lg transition-colors shadow-2xs"
             title="Open Demo Flow walkthrough"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
-            <span className="hidden xs:inline">Demo Flow</span>
+            <span>Demo Flow</span>
           </button>
 
           {/* Language Selector */}
@@ -167,7 +243,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDemoGuide }) => {
             className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-xs transition-colors"
           >
             <Mic className="w-3.5 h-3.5" />
-            <span className="hidden md:inline">Bol kar Poocho</span>
+            <span className="hidden md:inline">Voice</span>
           </button>
         </div>
       </div>
@@ -175,7 +251,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDemoGuide }) => {
       {/* Main Tab Navigation */}
       <nav className="max-w-7xl mx-auto px-2 sm:px-6 overflow-x-auto scrollbar-none border-t border-slate-100">
         <div className="flex space-x-1 py-1.5 min-w-max">
-          {tabs.map(tab => {
+          {visibleTabs.map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (

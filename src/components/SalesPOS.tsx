@@ -14,7 +14,13 @@ import {
   Share2,
   Printer,
   Sparkles,
-  ShoppingBag
+  ShoppingBag,
+  ExternalLink,
+  Smartphone,
+  ShieldCheck,
+  Check,
+  Copy,
+  Volume2
 } from 'lucide-react';
 import { useDukaan } from '../context/DukaanContext';
 import { Product, PaymentMode, ProductCategory, Sale } from '../types';
@@ -30,15 +36,20 @@ export const SalesPOS: React.FC = () => {
     processSale, 
     customers, 
     language,
-    openWhatsApp 
+    openWhatsApp,
+    paymentConfig,
+    speakText 
   } = useDukaan();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [paymentMode, setPaymentMode] = useState<PaymentMode>('CASH');
+  const [paymentMode, setPaymentMode] = useState<PaymentMode>('UPI');
+  const [digitalGateway, setDigitalGateway] = useState<'UPI' | 'PAYTM' | 'PHONEPE' | 'GPAY'>('UPI');
   const [selectedCustomerId, setSelectedCustomerId] = useState<string>(customers[0]?.id || '');
   const [completedSale, setCompletedSale] = useState<Sale | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [copiedUpi, setCopiedUpi] = useState(false);
+  const [showQrModal, setShowQrModal] = useState(false);
 
   const categories = ['All', 'Grains & Atta', 'Dairy & Eggs', 'Oils & Ghee', 'Spices & Masala', 'Snacks & Biscuits', 'Beverages', 'Cleaning & Household', 'Personal Care'];
 
@@ -71,6 +82,24 @@ export const SalesPOS: React.FC = () => {
     return customers.find(c => c.id === selectedCustomerId);
   }, [customers, selectedCustomerId]);
 
+  // Dynamic UPI Payment Link & QR Code string
+  const upiPayString = useMemo(() => {
+    const upiId = paymentConfig?.merchantUpiId || 'dukaan.sharma@okaxis';
+    const merchantName = encodeURIComponent(paymentConfig?.merchantName || 'Sharma Kirana Store');
+    return `upi://pay?pa=${upiId}&pn=${merchantName}&am=${cartSubtotal}&cu=INR&tn=DukaanAI_Bill`;
+  }, [paymentConfig, cartSubtotal]);
+
+  // Generate dynamic QR Code URL via high-speed QR SVG API
+  const qrCodeImageUrl = useMemo(() => {
+    return `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(upiPayString)}`;
+  }, [upiPayString]);
+
+  const handleCopyUpi = () => {
+    navigator.clipboard?.writeText(paymentConfig.merchantUpiId);
+    setCopiedUpi(true);
+    setTimeout(() => setCopiedUpi(false), 2000);
+  };
+
   const handleCheckout = async () => {
     if (cart.length === 0) return;
 
@@ -87,6 +116,16 @@ export const SalesPOS: React.FC = () => {
         paymentMode === 'UDHAAR' ? selectedCustomer?.name : undefined
       );
       setCompletedSale(sale);
+
+      // Trigger Hindi/English Soundbox Voice Alert announcement!
+      if (paymentMode === 'UPI') {
+        const audioMsg = language === 'hindi'
+          ? `पेटीएम पर ${sale.totalAmount} रुपये प्राप्त हुए!`
+          : `Payment of ${sale.totalAmount} rupees received successfully via UPI!`;
+        try {
+          speakText(audioMsg);
+        } catch {}
+      }
     } catch (err: any) {
       alert(err.message || 'Sale process karne mein truti hui');
     } finally {
@@ -100,7 +139,7 @@ export const SalesPOS: React.FC = () => {
       `📅 Tareekh: ${new Date(sale.timestamp).toLocaleDateString()} ${new Date(sale.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\n\n` +
       `*Kharidari Summary:*\n${itemsText}\n\n` +
       `💰 *Kul Yog: ₹${sale.totalAmount}*\n` +
-      `💳 Bhugtan Mode: ${sale.paymentMode}\n` +
+      `💳 Bhugtan Mode: ${sale.paymentMode} (${digitalGateway})\n` +
       (sale.paymentMode === 'UDHAAR' ? `📝 Khata Udhaar Balance: ₹${(selectedCustomer?.udhaarBalance || 0)}\n` : '') +
       `\nAapki dukaan par aane ke liye dhanyawad! 🙏`;
 
@@ -319,17 +358,38 @@ export const SalesPOS: React.FC = () => {
           </div>
 
           {/* Payment Mode Selector */}
-          <div className="pt-3 border-t border-slate-100 space-y-2">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-              Payment Mode (भुगतान का तरीका)
-            </label>
+          <div className="pt-3 border-t border-slate-100 space-y-2.5">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
+                Payment Mode (भुगतान का तरीका)
+              </label>
+              {paymentMode === 'UPI' && (
+                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-emerald-600" /> Instant Bank Settlement
+                </span>
+              )}
+            </div>
+
             <div className="grid grid-cols-3 gap-2">
+              <button
+                type="button"
+                onClick={() => setPaymentMode('UPI')}
+                className={`flex flex-col items-center justify-center p-2 rounded-xl border text-xs font-bold transition-all ${
+                  paymentMode === 'UPI'
+                    ? 'bg-blue-50 text-blue-900 border-blue-500 ring-2 ring-blue-500/20 shadow-xs'
+                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                }`}
+              >
+                <QrCode className="w-4 h-4 mb-1 text-blue-600" />
+                <span>UPI / Paytm</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => setPaymentMode('CASH')}
                 className={`flex flex-col items-center justify-center p-2 rounded-xl border text-xs font-bold transition-all ${
                   paymentMode === 'CASH'
-                    ? 'bg-emerald-50 text-emerald-900 border-emerald-500 ring-2 ring-emerald-500/20'
+                    ? 'bg-emerald-50 text-emerald-900 border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs'
                     : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                 }`}
               >
@@ -339,23 +399,10 @@ export const SalesPOS: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => setPaymentMode('UPI')}
-                className={`flex flex-col items-center justify-center p-2 rounded-xl border text-xs font-bold transition-all ${
-                  paymentMode === 'UPI'
-                    ? 'bg-blue-50 text-blue-900 border-blue-500 ring-2 ring-blue-500/20'
-                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                <QrCode className="w-4 h-4 mb-1 text-blue-600" />
-                <span>UPI / QR</span>
-              </button>
-
-              <button
-                type="button"
                 onClick={() => setPaymentMode('UDHAAR')}
                 className={`flex flex-col items-center justify-center p-2 rounded-xl border text-xs font-bold transition-all ${
                   paymentMode === 'UDHAAR'
-                    ? 'bg-rose-50 text-rose-900 border-rose-500 ring-2 ring-rose-500/20'
+                    ? 'bg-rose-50 text-rose-900 border-rose-500 ring-2 ring-rose-500/20 shadow-xs'
                     : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                 }`}
               >
@@ -364,6 +411,99 @@ export const SalesPOS: React.FC = () => {
               </button>
             </div>
           </div>
+
+          {/* Integrated Digital Payment Gateways Selection (When UPI is chosen) */}
+          {paymentMode === 'UPI' && (
+            <div className="p-3 bg-blue-50/50 border border-blue-200 rounded-xl space-y-3">
+              <div className="flex items-center justify-between text-xs font-bold text-blue-900">
+                <span>Select Digital Gateway / UPI Provider:</span>
+                <span className="text-[10px] text-blue-700 bg-blue-100/60 px-1.5 py-0.5 rounded">
+                  0% MDR Fee
+                </span>
+              </div>
+
+              {/* Gateway selector buttons */}
+              <div className="grid grid-cols-4 gap-1.5">
+                {[
+                  { id: 'UPI', label: 'BHIM UPI', color: 'border-blue-400 text-blue-800' },
+                  { id: 'PAYTM', label: 'Paytm', color: 'border-sky-400 text-sky-800' },
+                  { id: 'PHONEPE', label: 'PhonePe', color: 'border-purple-400 text-purple-800' },
+                  { id: 'GPAY', label: 'Google Pay', color: 'border-emerald-400 text-emerald-800' },
+                ].map(gw => (
+                  <button
+                    key={gw.id}
+                    type="button"
+                    onClick={() => setDigitalGateway(gw.id as any)}
+                    className={`py-1.5 px-2 rounded-lg text-xs font-extrabold transition-all border ${
+                      digitalGateway === gw.id
+                        ? 'bg-white shadow-xs ring-2 ring-blue-500 border-blue-500 text-slate-900'
+                        : 'bg-white/60 hover:bg-white text-slate-600 border-slate-200'
+                    }`}
+                  >
+                    {gw.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Dynamic QR & VPA Box */}
+              <div className="flex items-center gap-3 bg-white p-2.5 rounded-lg border border-blue-100">
+                {cartSubtotal > 0 ? (
+                  <div 
+                    onClick={() => setShowQrModal(true)}
+                    className="cursor-pointer group relative shrink-0"
+                    title="Click to expand QR Code"
+                  >
+                    <img
+                      src={qrCodeImageUrl}
+                      alt="UPI Payment QR Code"
+                      className="w-16 h-16 rounded border border-slate-200 object-contain group-hover:opacity-90 transition-opacity"
+                    />
+                    <div className="absolute inset-0 bg-blue-900/10 rounded flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <QrCode className="w-5 h-5 text-blue-700" />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-16 h-16 rounded bg-slate-100 border border-dashed border-slate-300 flex items-center justify-center shrink-0">
+                    <QrCode className="w-6 h-6 text-slate-400" />
+                  </div>
+                )}
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                      Merchant VPA / QR
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setShowQrModal(true)}
+                      className="text-[10px] font-bold text-blue-600 hover:text-blue-800 underline"
+                    >
+                      Bada QR Dekhein
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <code className="text-xs font-bold text-slate-800 truncate">
+                      {paymentConfig.merchantUpiId}
+                    </code>
+                    <button
+                      type="button"
+                      onClick={handleCopyUpi}
+                      className="text-slate-400 hover:text-slate-700 p-0.5 shrink-0"
+                      title="Copy UPI ID"
+                    >
+                      {copiedUpi ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+
+                  <div className="text-[10px] text-slate-500 mt-1 flex items-center gap-1">
+                    <Volume2 className="w-3 h-3 text-blue-600 shrink-0" />
+                    <span>Dukaan Soundbox voice confirmation active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Customer Picker for Udhaar Mode */}
           {paymentMode === 'UDHAAR' && (
@@ -471,6 +611,67 @@ export const SalesPOS: React.FC = () => {
                 Close & Next Sale
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Full Size UPI / Paytm QR Display Modal */}
+      {showQrModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border border-slate-100 space-y-4 animate-in fade-in zoom-in duration-150">
+            {/* Top Merchant Branding */}
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="text-left">
+                <h3 className="text-base font-black text-slate-900">
+                  {paymentConfig.merchantName}
+                </h3>
+                <p className="text-xs text-slate-500 font-medium">
+                  Accepted Here: Paytm • PhonePe • GPay • BHIM
+                </p>
+              </div>
+              <button
+                onClick={() => setShowQrModal(false)}
+                className="text-slate-400 hover:text-slate-700 p-1"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* High Definition QR Code */}
+            <div className="bg-gradient-to-b from-blue-50 to-indigo-50/40 p-4 rounded-2xl border-2 border-dashed border-blue-300 inline-block mx-auto">
+              <img
+                src={qrCodeImageUrl}
+                alt="Scan to Pay"
+                className="w-56 h-56 rounded-xl mx-auto shadow-xs bg-white p-2"
+              />
+              <div className="mt-2 text-xs font-black text-slate-800">
+                Amount: ₹{cartSubtotal > 0 ? cartSubtotal : 'Open Amount'}
+              </div>
+            </div>
+
+            {/* UPI ID Details */}
+            <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
+              <span className="text-slate-500 font-medium truncate mr-2">
+                UPI ID: <strong className="text-slate-800">{paymentConfig.merchantUpiId}</strong>
+              </span>
+              <button
+                onClick={handleCopyUpi}
+                className="text-xs font-bold text-blue-600 hover:text-blue-800 shrink-0"
+              >
+                {copiedUpi ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+
+            <p className="text-[11px] text-slate-500 font-medium">
+              Grahak kisi bhi UPI app (Paytm, Google Pay, PhonePe, Cred) se scan karke pay kar sakte hain.
+            </p>
+
+            <button
+              onClick={() => setShowQrModal(false)}
+              className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl"
+            >
+              Done / Close QR
+            </button>
           </div>
         </div>
       )}

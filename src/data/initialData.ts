@@ -1,4 +1,4 @@
-import { Product, Customer, Sale } from '../types';
+import { Product, Customer, Sale, Supplier, NearbyMerchant, UserProfile, PaymentGatewayConfig } from '../types';
 
 export const INITIAL_PRODUCTS: Product[] = [
   {
@@ -396,3 +396,260 @@ export const INITIAL_SALES: Sale[] = [
     timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString() // Today, 15 mins ago
   }
 ];
+
+export const INITIAL_PAYMENT_CONFIG: PaymentGatewayConfig = {
+  merchantUpiId: 'dukaan.sharma@okaxis',
+  merchantName: 'Sharma General Kirana Store',
+  paytmNumber: '9876543210',
+  preferredGateway: 'UPI',
+  isVerified: true,
+};
+
+export const INITIAL_SUPPLIERS: Supplier[] = [
+  {
+    id: 'supp-1',
+    name: 'Rajesh Agrawal',
+    companyName: 'Agrawal Grains & Pulses Wholesale',
+    category: 'Grains, Atta & Pulses',
+    phone: '+91 98112 34567',
+    email: 'agrawal.wholesale@gmail.com',
+    address: 'Shop No. 42, Krishi Upaj Mandi, Sector 12',
+    city: 'Delhi NCR',
+    state: 'Delhi',
+    pincode: '110085',
+    gstin: '07AAAAA0000A1Z5',
+    latitude: 28.6289,
+    longitude: 77.2065,
+    distanceKm: 1.8,
+    totalOrdersCount: 8,
+    totalPurchases: 48500,
+    totalPendingPayment: 9200,
+    nextPaymentDueDate: new Date(Date.now() + 2 * 86400000).toISOString().split('T')[0], // 2 days from now
+    rating: 4.8,
+    itemsSupplied: ['Aashirvaad Atta', 'Basmati Rice', 'Moong Dal', 'Toor Dal', 'Chana'],
+    purchaseOrders: [
+      {
+        id: 'po-101',
+        orderNumber: 'PO-2026-001',
+        supplierId: 'supp-1',
+        supplierName: 'Agrawal Grains Wholesale',
+        items: [
+          { productName: 'Aashirvaad Shudh Chakki Atta (10kg)', quantity: 20, unit: 'packet', unitCost: 385, subtotal: 7700 },
+          { productName: 'Fortune Sunlite Sunflower Oil (1L)', quantity: 24, unit: 'packet', unitCost: 130, subtotal: 3120 }
+        ],
+        totalAmount: 10820,
+        paidAmount: 6000,
+        pendingAmount: 4820,
+        orderDate: new Date(Date.now() - 5 * 86400000).toISOString(),
+        dueDate: new Date(Date.now() + 2 * 86400000).toISOString().split('T')[0],
+        status: 'RECEIVED',
+        paymentStatus: 'PARTIAL',
+        payments: [
+          { id: 'sp-1', amount: 6000, date: new Date(Date.now() - 4 * 86400000).toISOString(), paymentMethod: 'UPI', referenceId: 'UPI-98237461' }
+        ]
+      },
+      {
+        id: 'po-102',
+        orderNumber: 'PO-2026-002',
+        supplierId: 'supp-1',
+        supplierName: 'Agrawal Grains Wholesale',
+        items: [
+          { productName: 'Basmati Rice Premium (5kg)', quantity: 15, unit: 'packet', unitCost: 290, subtotal: 4350 }
+        ],
+        totalAmount: 4380,
+        paidAmount: 0,
+        pendingAmount: 4380,
+        orderDate: new Date(Date.now() - 1 * 86400000).toISOString(),
+        dueDate: new Date(Date.now() + 6 * 86400000).toISOString().split('T')[0],
+        status: 'ORDERED',
+        paymentStatus: 'PENDING',
+        payments: []
+      }
+    ]
+  },
+  {
+    id: 'supp-2',
+    name: 'Suresh Kumar',
+    companyName: 'Delhi Dairy & Beverage Distributors',
+    category: 'Dairy, Milk & Cold Beverages',
+    phone: '+91 98711 88223',
+    email: 'delhidairy.dist@yahoo.com',
+    address: 'Plot 15, Industrial Area, Phase 2',
+    city: 'Delhi NCR',
+    state: 'Delhi',
+    pincode: '110020',
+    gstin: '07BBBBB1111B2Z6',
+    latitude: 28.6142,
+    longitude: 77.2198,
+    distanceKm: 3.2,
+    totalOrdersCount: 14,
+    totalPurchases: 32400,
+    totalPendingPayment: 3500,
+    nextPaymentDueDate: new Date(Date.now() - 1 * 86400000).toISOString().split('T')[0], // Overdue by 1 day!
+    rating: 4.6,
+    itemsSupplied: ['Amul Taaza Milk', 'Amul Butter', 'Mother Dairy Paneer', 'Frooti', 'Coca-Cola'],
+    purchaseOrders: [
+      {
+        id: 'po-103',
+        orderNumber: 'PO-2026-003',
+        supplierId: 'supp-2',
+        supplierName: 'Delhi Dairy Distributors',
+        items: [
+          { productName: 'Amul Taaza Toned Milk (500ml)', quantity: 50, unit: 'packet', unitCost: 25, subtotal: 1250 },
+          { productName: 'Amul Butter (100g)', quantity: 30, unit: 'packet', unitCost: 52, subtotal: 1560 },
+          { productName: 'Amul Paneer (200g)', quantity: 15, unit: 'packet', unitCost: 75, subtotal: 1125 }
+        ],
+        totalAmount: 3935,
+        paidAmount: 435,
+        pendingAmount: 3500,
+        orderDate: new Date(Date.now() - 7 * 86400000).toISOString(),
+        dueDate: new Date(Date.now() - 1 * 86400000).toISOString().split('T')[0],
+        status: 'RECEIVED',
+        paymentStatus: 'OVERDUE',
+        payments: [
+          { id: 'sp-2', amount: 435, date: new Date(Date.now() - 6 * 86400000).toISOString(), paymentMethod: 'CASH', note: 'Token advance' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'supp-3',
+    name: 'Manish Gupta',
+    companyName: 'Gupta FMCG & Spices Traders',
+    category: 'Packaged Snacks, Spices & Cleaning',
+    phone: '+91 99100 44556',
+    email: 'guptafmcg@rediffmail.com',
+    address: 'Khari Baoli Main Bazaar, Old Delhi',
+    city: 'Delhi NCR',
+    state: 'Delhi',
+    pincode: '110006',
+    gstin: '07CCCCC2222C3Z7',
+    latitude: 28.6562,
+    longitude: 77.2285,
+    distanceKm: 4.5,
+    totalOrdersCount: 6,
+    totalPurchases: 27900,
+    totalPendingPayment: 0,
+    rating: 4.9,
+    itemsSupplied: ['MDH Masale', 'Tata Salt', 'Maggi Noodles', 'Surf Excel', 'Parle-G'],
+    purchaseOrders: [
+      {
+        id: 'po-104',
+        orderNumber: 'PO-2026-004',
+        supplierId: 'supp-3',
+        supplierName: 'Gupta FMCG Traders',
+        items: [
+          { productName: 'MDH Deggi Mirch (100g)', quantity: 30, unit: 'box', unitCost: 78, subtotal: 2340 },
+          { productName: 'Maggi 2-Minute Noodles (70g)', quantity: 96, unit: 'packet', unitCost: 11.5, subtotal: 1104 }
+        ],
+        totalAmount: 3444,
+        paidAmount: 3444,
+        pendingAmount: 0,
+        orderDate: new Date(Date.now() - 10 * 86400000).toISOString(),
+        dueDate: new Date(Date.now() - 3 * 86400000).toISOString().split('T')[0],
+        status: 'RECEIVED',
+        paymentStatus: 'PAID',
+        payments: [
+          { id: 'sp-3', amount: 3444, date: new Date(Date.now() - 3 * 86400000).toISOString(), paymentMethod: 'UPI', referenceId: 'UPI-77112288' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'supp-4',
+    name: 'Vikas Sharma',
+    companyName: 'Sharma Packaging & Daily Essentials',
+    category: 'Packaging, Bags & Disposables',
+    phone: '+91 98105 77119',
+    address: 'Warehouse 9, Okhla Industrial Area',
+    city: 'Delhi NCR',
+    latitude: 28.5355,
+    longitude: 77.2732,
+    distanceKm: 6.8,
+    totalOrdersCount: 3,
+    totalPurchases: 8400,
+    totalPendingPayment: 1800,
+    nextPaymentDueDate: new Date(Date.now() + 5 * 86400000).toISOString().split('T')[0],
+    rating: 4.5,
+    itemsSupplied: ['Carry Bags (Cloth/Paper)', 'Packaging Tape', 'Dukan Receipt Rolls'],
+    purchaseOrders: []
+  }
+];
+
+export const INITIAL_NEARBY_MERCHANTS: NearbyMerchant[] = [
+  {
+    id: 'merch-1',
+    name: 'Ramesh Sharma',
+    storeName: 'Sharma General Kirana Store',
+    category: 'Daily Grocery & Dairy',
+    phone: '+91 98765 43210',
+    rating: 4.8,
+    address: 'Shop 14, Pocket B Market, Mayur Vihar',
+    latitude: 28.6089,
+    longitude: 77.2965,
+    distanceKm: 0.3,
+    isOpen: true,
+    upiId: 'dukaan.sharma@okaxis',
+    popularItems: ['Aashirvaad Atta', 'Amul Milk', 'Fortune Oil', 'Tata Salt']
+  },
+  {
+    id: 'merch-2',
+    name: 'Mohit Verma',
+    storeName: 'Verma Provision & Daily Needs',
+    category: 'Spices, FMCG & Beverages',
+    phone: '+91 98110 99881',
+    rating: 4.6,
+    address: 'G-4, Central Market, Laxmi Nagar',
+    latitude: 28.6312,
+    longitude: 77.2778,
+    distanceKm: 1.1,
+    isOpen: true,
+    upiId: 'verma.kirana@paytm',
+    popularItems: ['MDH Masale', 'Surf Excel', 'Cadbury Dairy Milk', 'Maggi']
+  },
+  {
+    id: 'merch-3',
+    name: 'Pooja Agarwal',
+    storeName: 'Krishna Dairy & Organic Store',
+    category: 'Fresh Dairy, Paneer & Ghee',
+    phone: '+91 98991 22334',
+    rating: 4.9,
+    address: 'Near Shivalik Park, Malviya Nagar',
+    latitude: 28.5412,
+    longitude: 77.2089,
+    distanceKm: 2.4,
+    isOpen: true,
+    upiId: 'krishnadairy@okhdfcbank',
+    popularItems: ['Desi Ghee', 'Fresh Paneer', 'Amul Taaza Milk', 'Organic Honey']
+  },
+  {
+    id: 'merch-4',
+    name: 'Sunil Gupta',
+    storeName: 'Gupta Super Mart & Chemist',
+    category: 'Personal Care & Groceries',
+    phone: '+91 98101 55667',
+    rating: 4.5,
+    address: 'Shop 2, Block C, Lajpat Nagar 2',
+    latitude: 28.5714,
+    longitude: 77.2412,
+    distanceKm: 3.5,
+    isOpen: false,
+    upiId: 'guptasupermart@icici',
+    popularItems: ['Dettol Soap', 'Colgate Total', 'Dry Fruits', 'Beverages']
+  }
+];
+
+export const DEFAULT_USER_PROFILE: UserProfile = {
+  id: 'user-merchant-1',
+  name: 'Ramesh Sharma',
+  phone: '+91 98765 43210',
+  email: 'ramesh.sharma.kirana@gmail.com',
+  role: 'MERCHANT',
+  authProvider: 'phone',
+  isLoggedIn: true,
+  storeName: 'Sharma General Kirana Store',
+  storeCategory: 'Kirana & General Store',
+  address: 'Shop 14, Pocket B Market, Mayur Vihar, Delhi',
+  latitude: 28.6089,
+  longitude: 77.2965,
+};

@@ -112,3 +112,106 @@ export interface BusinessSummary {
   upiRevenue: number;
   udhaarRevenue: number;
 }
+
+// ============ SUPPLIERS & PURCHASE ORDERS ============
+export type SupplierPaymentStatus = 'PAID' | 'PARTIAL' | 'PENDING' | 'OVERDUE';
+
+export interface SupplierPayment {
+  id: string;
+  amount: number;
+  date: string;
+  paymentMethod: 'UPI' | 'NEFT' | 'CASH' | 'CHEQUE';
+  referenceId?: string;
+  note?: string;
+}
+
+export interface PurchaseOrderItem {
+  productId?: string;
+  productName: string;
+  quantity: number;
+  unit: UnitType;
+  unitCost: number;
+  subtotal: number;
+}
+
+export interface PurchaseOrder {
+  id: string;
+  orderNumber: string;
+  supplierId: string;
+  supplierName: string;
+  items: PurchaseOrderItem[];
+  totalAmount: number;
+  paidAmount: number;
+  pendingAmount: number;
+  orderDate: string;
+  dueDate: string;
+  status: 'DRAFT' | 'ORDERED' | 'RECEIVED' | 'CANCELLED';
+  paymentStatus: SupplierPaymentStatus;
+  payments: SupplierPayment[];
+}
+
+export interface Supplier {
+  id: string;
+  name: string;
+  companyName: string;
+  category: string;
+  phone: string;
+  email?: string;
+  address: string;
+  city: string;
+  state?: string;
+  pincode?: string;
+  gstin?: string;
+  latitude: number;
+  longitude: number;
+  distanceKm?: number;
+  totalOrdersCount: number;
+  totalPurchases: number;
+  totalPendingPayment: number;
+  nextPaymentDueDate?: string;
+  rating?: number;
+  itemsSupplied?: string[];
+  purchaseOrders: PurchaseOrder[];
+}
+
+// ============ USER AUTH & ROLE (Merchant vs Client) ============
+export type UserRole = 'MERCHANT' | 'CLIENT';
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  phone: string;
+  email?: string;
+  role: UserRole;
+  authProvider: 'google' | 'phone';
+  isLoggedIn?: boolean;
+  storeName?: string;
+  storeCategory?: string;
+  address?: string;
+  latitude: number;
+  longitude: number;
+}
+
+export interface NearbyMerchant {
+  id: string;
+  name: string;
+  storeName: string;
+  category: string;
+  phone: string;
+  rating: number;
+  address: string;
+  latitude: number;
+  longitude: number;
+  distanceKm: number;
+  isOpen: boolean;
+  upiId: string;
+  popularItems: string[];
+}
+
+export interface PaymentGatewayConfig {
+  merchantUpiId: string;
+  merchantName: string;
+  paytmNumber?: string;
+  preferredGateway: 'UPI' | 'PAYTM' | 'PHONEPE' | 'GPAY' | 'RAZORPAY';
+  isVerified: boolean;
+}

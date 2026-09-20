@@ -5,16 +5,20 @@ import { Dashboard } from './components/Dashboard';
 import { SalesPOS } from './components/SalesPOS';
 import { Inventory } from './components/Inventory';
 import { Khata } from './components/Khata';
+import { SuppliersModule } from './components/SuppliersModule';
+import { NearbyMapDirectory } from './components/NearbyMapDirectory';
 import { AiAssistant } from './components/AiAssistant';
 import { Analytics } from './components/Analytics';
 import { DemoFlowModal } from './components/DemoFlowModal';
 import { WhatsAppModal } from './components/WhatsAppModal';
-import { Mic, Sparkles, MessageCircle, Store } from 'lucide-react';
+import { LoginModal } from './components/LoginModal';
+import { Mic, Sparkles, MessageCircle, Store, MapPin, Truck } from 'lucide-react';
 
 function AppContent() {
-  const { activeTab, setActiveTab } = useDukaan();
+  const { activeTab, setActiveTab, currentUser } = useDukaan();
   const [showDemoGuide, setShowDemoGuide] = useState(false);
   const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [assistantTriggerQuery, setAssistantTriggerQuery] = useState<string>('');
 
   const handleOpenAssistantWithQuery = (query: string) => {
@@ -25,7 +29,10 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col text-slate-900 selection:bg-emerald-100 selection:text-emerald-900 font-sans">
       {/* Navigation Bar */}
-      <Navbar onOpenDemoGuide={() => setShowDemoGuide(true)} />
+      <Navbar 
+        onOpenDemoGuide={() => setShowDemoGuide(true)} 
+        onOpenLoginModal={() => setShowLoginModal(true)} 
+      />
 
       {/* Main View Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6">
@@ -43,6 +50,10 @@ function AppContent() {
         {activeTab === 'inventory' && <Inventory />}
 
         {activeTab === 'khata' && <Khata />}
+
+        {activeTab === 'suppliers' && <SuppliersModule />}
+
+        {activeTab === 'nearby' && <NearbyMapDirectory />}
 
         {activeTab === 'assistant' && (
           <AiAssistant initialQuery={assistantTriggerQuery} />
@@ -80,6 +91,12 @@ function AppContent() {
       <WhatsAppModal
         isOpen={showWhatsAppModal}
         onClose={() => setShowWhatsAppModal(false)}
+      />
+
+      {/* Role-Based Authentication & Login Modal */}
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
       />
     </div>
   );

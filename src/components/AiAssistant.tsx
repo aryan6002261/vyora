@@ -128,6 +128,8 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({ initialQuery }) => {
     { label: 'Aaj kya bik raha hai?', sub: 'Top selling analysis' },
     { label: 'Atta kitna bacha hai?', sub: 'Inventory check' },
     { label: 'Ramesh ka 850 rupaye udhaar hai, reminder bana do.', sub: 'Khata action & WhatsApp' },
+    { label: 'Suppliers ka kitna payment baki hai?', sub: 'Wholesale dues' },
+    { label: 'Aas-paas konsi dukaanein hain?', sub: 'Nearby directory' },
     { label: 'Aaj kitni sale hui?', sub: 'Sales & profit' },
     { label: 'Kya stock khatam hone wala hai?', sub: 'Low stock alert' },
   ];

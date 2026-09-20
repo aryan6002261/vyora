@@ -13,7 +13,9 @@ import {
   Clock, 
   Sparkles,
   MessageCircle,
-  QrCode
+  QrCode,
+  Truck,
+  MapPin
 } from 'lucide-react';
 import { useDukaan } from '../context/DukaanContext';
 
@@ -30,7 +32,21 @@ export const Dashboard: React.FC<DashboardProps> = ({
   onOpenInventory,
   onOpenAssistantWithQuery,
 }) => {
-  const { summary, products, sales, customers, language, setActiveTab, openWhatsApp } = useDukaan();
+  const { 
+    summary, 
+    products, 
+    sales, 
+    customers, 
+    language, 
+    setActiveTab, 
+    openWhatsApp,
+    suppliers,
+    getPendingSupplierPaymentsCount,
+    getTotalSupplierPendingAmount
+  } = useDukaan();
+
+  const pendingSupplierCount = getPendingSupplierPaymentsCount();
+  const totalSupplierPending = getTotalSupplierPendingAmount();
 
   const lowStockProducts = products.filter(p => p.stock <= p.minStockThreshold);
 
@@ -204,65 +220,125 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </div>
       </div>
 
+      {/* Pending Supplier Payment Urgent Alert Banner */}
+      {pendingSupplierCount > 0 && (
+        <div className="p-4 bg-gradient-to-r from-rose-50 to-orange-50 border border-rose-300 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <Truck className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-black uppercase tracking-wider text-rose-700 bg-rose-100 px-2 py-0.5 rounded-md">
+                  Supplier Alert (सप्लायर भुगतान)
+                </span>
+                <span className="text-xs font-bold text-slate-800">
+                  {pendingSupplierCount} Orders Pending Due
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 mt-0.5">
+                Total outstanding supplier payment due: <strong className="text-rose-700">₹{totalSupplierPending.toLocaleString('en-IN')}</strong>. Clear on time for smooth stock delivery.
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setActiveTab('suppliers')}
+            className="self-start sm:self-auto px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center gap-1.5 shrink-0"
+          >
+            <span>Suppliers Khata Dekhein</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
       {/* Quick Action Bar for Non-Technical Shopkeepers */}
       <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
           {language === 'hindi' ? 'त्वरित काम (Quick Actions)' : 'Quick Operations'}
         </h3>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-6 gap-3">
           <button
             id="btn-quick-sale"
             onClick={onOpenNewSale}
-            className="flex items-center gap-3 p-3.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 font-bold transition-all text-left"
+            className="flex items-center gap-2.5 p-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 font-bold transition-all text-left"
           >
-            <div className="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0">
-              <Plus className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0">
+              <Plus className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-sm font-extrabold leading-tight">Nayi Sale</div>
-              <div className="text-[11px] text-emerald-700 font-medium">Quick POS Bill</div>
+              <div className="text-xs font-extrabold leading-tight">Nayi Sale</div>
+              <div className="text-[10px] text-emerald-700 font-medium">POS Bill</div>
             </div>
           </button>
 
           <button
             id="btn-quick-khata"
             onClick={onOpenKhata}
-            className="flex items-center gap-3 p-3.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-900 border border-rose-200 font-bold transition-all text-left"
+            className="flex items-center gap-2.5 p-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-900 border border-rose-200 font-bold transition-all text-left"
           >
-            <div className="w-9 h-9 rounded-lg bg-rose-600 text-white flex items-center justify-center shrink-0">
-              <BookOpen className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-lg bg-rose-600 text-white flex items-center justify-center shrink-0">
+              <BookOpen className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-sm font-extrabold leading-tight">Udhaar Khata</div>
-              <div className="text-[11px] text-rose-700 font-medium">Jama / Udhaar</div>
+              <div className="text-xs font-extrabold leading-tight">Udhaar Khata</div>
+              <div className="text-[10px] text-rose-700 font-medium">Customer balance</div>
+            </div>
+          </button>
+
+          <button
+            id="btn-quick-suppliers"
+            onClick={() => setActiveTab('suppliers')}
+            className="flex items-center gap-2.5 p-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-200 font-bold transition-all text-left"
+          >
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0">
+              <Truck className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-xs font-extrabold leading-tight">Suppliers</div>
+              <div className="text-[10px] text-indigo-700 font-medium">Wholesale PO</div>
+            </div>
+          </button>
+
+          <button
+            id="btn-quick-nearby"
+            onClick={() => setActiveTab('nearby')}
+            className="flex items-center gap-2.5 p-3 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-200 font-bold transition-all text-left"
+          >
+            <div className="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center shrink-0">
+              <MapPin className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-xs font-extrabold leading-tight">Nearby Map</div>
+              <div className="text-[10px] text-sky-700 font-medium">Shops & Mandi</div>
             </div>
           </button>
 
           <button
             id="btn-quick-stock"
             onClick={onOpenInventory}
-            className="flex items-center gap-3 p-3.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 font-bold transition-all text-left"
+            className="flex items-center gap-2.5 p-3 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 font-bold transition-all text-left"
           >
-            <div className="w-9 h-9 rounded-lg bg-amber-500 text-white flex items-center justify-center shrink-0">
-              <Package className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center shrink-0">
+              <Package className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-sm font-extrabold leading-tight">Stock Update</div>
-              <div className="text-[11px] text-amber-800 font-medium">Restock items</div>
+              <div className="text-xs font-extrabold leading-tight">Stock Update</div>
+              <div className="text-[10px] text-amber-800 font-medium">Restock items</div>
             </div>
           </button>
 
           <button
             id="btn-quick-ai"
             onClick={() => setActiveTab('assistant')}
-            className="flex items-center gap-3 p-3.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200 font-bold transition-all text-left"
+            className="flex items-center gap-2.5 p-3 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200 font-bold transition-all text-left"
           >
-            <div className="w-9 h-9 rounded-lg bg-purple-600 text-white flex items-center justify-center shrink-0">
-              <Mic className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center shrink-0">
+              <Mic className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-sm font-extrabold leading-tight">Voice Copilot</div>
-              <div className="text-[11px] text-purple-700 font-medium">Bol kar poochhein</div>
+              <div className="text-xs font-extrabold leading-tight">AI Copilot</div>
+              <div className="text-[10px] text-purple-700 font-medium">Voice assistant</div>
             </div>
           </button>
         </div>
