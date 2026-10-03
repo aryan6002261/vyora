@@ -3,6 +3,7 @@ import {
   LogIn, 
   Store, 
   User, 
+  Truck, 
   Smartphone, 
   Mail, 
   CheckCircle2, 
@@ -31,6 +32,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const [googleEmail, setGoogleEmail] = useState('ramesh.sharma.kirana@gmail.com');
   const [clientName, setClientName] = useState('Priya Verma');
   const [merchantName, setMerchantName] = useState('Ramesh Sharma');
+  const [supplierName, setSupplierName] = useState('Gupta Wholesale Distributors');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
@@ -47,8 +49,12 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     e.preventDefault();
     setIsSubmitting(true);
     setTimeout(() => {
-      const name = selectedRole === 'MERCHANT' ? (merchantName || 'Sharma Kirana Store') : (clientName || 'Priya Verma');
-      loginUser(selectedRole, 'phone', name, `+91 ${phone}`);
+      let name = merchantName;
+      if (selectedRole === 'CLIENT') name = clientName || 'Priya Verma';
+      if (selectedRole === 'SUPPLIER') name = supplierName || 'Gupta Wholesale';
+      
+      const emailOrPhone = `+91 ${phone}`;
+      loginUser(selectedRole, 'phone', name, emailOrPhone);
       setIsSubmitting(false);
       onClose();
     }, 400);
@@ -57,7 +63,10 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const handleGoogleLogin = () => {
     setIsSubmitting(true);
     setTimeout(() => {
-      const name = selectedRole === 'MERCHANT' ? 'Ramesh Sharma (Merchant)' : (clientName || 'Priya Verma (Client)');
+      let name = 'Ramesh Sharma (Merchant)';
+      if (selectedRole === 'CLIENT') name = `${clientName || 'Priya Verma'} (Customer)`;
+      if (selectedRole === 'SUPPLIER') name = `${supplierName || 'Gupta Wholesale'} (Supplier)`;
+
       loginUser(selectedRole, 'google', name, googleEmail);
       setIsSubmitting(false);
       onClose();
@@ -66,7 +75,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in duration-150">
+      <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in duration-150">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
@@ -75,10 +84,10 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             </div>
             <div>
               <h3 className="text-base font-black text-slate-900">
-                DukaanAI Login
+                DukaanAI Multi-Role Portal
               </h3>
               <p className="text-xs text-slate-500">
-                Choose your role to continue
+                Choose your portal & account memory
               </p>
             </div>
           </div>
@@ -90,55 +99,87 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* 1. Role Selection: Merchant vs Client */}
+        {/* 1. Role Selection: 3 Ways (Merchant, Customer, Supplier) */}
         <div className="space-y-2">
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
             Step 1: Choose Account Type (आप कौन हैं?)
           </label>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-2.5">
             {/* Merchant Role Option */}
             <div
-              onClick={() => setSelectedRole('MERCHANT')}
-              className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all ${
+              onClick={() => {
+                setSelectedRole('MERCHANT');
+                setGoogleEmail('ramesh.sharma.kirana@gmail.com');
+              }}
+              className={`p-3 rounded-2xl border-2 cursor-pointer transition-all ${
                 selectedRole === 'MERCHANT'
-                  ? 'border-emerald-600 bg-emerald-50/50 shadow-xs'
+                  ? 'border-emerald-600 bg-emerald-50/60 shadow-xs'
                   : 'border-slate-200 hover:border-emerald-300 bg-white'
               }`}
             >
               <div className="flex items-center justify-between mb-1.5">
-                <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
-                  <Store className="w-4 h-4" />
+                <div className="w-7 h-7 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                  <Store className="w-3.5 h-3.5" />
                 </div>
                 {selectedRole === 'MERCHANT' && (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                 )}
               </div>
-              <h4 className="font-extrabold text-sm text-slate-900">Merchant / Dukaandar</h4>
-              <p className="text-[11px] text-slate-500 mt-0.5 leading-tight">
-                Manage billing, stock, udhaar, and nearby suppliers.
+              <h4 className="font-extrabold text-xs text-slate-900">Merchant</h4>
+              <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">
+                POS, stock & khata
               </p>
             </div>
 
             {/* Client / Customer Role Option */}
             <div
-              onClick={() => setSelectedRole('CLIENT')}
-              className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all ${
+              onClick={() => {
+                setSelectedRole('CLIENT');
+                setGoogleEmail('priya.verma.client@gmail.com');
+              }}
+              className={`p-3 rounded-2xl border-2 cursor-pointer transition-all ${
                 selectedRole === 'CLIENT'
-                  ? 'border-indigo-600 bg-indigo-50/50 shadow-xs'
+                  ? 'border-indigo-600 bg-indigo-50/60 shadow-xs'
                   : 'border-slate-200 hover:border-indigo-300 bg-white'
               }`}
             >
               <div className="flex items-center justify-between mb-1.5">
-                <div className="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
-                  <User className="w-4 h-4" />
+                <div className="w-7 h-7 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
+                  <User className="w-3.5 h-3.5" />
                 </div>
                 {selectedRole === 'CLIENT' && (
-                  <CheckCircle2 className="w-4 h-4 text-indigo-600" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600" />
                 )}
               </div>
-              <h4 className="font-extrabold text-sm text-slate-900">Customer / Client</h4>
-              <p className="text-[11px] text-slate-500 mt-0.5 leading-tight">
-                Explore nearby shops, check stock & order via WhatsApp.
+              <h4 className="font-extrabold text-xs text-slate-900">Customer</h4>
+              <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">
+                Udhaar & nearby shops
+              </p>
+            </div>
+
+            {/* Supplier / Wholesaler Role Option */}
+            <div
+              onClick={() => {
+                setSelectedRole('SUPPLIER');
+                setGoogleEmail('gupta.wholesale@gmail.com');
+              }}
+              className={`p-3 rounded-2xl border-2 cursor-pointer transition-all ${
+                selectedRole === 'SUPPLIER'
+                  ? 'border-amber-600 bg-amber-50/60 shadow-xs'
+                  : 'border-slate-200 hover:border-amber-300 bg-white'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-1.5">
+                <div className="w-7 h-7 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
+                  <Truck className="w-3.5 h-3.5" />
+                </div>
+                {selectedRole === 'SUPPLIER' && (
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-600" />
+                )}
+              </div>
+              <h4 className="font-extrabold text-xs text-slate-900">Supplier</h4>
+              <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">
+                PO & pending dues
               </p>
             </div>
           </div>
@@ -177,7 +218,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
               </svg>
-              <span>Google</span>
+              <span>Google SSO</span>
             </button>
           </div>
         </div>
@@ -187,14 +228,17 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           <form onSubmit={handlePhoneLogin} className="space-y-3">
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">
-                {selectedRole === 'MERCHANT' ? 'Shopkeeper / Store Name' : 'Your Name'}
+                {selectedRole === 'MERCHANT' ? 'Shop / Merchant Name' : selectedRole === 'CLIENT' ? 'Customer Name' : 'Wholesale Business Name'}
               </label>
               <input
                 type="text"
                 required
-                value={selectedRole === 'MERCHANT' ? merchantName : clientName}
-                onChange={e => selectedRole === 'MERCHANT' ? setMerchantName(e.target.value) : setClientName(e.target.value)}
-                placeholder={selectedRole === 'MERCHANT' ? 'e.g. Ramesh Sharma' : 'e.g. Priya Verma'}
+                value={selectedRole === 'MERCHANT' ? merchantName : selectedRole === 'CLIENT' ? clientName : supplierName}
+                onChange={e => {
+                  if (selectedRole === 'MERCHANT') setMerchantName(e.target.value);
+                  else if (selectedRole === 'CLIENT') setClientName(e.target.value);
+                  else setSupplierName(e.target.value);
+                }}
                 className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
               />
             </div>
@@ -250,7 +294,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 disabled={isSubmitting}
                 className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all"
               >
-                {isSubmitting ? 'Verifying OTP...' : `Login as ${selectedRole === 'MERCHANT' ? 'Merchant' : 'Customer'}`}
+                {isSubmitting ? 'Verifying OTP...' : `Login as ${selectedRole}`}
               </button>
             )}
           </form>
@@ -282,7 +326,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
               </svg>
-              <span>Continue with Google as {selectedRole === 'MERCHANT' ? 'Merchant' : 'Customer'}</span>
+              <span>Continue with Google as {selectedRole}</span>
             </button>
           </div>
         )}
@@ -290,7 +334,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         {/* Security badge */}
         <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Encrypted Kirana Authentication & Secure Session</span>
+          <span>Encrypted Account Session with Independent Memory</span>
         </div>
       </div>
     </div>

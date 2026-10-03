@@ -175,7 +175,7 @@ export interface Supplier {
 }
 
 // ============ USER AUTH & ROLE (Merchant vs Client) ============
-export type UserRole = 'MERCHANT' | 'CLIENT';
+export type UserRole = 'MERCHANT' | 'CLIENT' | 'SUPPLIER';
 
 export interface UserProfile {
   id: string;

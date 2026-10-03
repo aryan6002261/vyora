@@ -104,10 +104,28 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const [activeTab, setActiveTab] = useState<string>('dashboard');
 
+  const [currentUser, setCurrentUser] = useState<UserProfile>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.USER);
+      return saved ? JSON.parse(saved) : DEFAULT_USER_PROFILE;
+    } catch {
+      return DEFAULT_USER_PROFILE;
+    }
+  });
+
+  const getUserKey = (user: UserProfile) => {
+    const identifier = user.email || user.phone || user.id || 'default';
+    return `dukaan_acc_${user.role}_${identifier.replace(/[^a-zA-Z0-9]/g, '_')}_`;
+  };
+
+  const userPrefix = getUserKey(currentUser);
+
   const [products, setProducts] = useState<Product[]>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
-      return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+      const saved = localStorage.getItem(userPrefix + 'products');
+      if (saved) return JSON.parse(saved);
+      const globalSaved = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
+      return globalSaved ? JSON.parse(globalSaved) : INITIAL_PRODUCTS;
     } catch {
       return INITIAL_PRODUCTS;
     }
@@ -115,8 +133,10 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const [customers, setCustomers] = useState<Customer[]>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.CUSTOMERS);
-      return saved ? JSON.parse(saved) : INITIAL_CUSTOMERS;
+      const saved = localStorage.getItem(userPrefix + 'customers');
+      if (saved) return JSON.parse(saved);
+      const globalSaved = localStorage.getItem(STORAGE_KEYS.CUSTOMERS);
+      return globalSaved ? JSON.parse(globalSaved) : INITIAL_CUSTOMERS;
     } catch {
       return INITIAL_CUSTOMERS;
     }
@@ -124,8 +144,10 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const [sales, setSales] = useState<Sale[]>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.SALES);
-      return saved ? JSON.parse(saved) : INITIAL_SALES;
+      const saved = localStorage.getItem(userPrefix + 'sales');
+      if (saved) return JSON.parse(saved);
+      const globalSaved = localStorage.getItem(STORAGE_KEYS.SALES);
+      return globalSaved ? JSON.parse(globalSaved) : INITIAL_SALES;
     } catch {
       return INITIAL_SALES;
     }
@@ -133,14 +155,18 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.CHAT);
+      const saved = localStorage.getItem(userPrefix + 'chat');
       if (saved) return JSON.parse(saved);
     } catch {}
     return [
       {
         id: 'msg-welcome',
         sender: 'assistant',
-        text: 'Namaste Sethji! 🙏 Mai hoon DukaanAI, aapka personal digital munimji. Aap bol kar ya likh kar dukaan ki sale, stock, aur khata ke baare mein kuch bhi pooch sakte hain!',
+        text: currentUser.role === 'CLIENT'
+          ? 'Namaste Grahak ji! 🙏 DukaanAI Shopping Assistant mein aapka swagat hai. Aap apne aas-paas ki dukaanon ke baare mein ya apne udhaar khata ke baare mein pooch sakte hain!'
+          : currentUser.role === 'SUPPLIER'
+          ? 'Namaste Supplier ji! 🙏 DukaanAI Wholesale Portal mein aapka swagat hai. Aap apne pending purchase orders aur payment collections yahan track kar sakte hain!'
+          : 'Namaste Sethji! 🙏 Mai hoon DukaanAI, aapka personal digital munimji. Aap bol kar ya likh kar dukaan ki sale, stock, aur khata ke baare mein kuch bhi pooch sakte hain!',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       }
     ];
@@ -148,19 +174,12 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const [suppliers, setSuppliers] = useState<Supplier[]>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.SUPPLIERS);
-      return saved ? JSON.parse(saved) : INITIAL_SUPPLIERS;
+      const saved = localStorage.getItem(userPrefix + 'suppliers');
+      if (saved) return JSON.parse(saved);
+      const globalSaved = localStorage.getItem(STORAGE_KEYS.SUPPLIERS);
+      return globalSaved ? JSON.parse(globalSaved) : INITIAL_SUPPLIERS;
     } catch {
       return INITIAL_SUPPLIERS;
-    }
-  });
-
-  const [currentUser, setCurrentUser] = useState<UserProfile>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.USER);
-      return saved ? JSON.parse(saved) : DEFAULT_USER_PROFILE;
-    } catch {
-      return DEFAULT_USER_PROFILE;
     }
   });
 
@@ -178,26 +197,31 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [cart, setCart] = useState<{ product: Product; quantity: number }[]>([]);
 
-  // Local storage synchronization
+  // Local storage & account memory synchronization
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(products));
-  }, [products]);
+    localStorage.setItem(userPrefix + 'products', JSON.stringify(products));
+  }, [products, userPrefix]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.CUSTOMERS, JSON.stringify(customers));
-  }, [customers]);
+    localStorage.setItem(userPrefix + 'customers', JSON.stringify(customers));
+  }, [customers, userPrefix]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.SALES, JSON.stringify(sales));
-  }, [sales]);
+    localStorage.setItem(userPrefix + 'sales', JSON.stringify(sales));
+  }, [sales, userPrefix]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.CHAT, JSON.stringify(chatMessages));
-  }, [chatMessages]);
+    localStorage.setItem(userPrefix + 'chat', JSON.stringify(chatMessages));
+  }, [chatMessages, userPrefix]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.SUPPLIERS, JSON.stringify(suppliers));
-  }, [suppliers]);
+    localStorage.setItem(userPrefix + 'suppliers', JSON.stringify(suppliers));
+  }, [suppliers, userPrefix]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(currentUser));
@@ -808,21 +832,41 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const isGoogle = authProvider === 'google';
     const profile: UserProfile = {
       id: `user-${Date.now()}`,
-      name: name || (isGoogle ? 'Priya Verma (Client)' : 'Sharma General Kirana'),
+      name: name || (isGoogle ? 'Priya Verma (Client)' : role === 'SUPPLIER' ? 'Gupta Wholesale' : 'Sharma General Kirana'),
       phone: !isGoogle ? (phoneOrEmail || '+91 98765 43210') : '+91 98991 22334',
       email: isGoogle ? (phoneOrEmail || 'user.demo@gmail.com') : undefined,
       role,
       authProvider,
-      storeName: role === 'MERCHANT' ? 'Sharma General Kirana Store' : undefined,
-      storeCategory: role === 'MERCHANT' ? 'Kirana & Daily Needs' : undefined,
+      storeName: role === 'MERCHANT' ? 'Sharma General Kirana Store' : role === 'SUPPLIER' ? 'Gupta Wholesale Distributors' : undefined,
+      storeCategory: role === 'MERCHANT' ? 'Kirana & Daily Needs' : role === 'SUPPLIER' ? 'Wholesale Grain & Oil' : undefined,
       address: role === 'MERCHANT' ? 'Shop 14, Pocket B Market, Mayur Vihar, Delhi' : 'Sector 15, Vasundhara Enclave, Delhi',
       latitude: 28.6089,
       longitude: 77.2965,
     };
     setCurrentUser(profile);
-    // If client, default to nearby merchants view
+
+    // Load account-specific memory
+    const identifier = profile.email || profile.phone || profile.id;
+    const prefix = `dukaan_acc_${profile.role}_${identifier.replace(/[^a-zA-Z0-9]/g, '_')}_`;
+    try {
+      const savedProd = localStorage.getItem(prefix + 'products');
+      if (savedProd) setProducts(JSON.parse(savedProd));
+      const savedCust = localStorage.getItem(prefix + 'customers');
+      if (savedCust) setCustomers(JSON.parse(savedCust));
+      const savedSales = localStorage.getItem(prefix + 'sales');
+      if (savedSales) setSales(JSON.parse(savedSales));
+      const savedChat = localStorage.getItem(prefix + 'chat');
+      if (savedChat) setChatMessages(JSON.parse(savedChat));
+      const savedSupp = localStorage.getItem(prefix + 'suppliers');
+      if (savedSupp) setSuppliers(JSON.parse(savedSupp));
+    } catch (e) {
+      console.warn('Could not load account memory:', e);
+    }
+
     if (role === 'CLIENT') {
       setActiveTab('nearby');
+    } else if (role === 'SUPPLIER') {
+      setActiveTab('suppliers');
     } else {
       setActiveTab('dashboard');
     }
