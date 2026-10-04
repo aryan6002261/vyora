@@ -199,6 +199,7 @@ app.post("/api/assistant", async (req, res) => {
       return res.status(400).json({ error: "Query is required" });
     }
 
+    const currentUser = context?.currentUser || { role: 'MERCHANT', name: 'Ramesh Sharma' };
     const ai = getGenAI();
 
     // If Gemini API is not configured or fails, smoothly run our tuned local engine
@@ -209,10 +210,16 @@ app.post("/api/assistant", async (req, res) => {
 
     // With Gemini API Key available
     try {
-      const systemPrompt = `You are 'DukaanAI Munimji', an intelligent, trustworthy, warm, and highly practical AI business copilot for Indian retail and kirana shopkeepers (dukandars).
-You communicate fluently in natural conversational Hinglish (Hindi mixed with English words commonly used by shopkeepers like 'sale', 'stock', 'profit', 'udhaar', 'jama', 'bill', 'packets', 'reminder', 'Sethji').
+      const systemPrompt = `You are 'DukaanAI Munimji', an intelligent, trustworthy, warm, and highly practical AI business copilot for Indian retail ecosystem.
+Current Logged-In User Profile:
+- Role: ${currentUser.role} (${currentUser.role === 'MERCHANT' ? 'Shop Owner / Dukaandar' : currentUser.role === 'CLIENT' ? 'Retail Customer / Grahak' : 'Wholesale Supplier / Distributor'})
+- Name: ${currentUser.name}
+- Phone/Email: ${currentUser.phone || currentUser.email || 'N/A'}
 
-Current Store Context provided by the POS & Khata system:
+You communicate fluently in natural conversational Hinglish (Hindi mixed with English words commonly used in retail like 'sale', 'stock', 'profit', 'udhaar', 'jama', 'bill', 'packets', 'reminder', 'Sethji', 'Grahak ji').
+
+Current Store Context provided by the system:
+- User Role: ${currentUser.role}
 - Products in Stock: ${JSON.stringify(
         (context?.products || []).map((p: any) => ({
           name: p.name,
@@ -230,40 +237,23 @@ Current Store Context provided by the POS & Khata system:
         }))
       )}
 - Today's Sales Summary: ${JSON.stringify(context?.summary || {})}
-- Recent Sales: ${JSON.stringify(
-        (context?.sales || []).slice(0, 5).map((s: any) => ({
-          invoice: s.invoiceNo,
-          amount: s.totalAmount,
-          mode: s.paymentMode,
-          items: s.items?.map((i: any) => `${i.quantity}x ${i.productName}`).join(", "),
-        }))
-      )}
 - Wholesale Suppliers & Pending Payments: ${JSON.stringify(
         (context?.suppliers || []).map((s: any) => ({
           name: s.name,
           company: s.companyName,
           category: s.category,
-          phone: s.phone,
           pendingAmount: s.totalPendingPayment,
-          nextDueDate: s.nextPaymentDueDate,
-        }))
-      )}
-- Nearby Shops / Directory: ${JSON.stringify(
-        (context?.nearbyMerchants || []).slice(0, 5).map((m: any) => ({
-          storeName: m.storeName,
-          category: m.category,
-          distance: `${m.distanceKm} km`,
-          rating: m.rating,
-          phone: m.phone,
         }))
       )}
 
 RULES:
-1. Address the shopkeeper warmly as 'Sethji' or 'Bhaiya'.
+1. Tailor your tone and response specifically to the logged-in user role (${currentUser.role}).
+   - If MERCHANT: Assist with billing, stock, khata, and supplier orders. Address them as 'Sethji'.
+   - If CLIENT (Customer): Help them check their digital udhaar balance, explore nearby shops, and place grocery orders politely. Address them as 'Grahak ji'.
+   - If SUPPLIER: Assist with wholesale purchase orders, pending payment collections, and delivery statuses. Address them as 'Seth ji / Supplier bhai'.
 2. Give concise, direct answers with numbers, rupee signs (₹), and bullet points where helpful.
-3. If the user asks to send a reminder, update stock, add udhaar, or record a sale, ALWAYS generate a structured 'actionProposal' so the shopkeeper can review and confirm before it executes.
-4. For WhatsApp reminders (like for Ramesh Kumar ₹850), compose a polite, respectful Hinglish WhatsApp message with customer name, exact amount, and request for payment, plus a valid WhatsApp link (wa.me).
-5. Output your response strictly in valid JSON with this format:
+3. If the user asks to take an action, generate a structured 'actionProposal' so they can confirm.
+4. Output your response strictly in valid JSON with this format:
 {
   "reply": "Conversational reply in natural Hinglish...",
   "actionProposal": {
@@ -275,10 +265,9 @@ RULES:
       "customerName": "...",
       "phone": "...",
       "amount": 850,
-      "whatsAppMessage": "...",
-      "waLink": "https://wa.me/91..."
+      "whatsAppMessage": "..."
     }
-  } // actionProposal is optional, only include if user asks to take an action or if an alert warrants immediate action.
+  }
 }`;
 
       const generatePromise = ai.models.generateContent({
@@ -343,4 +332,8 @@ async function startServer() {
   });
 }
 
-startServer();
+if (!process.env.VERCEL) {
+  startServer();
+}
+
+export default app;
