@@ -17,7 +17,7 @@ import { useDukaan } from '../context/DukaanContext';
 import { Product, ProductCategory, UnitType } from '../types';
 
 export const Inventory: React.FC = () => {
-  const { products, updateProductStock, addNewProduct, setProductExactStock, language } = useDukaan();
+  const { products, updateProductStock, addNewProduct, setProductExactStock, language, t } = useDukaan();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -83,7 +83,7 @@ export const Inventory: React.FC = () => {
         <div>
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
             <Package className="w-6 h-6 text-amber-600" />
-            <span>{language === 'hindi' ? 'सामान और स्टॉक (Inventory)' : 'Products & Inventory'}</span>
+            <span>{t('inv_title')}</span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-500">
             Total {products.length} products • {lowStockCount} items low in stock

@@ -22,7 +22,7 @@ interface LoginModalProps {
 }
 
 export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
-  const { loginUser, currentUser } = useDukaan();
+  const { loginUser, currentUser, language, setLanguage, t } = useDukaan();
 
   const [selectedRole, setSelectedRole] = useState<UserRole>('MERCHANT');
   const [authMethod, setAuthMethod] = useState<'phone' | 'google'>('phone');
@@ -330,6 +330,36 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             </button>
           </div>
         )}
+
+                {/* Quick 1-Click Demo Buttons */}
+        <div className="pt-2 border-t border-slate-100 space-y-1.5">
+          <div className="text-[11px] font-bold text-slate-500 flex items-center justify-between">
+            <span>Instant 1-Click Demo Presets:</span>
+            <Sparkles className="w-3 h-3 text-amber-500" />
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                loginUser('MERCHANT', 'phone', 'Ramesh Sharma', '+91 98765 43210');
+                onClose();
+              }}
+              className="py-1.5 px-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-950 font-bold text-[11px] rounded-lg border border-emerald-200 text-left truncate"
+            >
+              🏪 Merchant Demo
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                loginUser('CLIENT', 'google', 'Priya Verma', 'priya.verma.client@gmail.com');
+                onClose();
+              }}
+              className="py-1.5 px-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-950 font-bold text-[11px] rounded-lg border border-indigo-200 text-left truncate"
+            >
+              👤 Client Demo
+            </button>
+          </div>
+        </div>
 
         {/* Security badge */}
         <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
