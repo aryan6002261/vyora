@@ -287,7 +287,7 @@ export const SalesPOS: React.FC = () => {
         </div>
 
         {/* Right Column: Billing Cart Summary (5 Cols) */}
-        <div id="pos-cart-section" className="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs sticky top-24 space-y-4">
+        <div className="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs sticky top-24 space-y-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
               <h3 className="font-black text-slate-900 text-base">
@@ -675,30 +675,6 @@ export const SalesPOS: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Mobile Sticky Quick Bill Action */}
-      {cart.length > 0 && (
-        <div className="lg:hidden fixed bottom-14 left-3 right-3 z-30 bg-slate-900/95 backdrop-blur-md text-white p-3 rounded-2xl shadow-xl flex items-center justify-between border border-slate-700 animate-in slide-in-from-bottom-2">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-black text-xs">
-              {cart.reduce((sum, i) => sum + i.quantity, 0)}
-            </div>
-            <div>
-              <div className="text-xs font-black">₹{cartSubtotal}</div>
-              <div className="text-[10px] text-slate-400">Total Bill Amount</div>
-            </div>
-          </div>
-          <button
-            onClick={() => {
-              document.getElementById('pos-cart-section')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs rounded-xl flex items-center gap-1.5 transition-all active:scale-95 shadow-xs"
-          >
-            <span>View Bill & Pay</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      )}
-  </div>
-);
+    </div>
+  );
 };

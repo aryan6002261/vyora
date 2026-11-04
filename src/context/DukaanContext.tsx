@@ -27,13 +27,10 @@ import {
   DEFAULT_USER_PROFILE,
   INITIAL_PAYMENT_CONFIG
 } from '../data/initialData';
-import { TRANSLATIONS, TranslationKey } from '../data/translations';
-import { processAssistantQuery } from '../data/aiLocalEngine';
 
 interface DukaanContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: TranslationKey) => string;
   activeTab: string;
   setActiveTab: (tab: string) => void;
   products: Product[];
@@ -238,11 +235,6 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setLanguageState(lang);
     localStorage.setItem(STORAGE_KEYS.LANG, lang);
   }, []);
-
-  const t = useCallback((key: TranslationKey): string => {
-    return TRANSLATIONS[language]?.[key] || TRANSLATIONS.english[key] || key;
-  }, [language]);
-
 
   // Compute live business summary
   const summary: BusinessSummary = useMemo(() => {
@@ -583,92 +575,53 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setIsAiLoading(true);
 
     try {
-      let replyText = '';
-      let actionProposal: ActionProposal | undefined;
+      const response = await fetch('/api/assistant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query,
+          context: {
+            products,
+            customers,
+            sales,
+            summary,
+            suppliers,
+            currentUser,
+            nearbyMerchants,
+          },
+        }),
+      });
 
-      try {
-        const response = await fetch('/api/assistant', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            query,
-            context: {
-              products,
-              customers,
-              sales,
-              summary,
-              suppliers,
-              currentUser,
-              nearbyMerchants,
-              language,
-            },
-          }),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.reply) {
-            replyText = data.reply;
-            actionProposal = data.actionProposal;
-          }
-        }
-      } catch (networkErr) {
-        console.warn('Backend assistant endpoint unreachable, running local NLP engine:', networkErr);
-      }
-
-      // If network call did not succeed, run our local multi-lingual NLP engine
-      if (!replyText) {
-        const localResult = processAssistantQuery(query, {
-          products,
-          customers,
-          sales,
-          summary,
-          suppliers,
-          currentUser,
-          nearbyMerchants,
-          language,
-        });
-        replyText = localResult.reply;
-        actionProposal = localResult.actionProposal;
-      }
+      const data = await response.json();
+      const replyText = data.reply || 'Sethji, mujhe samajhne mein thodi samasya hui. Kripya punah prayas karein.';
 
       const assistantMsg: ChatMessage = {
         id: `msg-${Date.now() + 1}`,
         sender: 'assistant',
         text: replyText,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        actionProposal,
+        actionProposal: data.actionProposal,
       };
 
       setChatMessages(prev => [...prev, assistantMsg]);
 
+      // If spoken voice query, read out response automatically
       if (isVoice) {
         speakText(replyText);
       }
     } catch (err) {
-      console.error('Error in sendAiQuery:', err);
-      const localResult = processAssistantQuery(query, {
-        products,
-        customers,
-        sales,
-        summary,
-        suppliers,
-        currentUser,
-        nearbyMerchants,
-        language,
-      });
-      const assistantMsg: ChatMessage = {
+      console.error('Error sending query to AI:', err);
+      const fallbackMsg: ChatMessage = {
         id: `msg-${Date.now() + 1}`,
         sender: 'assistant',
-        text: localResult.reply,
+        text: 'Sethji, network connection mein thoda issue hai. Kripya punah prayas karein.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        actionProposal: localResult.actionProposal,
       };
-      setChatMessages(prev => [...prev, assistantMsg]);
+      setChatMessages(prev => [...prev, fallbackMsg]);
     } finally {
       setIsAiLoading(false);
     }
-  }, [products, customers, sales, summary, suppliers, currentUser, nearbyMerchants, language, speakText]);
+  }, [products, customers, sales, summary, speakText]);
 
   // Action Proposal Confirmation
   const confirmActionProposal = useCallback((proposalId: string) => {
@@ -879,12 +832,11 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const isGoogle = authProvider === 'google';
     const profile: UserProfile = {
       id: `user-${Date.now()}`,
-      name: name || (isGoogle ? (role === 'MERCHANT' ? 'Ramesh Sharma' : 'Priya Verma') : role === 'SUPPLIER' ? 'Gupta Wholesale' : role === 'MERCHANT' ? 'Ramesh Sharma' : 'Priya Verma'),
+      name: name || (isGoogle ? 'Priya Verma (Client)' : role === 'SUPPLIER' ? 'Gupta Wholesale' : 'Sharma General Kirana'),
       phone: !isGoogle ? (phoneOrEmail || '+91 98765 43210') : '+91 98991 22334',
       email: isGoogle ? (phoneOrEmail || 'user.demo@gmail.com') : undefined,
       role,
       authProvider,
-      isLoggedIn: true,
       storeName: role === 'MERCHANT' ? 'Sharma General Kirana Store' : role === 'SUPPLIER' ? 'Gupta Wholesale Distributors' : undefined,
       storeCategory: role === 'MERCHANT' ? 'Kirana & Daily Needs' : role === 'SUPPLIER' ? 'Wholesale Grain & Oil' : undefined,
       address: role === 'MERCHANT' ? 'Shop 14, Pocket B Market, Mayur Vihar, Delhi' : 'Sector 15, Vasundhara Enclave, Delhi',
@@ -921,18 +873,15 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, []);
 
   const logoutUser = useCallback(() => {
-    setCurrentUser({
-      ...DEFAULT_USER_PROFILE,
-      isLoggedIn: false,
-    });
-    setActiveTab('login');
+    // Reset to default merchant
+    setCurrentUser(DEFAULT_USER_PROFILE);
+    setActiveTab('dashboard');
   }, []);
 
   const switchRole = useCallback((newRole: UserRole) => {
     setCurrentUser(prev => ({
       ...prev,
       role: newRole,
-      name: newRole === 'MERCHANT' ? 'Ramesh Sharma' : 'Priya Verma',
       storeName: newRole === 'MERCHANT' ? 'Sharma General Kirana Store' : undefined,
     }));
     if (newRole === 'CLIENT') {
@@ -958,7 +907,6 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setSuppliers(INITIAL_SUPPLIERS);
     setCurrentUser(DEFAULT_USER_PROFILE);
     setPaymentConfig(INITIAL_PAYMENT_CONFIG);
-    setActiveTab('dashboard');
     setCart([]);
     setChatMessages([
       {
@@ -982,7 +930,6 @@ export const DukaanProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       value={{
         language,
         setLanguage,
-        t,
         activeTab,
         setActiveTab,
         products,

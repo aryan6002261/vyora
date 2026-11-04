@@ -82,10 +82,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <span>DukaanAI Hackathon Demo Showcase</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-              {t('dash_hero_title_merchant')}
+              {language === 'hindi' ? 'नमस्ते सेठजी! आज की दुकान का हाल' : 'Namaste Sethji! Store Overview'}
             </h2>
             <p className="text-sm text-emerald-100/90 max-w-2xl">
-              {t('dash_hero_desc_merchant')}
+              Tap any demo question below to test the AI copilot live with Hindi, Hinglish, inventory, and Khata actions.
             </p>
           </div>
 
@@ -95,7 +95,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             className="flex items-center justify-center gap-2 px-4 py-3 bg-white text-emerald-800 font-bold rounded-xl shadow-md hover:bg-emerald-50 active:scale-98 transition-all shrink-0 text-sm"
           >
             <Mic className="w-4 h-4 text-emerald-600 animate-pulse" />
-            <span>{t('dash_voice_btn')}</span>
+            <span>{language === 'hindi' ? 'बोल कर पूछें (Voice AI)' : 'Ask DukaanAI (Voice / Text)'}</span>
           </button>
         </div>
 
@@ -130,7 +130,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs hover:shadow-xs transition-shadow">
           <div className="flex items-center justify-between text-slate-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">
-              {t('dash_today_sales')}
+              {language === 'hindi' ? 'आज की कुल बिक्री' : "Today's Sales"}
             </span>
             <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
               <ShoppingBag className="w-4 h-4" />
@@ -153,7 +153,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs hover:shadow-xs transition-shadow">
           <div className="flex items-center justify-between text-slate-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">
-              {t('dash_gross_profit')}
+              {language === 'hindi' ? 'आज का मुनाफा' : "Gross Profit"}
             </span>
             <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
               <TrendingUp className="w-4 h-4" />
@@ -177,7 +177,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         >
           <div className="flex items-center justify-between text-slate-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">
-              {t('dash_low_stock')}
+              {language === 'hindi' ? 'खत्म होने वाला स्टॉक' : 'Low Stock Items'}
             </span>
             <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${summary.lowStockItemsCount > 0 ? 'bg-amber-100 text-amber-700 animate-pulse' : 'bg-slate-100 text-slate-600'}`}>
               <AlertTriangle className="w-4 h-4" />
@@ -202,7 +202,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         >
           <div className="flex items-center justify-between text-slate-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">
-              {t('dash_total_udhaar')}
+              {language === 'hindi' ? 'कुल बकाया उधार' : 'Total Udhaar'}
             </span>
             <div className="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
               <BookOpen className="w-4 h-4" />
@@ -255,7 +255,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
       {/* Quick Action Bar for Non-Technical Shopkeepers */}
       <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
-          {t('dash_quick_actions')}
+          {language === 'hindi' ? 'त्वरित काम (Quick Actions)' : 'Quick Operations'}
         </h3>
         <div className="grid grid-cols-2 sm:grid-cols-6 gap-3">
           <button

@@ -216,7 +216,7 @@ Current Logged-In User Profile:
 - Name: ${currentUser.name}
 - Phone/Email: ${currentUser.phone || currentUser.email || 'N/A'}
 
-- Preferred Language: ${context?.language || 'hinglish'} (You must respond strictly in ${context?.language === 'hindi' ? 'Hindi using Devanagari script' : context?.language === 'english' ? 'Clear English' : 'Natural conversational Hinglish (Hindi written in Latin script)'}).
+You communicate fluently in natural conversational Hinglish (Hindi mixed with English words commonly used in retail like 'sale', 'stock', 'profit', 'udhaar', 'jama', 'bill', 'packets', 'reminder', 'Sethji', 'Grahak ji').
 
 Current Store Context provided by the system:
 - User Role: ${currentUser.role}
@@ -271,7 +271,7 @@ RULES:
 }`;
 
       const generatePromise = ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.8-flash",
         contents: query,
         config: {
           systemInstruction: systemPrompt,

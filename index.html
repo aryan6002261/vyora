@@ -1,21 +1,3283 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DukaanAI</title>
-    <meta name="description" content="AI-powered business copilot for small shops in India with voice & Hinglish support, POS billing, inventory, digital khata, and smart analytics." />
-    <meta property="og:title" content="DukaanAI" />
-    <meta property="og:description" content="AI-powered business copilot for small shops in India with voice & Hinglish support, POS billing, inventory, digital khata, and smart analytics." />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rozha+One&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-slate-50 text-slate-900 antialiased font-sans selection:bg-emerald-100 selection:text-emerald-900">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vyora DukaanAI - Smart Indian Retail & AI Business Copilot</title>
+  <meta name="description" content="AI-powered hyperlocal retail commerce platform and Munimji copilot for Indian retail shops and customers with English, Hindi, and Hinglish voice support, POS billing, inventory, digital khata, and wholesale supplier management." />
+  
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
+  <style>
+    :root {
+      --primary-color: #059669;
+      --primary-hover: #047857;
+      --primary-subtle: #ecfdf5;
+      --ai-purple: #6366f1;
+      --ai-purple-subtle: #eef2ff;
+      --body-bg: #f8fafc;
+      --card-border: #e2e8f0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--body-bg);
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-gradient {
+      background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+    }
+
+    .ai-gradient {
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, #065f46 0%, #0f766e 50%, #064e3b 100%);
+      color: #ffffff;
+      border-radius: 1.25rem;
+    }
+
+    .client-hero-banner {
+      background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 50%, #064e3b 100%);
+      color: #ffffff;
+      border-radius: 1.25rem;
+    }
+
+    .card-modern {
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card-modern:hover {
+      box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.07);
+    }
+
+    .btn-emerald {
+      background-color: var(--primary-color);
+      color: #ffffff;
+      border: none;
+      font-weight: 700;
+    }
+
+    .btn-emerald:hover, .btn-emerald:focus {
+      background-color: var(--primary-hover);
+      color: #ffffff;
+    }
+
+    .badge-pill-custom {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.35em 0.75em;
+      border-radius: 50rem;
+    }
+
+    .nav-tab-btn {
+      color: #475569;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.5rem 0.85rem;
+      border-radius: 0.65rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      border: none;
+      background: transparent;
+    }
+
+    .nav-tab-btn:hover {
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .nav-tab-btn.active {
+      background-color: var(--primary-color);
+      color: #ffffff !important;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+    }
+
+    .nav-tab-btn.active i {
+      color: #ffffff !important;
+    }
+
+    /* Mobile Bottom Navigation Bar */
+    .mobile-bottom-bar {
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(8px);
+      background-color: rgba(255, 255, 255, 0.96);
+    }
+
+    .mobile-nav-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem 0.2rem;
+      color: #64748b;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      background: transparent;
+      position: relative;
+    }
+
+    .mobile-nav-btn.active {
+      color: var(--primary-color);
+    }
+
+    .mobile-nav-btn i {
+      font-size: 1.15rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .elevated-ai-btn {
+      position: relative;
+      top: -14px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+      border: 3px solid #ffffff;
+      transition: transform 0.15s ease;
+    }
+
+    .elevated-ai-btn:active {
+      transform: scale(0.94);
+    }
+
+    .elevated-ai-btn i {
+      font-size: 1.4rem;
+      margin-bottom: 0;
+    }
+
+    /* AI Chat Stream */
+    .chat-bubble-user {
+      background-color: var(--primary-color);
+      color: #ffffff;
+      border-radius: 1.15rem 1.15rem 0.25rem 1.15rem;
+      max-width: 82%;
+    }
+
+    .chat-bubble-ai {
+      background-color: #ffffff;
+      border: 1px solid var(--card-border);
+      color: #0f172a;
+      border-radius: 1.15rem 1.15rem 1.15rem 0.25rem;
+      max-width: 82%;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .radar-canvas {
+      background: radial-gradient(circle at center, #dcfce7 0%, #f1f5f9 60%, #e2e8f0 100%);
+      border: 2px dashed #94a3b8;
+      border-radius: 1.25rem;
+      height: 280px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .radar-sweep {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 260px;
+      height: 260px;
+      margin-top: -130px;
+      margin-left: -130px;
+      border-radius: 50%;
+      border: 1px solid rgba(5, 150, 105, 0.35);
+      animation: radar-pulse 3s infinite linear;
+    }
+
+    @keyframes radar-pulse {
+      0% { transform: scale(0.3); opacity: 0.9; }
+      100% { transform: scale(1.4); opacity: 0; }
+    }
+
+    .cursor-pointer {
+      cursor: pointer;
+    }
+
+    /* Print styles for POS receipt */
+    @media print {
+      body * { visibility: hidden; }
+      #printableReceipt, #printableReceipt * { visibility: visible; }
+      #printableReceipt { position: absolute; left: 0; top: 0; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= TOP MAIN NAVBAR ================= -->
+  <header class="sticky-top bg-white border-bottom shadow-sm z-3">
+    <div class="container-xl py-2 px-3 px-sm-4 d-flex align-items-center justify-content-between">
+      
+      <!-- Logo & Store Profile -->
+      <div class="d-flex align-items-center gap-2 cursor-pointer" onclick="navigateTo(currentUser.role === 'CLIENT' ? 'nearby' : 'dashboard')">
+        <div class="brand-gradient rounded-3 p-2 text-white d-flex align-items-center justify-center shadow-sm" style="width: 40px; height: 40px;">
+          <i class="bi bi-shop fs-5"></i>
+        </div>
+        <div>
+          <div class="d-flex align-items-center gap-1.5">
+            <span class="fs-5 fw-extrabold text-dark tracking-tight">Vyora <span class="text-success">DukaanAI</span></span>
+            <span id="navRoleBadge" class="badge bg-success-subtle text-success-emphasis border border-success-subtle badge-pill-custom">
+              <i class="bi bi-shop me-1"></i><span id="navRoleBadgeText">Merchant</span>
+            </span>
+          </div>
+          <div class="small text-muted fw-medium text-truncate" style="max-width: 220px;" id="navStoreSubtitle">
+            Sharma General Kirana Store
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Items: Language, Demo Guide, User Profile -->
+      <div class="d-flex align-items-center gap-1.5 gap-sm-2">
+        
+        <!-- Language Switcher (Hinglish / Hindi / English) -->
+        <div class="btn-group btn-group-sm p-0.5 bg-light rounded-2 border" role="group">
+          <button type="button" id="btnLangHinglish" onclick="setLanguage('hinglish')" class="btn btn-sm fw-bold active btn-light text-success">Hinglish</button>
+          <button type="button" id="btnLangHindi" onclick="setLanguage('hindi')" class="btn btn-sm fw-bold btn-light text-secondary">हिंदी</button>
+          <button type="button" id="btnLangEn" onclick="setLanguage('english')" class="btn btn-sm fw-bold btn-light text-secondary">EN</button>
+        </div>
+
+        <!-- 1-Click Role Switch Pill (Desktop) -->
+        <button type="button" onclick="toggleRoleSwitch()" class="btn btn-sm btn-outline-secondary fw-bold rounded-3 d-none d-lg-inline-flex align-items-center gap-1 shadow-2xs">
+          <i class="bi bi-arrow-left-right text-success"></i>
+          <span id="btnSwitchRoleText">Switch to Customer</span>
+        </button>
+
+        <!-- Demo Flow Walkthrough Button -->
+        <button type="button" class="btn btn-sm btn-warning text-dark fw-bold rounded-3 d-none d-sm-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#demoFlowModal">
+          <i class="bi bi-stars"></i>
+          <span id="txtNavDemoFlow">Demo Flow</span>
+        </button>
+
+        <!-- Voice Quick Trigger -->
+        <button type="button" onclick="navigateTo('assistant'); startVoiceInput();" class="btn btn-sm btn-success fw-bold rounded-3 d-inline-flex align-items-center gap-1 shadow-2xs">
+          <i class="bi bi-mic-fill"></i>
+          <span class="d-none d-md-inline" id="txtNavVoice">Voice</span>
+        </button>
+
+        <!-- User Profile Dropdown -->
+        <div class="dropdown">
+          <button class="btn btn-sm btn-light border rounded-3 fw-bold d-flex align-items-center gap-1.5" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div id="navUserAvatar" class="rounded-circle bg-success-subtle text-success fw-black d-flex align-items-center justify-center" style="width: 24px; height: 24px; font-size: 0.75rem;">
+              🏪
+            </div>
+            <span id="navUserName" class="d-none d-md-inline small text-truncate" style="max-width: 110px;">Ramesh Sharma</span>
+            <i class="bi bi-chevron-down small text-muted"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 p-2" style="min-width: 230px;">
+            <li class="px-2 py-1.5 border-bottom mb-1">
+              <div class="fw-bold text-dark small" id="dropUserName">Ramesh Sharma</div>
+              <div class="text-muted text-xs" style="font-size: 0.75rem;" id="dropUserContact">+91 98765 43210</div>
+              <span id="dropUserRoleBadge" class="badge bg-success-subtle text-success mt-1">MERCHANT PORTAL</span>
+            </li>
+            <li>
+              <button class="dropdown-item small fw-bold py-1.5 rounded-2 d-flex align-items-center gap-2" onclick="toggleRoleSwitch()">
+                <i class="bi bi-arrow-repeat text-success"></i>
+                <span id="dropRoleSwitchText">Switch to Customer (ग्राहक)</span>
+              </button>
+            </li>
+            <li>
+              <button class="dropdown-item small fw-bold py-1.5 rounded-2 d-flex align-items-center gap-2" onclick="navigateTo('login')">
+                <i class="bi bi-person-gear text-primary"></i>
+                <span id="dropOpenLoginText">Account / Login Portal</span>
+              </button>
+            </li>
+            <li>
+              <button class="dropdown-item small fw-bold py-1.5 rounded-2 d-flex align-items-center gap-2 text-danger" onclick="logoutUser()">
+                <i class="bi bi-box-arrow-right"></i>
+                <span id="dropLogoutText">Logout (लॉगआउट)</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Desktop Navigation Tab Bar -->
+    <nav class="border-top bg-white d-none d-sm-block">
+      <div class="container-xl px-3 px-sm-4 py-1.5 overflow-x-auto d-flex gap-1" id="desktopNavTabs">
+        <!-- Rendered dynamically depending on Merchant vs Client -->
+      </div>
+    </nav>
+  </header>
+
+  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <main class="flex-grow-1 container-xl py-3 py-sm-4 px-3 px-sm-4" style="margin-bottom: 70px;">
+
+    <!-- ================= VIEW 1: LOGIN / ONBOARDING SCREEN ================= -->
+    <section id="viewLogin" class="d-none">
+      <div class="row justify-content-center py-2 py-sm-4">
+        <div class="col-12 col-lg-10">
+          <div class="card-modern border-0 shadow-lg overflow-hidden">
+            <div class="row g-0">
+              
+              <!-- Left Sidebar: Branding & Indian Context -->
+              <div class="col-12 col-md-5 brand-gradient p-4 p-lg-5 text-white d-flex flex-col justify-content-between">
+                <div>
+                  <div class="d-flex align-items-center gap-2 mb-4">
+                    <div class="bg-white bg-opacity-20 rounded-3 p-2 text-white">
+                      <i class="bi bi-shop fs-4"></i>
+                    </div>
+                    <div>
+                      <h3 class="fw-black mb-0 text-white">Vyora <span class="text-warning">DukaanAI</span></h3>
+                      <div class="small text-white-50" id="txtLoginBrandTagline">Smart Indian Hyperlocal Retail & Munimji</div>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-column gap-3 mb-4">
+                    <div class="d-flex align-items-start gap-2.5 bg-white bg-opacity-10 p-3 rounded-3">
+                      <i class="bi bi-shop text-warning fs-5"></i>
+                      <div>
+                        <div class="fw-bold small text-white" id="txtLoginMerchantBadge">Merchant Portal (दुकानदार)</div>
+                        <div class="text-white-50" style="font-size: 0.75rem;" id="txtLoginMerchantDesc">Fast POS Billing, Stock alerts, Digital Khata ledger & WhatsApp payment reminders.</div>
+                      </div>
+                    </div>
+
+                    <div class="d-flex align-items-start gap-2.5 bg-white bg-opacity-10 p-3 rounded-3">
+                      <i class="bi bi-person-heart text-info fs-5"></i>
+                      <div>
+                        <div class="fw-bold small text-white" id="txtLoginClientBadge">Customer Portal (ग्राहक)</div>
+                        <div class="text-white-50" style="font-size: 0.75rem;" id="txtLoginClientDesc">Discover nearby open kirana stores, track personal udhaar passbook, and order on WhatsApp.</div>
+                      </div>
+                    </div>
+
+                    <div class="d-flex align-items-start gap-2.5 bg-white bg-opacity-10 p-3 rounded-3">
+                      <i class="bi bi-robot text-warning fs-5"></i>
+                      <div>
+                        <div class="fw-bold small text-white" id="txtLoginAiBadge">AI Munimji Copilot</div>
+                        <div class="text-white-50" style="font-size: 0.75rem;" id="txtLoginAiDesc">Speak or type in English, Hindi, or Hinglish with live stock and khata context.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between small text-white-50 pt-3 border-top border-white border-opacity-20" style="font-size: 0.75rem;">
+                  <span><i class="bi bi-shield-check text-warning me-1"></i>100% Secure & Local Memory</span>
+                  <span>🇮🇳 Bharat Retail</span>
+                </div>
+              </div>
+
+              <!-- Right Form: Role & Auth Method -->
+              <div class="col-12 col-md-7 p-4 p-lg-5 bg-white">
+                <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+                  <div>
+                    <h4 class="fw-black mb-0 text-dark" id="txtLoginTitle">Welcome to Vyora</h4>
+                    <p class="text-muted small mb-0" id="txtLoginSubtitle">Choose your portal and sign in</p>
+                  </div>
+                  <span class="badge bg-light text-dark border px-2 py-1 small fw-bold" id="txtLoginActiveRoleBadge">MERCHANT</span>
+                </div>
+
+                <!-- Step 1: Select Role (Merchant vs Customer) -->
+                <div class="mb-4">
+                  <label class="form-label small fw-bold text-muted text-uppercase" id="lblStepRole">Step 1: Choose Account Type (आप कौन हैं?)</label>
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <div class="border rounded-3 p-3 cursor-pointer text-center position-relative transition" id="cardRoleMerchant" onclick="selectLoginRole('MERCHANT')">
+                        <i class="bi bi-shop fs-3 text-success d-block mb-1"></i>
+                        <div class="fw-black small text-dark" id="lblMerchantRole">Merchant</div>
+                        <div class="text-muted" style="font-size: 0.7rem;" id="lblMerchantRoleSub">POS, Stock & Khata</div>
+                        <i class="bi bi-check-circle-fill text-success position-absolute top-0 end-0 m-2 d-none" id="checkIconMerchant"></i>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="border rounded-3 p-3 cursor-pointer text-center position-relative transition" id="cardRoleClient" onclick="selectLoginRole('CLIENT')">
+                        <i class="bi bi-person-fill fs-3 text-primary d-block mb-1"></i>
+                        <div class="fw-black small text-dark" id="lblClientRole">Customer</div>
+                        <div class="text-muted" style="font-size: 0.7rem;" id="lblClientRoleSub">Nearby & My Udhaar</div>
+                        <i class="bi bi-check-circle-fill text-primary position-absolute top-0 end-0 m-2 d-none" id="checkIconClient"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 2: Sign-in Method Tabs (Phone OTP vs Gmail) -->
+                <div class="mb-3">
+                  <label class="form-label small fw-bold text-muted text-uppercase" id="lblStepMethod">Step 2: Sign-in Method</label>
+                  <ul class="nav nav-pills nav-fill bg-light p-1 rounded-3 small fw-bold mb-3">
+                    <li class="nav-item">
+                      <button class="nav-link active py-2" id="tabLoginPhone" onclick="setAuthMethod('phone')">
+                        <i class="bi bi-phone me-1"></i><span id="lblAuthPhone">Mobile Number (OTP)</span>
+                      </button>
+                    </li>
+                    <li class="nav-item">
+                      <button class="nav-link py-2 text-dark" id="tabLoginGoogle" onclick="setAuthMethod('google')">
+                        <i class="bi bi-google me-1 text-danger"></i><span id="lblAuthGoogle">Google SSO (Gmail)</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Form: Phone OTP -->
+                <form id="formLoginPhone" onsubmit="handlePhoneLoginSubmit(event)">
+                  <div class="mb-3">
+                    <label class="form-label small fw-bold text-dark" id="lblFullName">Full Name (पूरा नाम)</label>
+                    <input type="text" class="form-control rounded-3 py-2.5 px-3 small fw-semibold" id="inputLoginName" placeholder="e.g. Ramesh Sharma" required />
+                  </div>
+
+                  <div class="mb-3" id="groupStoreName">
+                    <label class="form-label small fw-bold text-dark" id="lblStoreName">Shop / Business Name (दुकान का नाम)</label>
+                    <input type="text" class="form-control rounded-3 py-2.5 px-3 small fw-semibold" id="inputLoginStoreName" placeholder="e.g. Sharma General Kirana Store" />
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label small fw-bold text-dark" id="lblMobileNumber">10-Digit Mobile Number (मोबाइल नंबर)</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light fw-bold small">🇮🇳 +91</span>
+                      <input type="tel" maxlength="10" class="form-control rounded-end-3 py-2.5 px-3 fw-bold font-monospace" id="inputLoginPhone" placeholder="9876543210" required />
+                    </div>
+                  </div>
+
+                  <!-- OTP Section -->
+                  <div id="sectionOtpInput" class="p-3 bg-success-subtle border border-success-subtle rounded-3 mb-3 d-none">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                      <span class="small fw-bold text-success-emphasis" id="lblEnterOtp">Enter 4-Digit OTP:</span>
+                      <span class="badge bg-success text-white">Demo OTP: 4582</span>
+                    </div>
+                    <input type="text" maxlength="4" class="form-control text-center fw-black fs-4 font-monospace py-2 mb-2" id="inputLoginOtp" value="4582" />
+                    <div class="d-flex justify-content-between small text-muted">
+                      <span>SMS sent to your mobile</span>
+                      <a href="javascript:void(0)" onclick="resendOtp()" class="text-success fw-bold text-decoration-none" id="lblResendOtp">Resend OTP</a>
+                    </div>
+                  </div>
+
+                  <button type="button" id="btnSendOtp" onclick="sendOtp()" class="btn btn-emerald w-100 py-2.5 rounded-3 fw-bold shadow-sm d-flex align-items-center justify-center gap-1.5 mb-2">
+                    <span id="btnSendOtpText">Send Verification OTP</span>
+                    <i class="bi bi-arrow-right"></i>
+                  </button>
+
+                  <button type="submit" id="btnVerifyLogin" class="btn btn-emerald w-100 py-2.5 rounded-3 fw-bold shadow-sm d-none">
+                    <span id="btnVerifyLoginText">Verify OTP & Login</span>
+                  </button>
+                </form>
+
+                <!-- Form: Google SSO -->
+                <div id="formLoginGoogle" class="d-none">
+                  <div class="mb-3">
+                    <label class="form-label small fw-bold text-dark">Your Name (आपका नाम)</label>
+                    <input type="text" class="form-control rounded-3 py-2.5 px-3 small fw-semibold mb-3" id="inputGoogleName" placeholder="e.g. Ramesh Sharma" />
+                    <label class="form-label small fw-bold text-dark">Gmail / Google Account Email</label>
+                    <input type="email" class="form-control rounded-3 py-2.5 px-3 small fw-semibold" id="inputGoogleEmail" placeholder="yourname@gmail.com" />
+                  </div>
+                  <button type="button" onclick="handleGoogleLoginSubmit()" class="btn btn-light border w-100 py-2.5 rounded-3 fw-bold d-flex align-items-center justify-content-center gap-2 mb-3 shadow-2xs">
+                    <i class="bi bi-google text-danger fs-5"></i>
+                    <span id="btnGoogleLoginText">Sign In with Google Account</span>
+                  </button>
+                </div>
+
+                
+                <!-- Guest Mode Button -->
+                <div class="mb-3 pt-2">
+                  <button type="button" onclick="loginAsGuest()" class="btn btn-outline-secondary w-100 py-2.5 rounded-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-2xs" id="btnContinueGuest">
+                    <i class="bi bi-person-badge fs-5"></i>
+                    <span id="btnContinueGuestText">Continue as Guest (अतिथि मोड - सीमित सुविधाएँ)</span>
+                  </button>
+                  <div class="text-muted text-center mt-1" style="font-size: 0.72rem;">
+                    <i class="bi bi-shield-check text-secondary me-1"></i>Browse nearby stores & preview catalog without signing in
+                  </div>
+                </div>
+
+                <!-- Instant 1-Click Demo Buttons -->
+                <div class="pt-3 border-top mt-3">
+                  <div class="d-flex align-items-center justify-content-between small text-muted fw-bold mb-2">
+                    <span id="txtInstantDemoTitle">Instant 1-Click Demo Logins:</span>
+                    <i class="bi bi-lightning-charge-fill text-warning"></i>
+                  </div>
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <button type="button" onclick="loginAsDemo('MERCHANT')" class="btn btn-outline-success w-100 fw-bold py-2 px-2.5 rounded-3 text-start small d-flex align-items-center justify-content-between">
+                        <span>🏪 <span id="lblDemoMerchantBtn">Merchant</span></span>
+                        <i class="bi bi-arrow-right small"></i>
+                      </button>
+                    </div>
+                    <div class="col-6">
+                      <button type="button" onclick="loginAsDemo('CLIENT')" class="btn btn-outline-primary w-100 fw-bold py-2 px-2.5 rounded-3 text-start small d-flex align-items-center justify-content-between">
+                        <span>👤 <span id="lblDemoClientBtn">Customer</span></span>
+                        <i class="bi bi-arrow-right small"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 2: MERCHANT DASHBOARD ================= -->
+    <section id="viewDashboard" class="d-none">
+      <!-- Hero AI Copilot Prompt Banner -->
+      <div class="hero-banner p-4 p-lg-5 mb-4 shadow-sm">
+        <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
+          <div>
+            <span class="badge bg-success bg-opacity-50 text-white rounded-pill px-3 py-1.5 small fw-bold mb-2 d-inline-flex align-items-center gap-1.5">
+              <i class="bi bi-stars text-warning"></i> <span id="txtHeroBadge">Vyora Smart Kirana Copilot</span>
+            </span>
+            <h2 class="fw-black mb-1" id="txtHeroGreeting">Namaste Sethji! Store Overview</h2>
+            <p class="text-white-50 mb-0 small" id="txtHeroDesc">Ask DukaanAI anything in Hindi, Hinglish, or English for instant billing, inventory alerts, and khata reminders.</p>
+          </div>
+          <button type="button" onclick="navigateTo('assistant'); startVoiceInput();" class="btn btn-light text-success fw-extrabold rounded-3 px-4 py-2.5 shadow-sm d-flex align-items-center gap-2 align-self-start align-self-lg-center">
+            <i class="bi bi-mic-fill fs-5 animate-pulse text-danger"></i>
+            <span id="txtAskMunimjiBtn">Ask DukaanAI (Voice / Text)</span>
+          </button>
+        </div>
+
+        <!-- 3-Step Demo Quick Action Cards -->
+        <div class="row g-2 pt-3 border-top border-white border-opacity-25">
+          <div class="col-12 col-md-4">
+            <div class="bg-white bg-opacity-10 p-3 rounded-3 cursor-pointer hover-bg-opacity transition" onclick="triggerAiQuickQuery('Aaj kya bik raha hai?')">
+              <div class="d-flex justify-content-between small text-warning fw-bold mb-1">
+                <span id="txtDemoStep1Title">Step 1: Sales Analysis</span>
+                <i class="bi bi-arrow-right"></i>
+              </div>
+              <div class="fw-bold text-white small">"Aaj kya bik raha hai?"</div>
+              <div class="text-white-50" style="font-size: 0.72rem;" id="txtDemoStep1Sub">Top sellers and demand tips</div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="bg-white bg-opacity-10 p-3 rounded-3 cursor-pointer hover-bg-opacity transition" onclick="triggerAiQuickQuery('Atta kitna bacha hai?')">
+              <div class="d-flex justify-content-between small text-warning fw-bold mb-1">
+                <span id="txtDemoStep2Title">Step 2: Inventory Check</span>
+                <i class="bi bi-arrow-right"></i>
+              </div>
+              <div class="fw-bold text-white small">"Atta kitna bacha hai?"</div>
+              <div class="text-white-50" style="font-size: 0.72rem;" id="txtDemoStep2Sub">Check stock & generate restock order</div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="bg-white bg-opacity-10 p-3 rounded-3 cursor-pointer hover-bg-opacity transition" onclick="triggerAiQuickQuery('Ramesh ka 850 rupaye udhaar hai, reminder bana do.')">
+              <div class="d-flex justify-content-between small text-warning fw-bold mb-1">
+                <span id="txtDemoStep3Title">Step 3: WhatsApp Khata</span>
+                <i class="bi bi-arrow-right"></i>
+              </div>
+              <div class="fw-bold text-white small">"Ramesh ka 850 udhaar reminder bana do"</div>
+              <div class="text-white-50" style="font-size: 0.72rem;" id="txtDemoStep3Sub">Draft WhatsApp polite reminder</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Core Business Stats Metric Cards -->
+      <div class="row g-3 mb-4">
+        <!-- Metric 1: Today's Revenue -->
+        <div class="col-6 col-lg-3">
+          <div class="card-modern p-3 p-sm-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="small fw-bold text-muted text-uppercase" id="lblMetricTodaySales">Today's Sales</span>
+              <div class="rounded-3 bg-success-subtle text-success p-2"><i class="bi bi-bag-check fs-5"></i></div>
+            </div>
+            <div class="fs-3 fw-black text-dark" id="statTodayRevenue">₹0</div>
+            <div class="d-flex align-items-center justify-content-between small text-muted pt-2 border-top mt-2">
+              <span id="statSalesCountText">0 bills cut today</span>
+              <span class="text-success fw-bold"><i class="bi bi-arrow-up-right"></i> +14%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric 2: Gross Profit -->
+        <div class="col-6 col-lg-3">
+          <div class="card-modern p-3 p-sm-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="small fw-bold text-muted text-uppercase" id="lblMetricGrossProfit">Gross Profit</span>
+              <div class="rounded-3 bg-primary-subtle text-primary p-2"><i class="bi bi-graph-up-arrow fs-5"></i></div>
+            </div>
+            <div class="fs-3 fw-black text-primary" id="statTodayProfit">₹0</div>
+            <div class="d-flex align-items-center justify-content-between small text-muted pt-2 border-top mt-2">
+              <span id="statProfitMarginText">Margin: 0%</span>
+              <span class="text-primary fw-medium">Net Profit</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric 3: Low Stock Warning -->
+        <div class="col-6 col-lg-3">
+          <div class="card-modern p-3 p-sm-4 h-100 cursor-pointer" onclick="navigateTo('inventory')">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="small fw-bold text-muted text-uppercase" id="lblMetricLowStock">Low Stock Items</span>
+              <div class="rounded-3 bg-warning-subtle text-warning p-2"><i class="bi bi-exclamation-triangle fs-5"></i></div>
+            </div>
+            <div class="fs-3 fw-black text-warning" id="statLowStockCount">0</div>
+            <div class="d-flex align-items-center justify-content-between small text-warning pt-2 border-top mt-2 fw-bold">
+              <span>Atta, Mirch, Soap</span>
+              <i class="bi bi-arrow-right"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric 4: Total Udhaar -->
+        <div class="col-6 col-lg-3">
+          <div class="card-modern p-3 p-sm-4 h-100 cursor-pointer" onclick="navigateTo('khata')">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="small fw-bold text-muted text-uppercase" id="lblMetricTotalUdhaar">Total Udhaar</span>
+              <div class="rounded-3 bg-danger-subtle text-danger p-2"><i class="bi bi-journal-bookmark fs-5"></i></div>
+            </div>
+            <div class="fs-3 fw-black text-danger" id="statTotalUdhaar">₹0</div>
+            <div class="d-flex align-items-center justify-content-between small text-danger pt-2 border-top mt-2 fw-bold">
+              <span>5 grahak baki hain</span>
+              <i class="bi bi-arrow-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Urgent Supplier Payment Due Alert Strip -->
+      <div id="supplierDuesAlert" class="card-modern bg-danger-subtle border-danger-subtle p-3 p-sm-4 mb-4 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-danger text-white p-2.5 rounded-3"><i class="bi bi-truck fs-4"></i></div>
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-danger text-white" id="lblSupplierDueBadge">Supplier Alert</span>
+              <span class="fw-bold small text-dark" id="txtSupplierDueHeadline">Wholesale Supplier Dues Pending</span>
+            </div>
+            <div class="small text-muted mt-0.5" id="txtSupplierDueBody">
+              Total pending supplier payment due: <strong class="text-danger" id="statSupplierTotalPending">₹0</strong>. Pay on time for seamless stock delivery.
+            </div>
+          </div>
+        </div>
+        <button type="button" onclick="navigateTo('suppliers')" class="btn btn-sm btn-danger fw-bold rounded-3 px-3 py-2 text-nowrap">
+          <span id="btnPaySuppliersText">View Supplier Khata</span> <i class="bi bi-arrow-right ms-1"></i>
+        </button>
+      </div>
+
+      <!-- Quick Operations Grid -->
+      <div class="card-modern p-4 mb-4">
+        <div class="small fw-bold text-muted text-uppercase mb-3" id="lblQuickOperationsTitle">Quick Operations (त्वरित काम)</div>
+        <div class="row g-2">
+          <div class="col-6 col-sm-4 col-lg-2">
+            <button onclick="navigateTo('sales')" class="btn btn-outline-success w-100 p-3 rounded-3 text-start d-flex flex-column gap-1 h-100">
+              <i class="bi bi-cart-plus fs-4"></i>
+              <span class="fw-bold small" id="btnQuickNewBill">Nayi Sale</span>
+              <span class="text-muted" style="font-size: 0.7rem;">POS Counter</span>
+            </button>
+          </div>
+          <div class="col-6 col-sm-4 col-lg-2">
+            <button onclick="navigateTo('khata')" class="btn btn-outline-danger w-100 p-3 rounded-3 text-start d-flex flex-column gap-1 h-100">
+              <i class="bi bi-book fs-4"></i>
+              <span class="fw-bold small" id="btnQuickKhata">Udhaar Khata</span>
+              <span class="text-muted" style="font-size: 0.7rem;">Customer ledger</span>
+            </button>
+          </div>
+          <div class="col-6 col-sm-4 col-lg-2">
+            <button onclick="navigateTo('inventory')" class="btn btn-outline-warning text-dark w-100 p-3 rounded-3 text-start d-flex flex-column gap-1 h-100">
+              <i class="bi bi-box-seam fs-4"></i>
+              <span class="fw-bold small" id="btnQuickStock">Stock Inventory</span>
+              <span class="text-muted" style="font-size: 0.7rem;">Check levels</span>
+            </button>
+          </div>
+          <div class="col-6 col-sm-4 col-lg-2">
+            <button onclick="navigateTo('suppliers')" class="btn btn-outline-primary w-100 p-3 rounded-3 text-start d-flex flex-column gap-1 h-100">
+              <i class="bi bi-truck fs-4"></i>
+              <span class="fw-bold small" id="btnQuickSuppliers">Suppliers</span>
+              <span class="text-muted" style="font-size: 0.7rem;">Wholesale PO</span>
+            </button>
+          </div>
+          <div class="col-6 col-sm-4 col-lg-2">
+            <button onclick="navigateTo('nearby')" class="btn btn-outline-info text-dark w-100 p-3 rounded-3 text-start d-flex flex-column gap-1 h-100">
+              <i class="bi bi-geo-alt fs-4"></i>
+              <span class="fw-bold small" id="btnQuickNearby">Nearby Mandi</span>
+              <span class="text-muted" style="font-size: 0.7rem;">Local radius</span>
+            </button>
+          </div>
+          <div class="col-6 col-sm-4 col-lg-2">
+            <button onclick="navigateTo('assistant')" class="btn btn-outline-secondary w-100 p-3 rounded-3 text-start d-flex flex-column gap-1 h-100">
+              <i class="bi bi-robot fs-4 text-purple"></i>
+              <span class="fw-bold small" id="btnQuickAssistant">AI Munimji</span>
+              <span class="text-muted" style="font-size: 0.7rem;">Ask copilot</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Sales Table & Low Stock Alert Grid -->
+      <div class="row g-4">
+        <!-- Recent Sales (8 cols) -->
+        <div class="col-12 col-lg-8">
+          <div class="card-modern p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-black mb-0 small text-uppercase" id="lblRecentSalesTitle">Today's Recent Invoices (हालिया बिक्री)</h5>
+              <button onclick="navigateTo('sales')" class="btn btn-sm btn-link text-success fw-bold text-decoration-none p-0" id="lblViewAllSales">View POS Counter &rarr;</button>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0 small">
+                <thead class="table-light">
+                  <tr>
+                    <th>Invoice #</th>
+                    <th>Items</th>
+                    <th>Payment</th>
+                    <th>Total</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody id="tblRecentSalesBody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Low Stock Alerts (4 cols) -->
+        <div class="col-12 col-lg-4">
+          <div class="card-modern p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-black mb-0 small text-uppercase text-danger" id="lblLowStockAlertsTitle">Restock Needed (कम स्टॉक)</h5>
+              <button onclick="navigateTo('inventory')" class="btn btn-sm btn-link text-danger fw-bold text-decoration-none p-0">Reorder &rarr;</button>
+            </div>
+            <div class="d-flex flex-column gap-2.5" id="listLowStockAlerts">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 3: POS BILLING COUNTER ================= -->
+    <section id="viewSales" class="d-none">
+      <div class="row g-4">
+        <!-- Products Catalog (7 Cols) -->
+        <div class="col-12 col-lg-7">
+          <div class="card-modern p-4 mb-3">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
+              <div>
+                <h4 class="fw-black mb-0 text-dark" id="txtPosCounterTitle">Counter POS Billing</h4>
+                <div class="small text-muted" id="txtPosCounterSub">Tap items to add to bill or search by barcode/name</div>
+              </div>
+              <div class="input-group input-group-sm" style="max-width: 250px;">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="text" id="inputPosSearch" onkeyup="filterPosProducts()" class="form-control" placeholder="Search items..." />
+              </div>
+            </div>
+
+            <!-- Category Pills -->
+            <div class="d-flex gap-1.5 overflow-x-auto pb-2 mb-3" id="posCategoryPills">
+              <!-- Category pills populated dynamically -->
+            </div>
+
+            <!-- Product Items Grid -->
+            <div class="row g-2.5" id="posProductsGrid" style="max-height: 520px; overflow-y: auto;">
+              <!-- Products populated dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Current Bill & Cart (5 Cols) -->
+        <div class="col-12 col-lg-5" id="posCartSection">
+          <div class="card-modern p-4 sticky-top" style="top: 85px;">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+              <div>
+                <h5 class="fw-black mb-0 text-dark" id="txtCartTitle">Current Bill Cart</h5>
+                <span class="small text-muted" id="cartItemCountSubtitle">0 items</span>
+              </div>
+              <button onclick="clearCart()" class="btn btn-sm btn-link text-danger fw-bold text-decoration-none p-0" id="btnClearCart">Clear</button>
+            </div>
+
+            <!-- Cart Items List -->
+            <div class="d-flex flex-column gap-2 mb-3" id="cartItemsList" style="max-height: 240px; overflow-y: auto;">
+              <div class="text-center text-muted py-4 small" id="txtCartEmptyMsg">
+                <i class="bi bi-cart3 fs-2 text-muted d-block mb-1"></i>
+                Cart is empty. Tap products to add to current bill.
+              </div>
+            </div>
+
+            <!-- Bill Totals -->
+            <div class="bg-light p-3 rounded-3 mb-3">
+              <div class="d-flex justify-content-between small text-muted mb-1">
+                <span id="lblCartSubtotal">Bill Total:</span>
+                <span class="fs-5 fw-black text-dark" id="lblCartTotalAmount">₹0</span>
+              </div>
+              <div class="d-flex justify-content-between small text-success fw-bold">
+                <span id="lblCartEstimatedProfit">Est. Profit Margin:</span>
+                <span id="lblCartProfitAmount">+₹0</span>
+              </div>
+            </div>
+
+            <!-- Payment Mode Selector -->
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted text-uppercase" id="lblPaymentModeSelect">Payment Mode (भुगतान का तरीका)</label>
+              <div class="btn-group w-100" role="group">
+                <input type="radio" class="btn-check" name="paymentModeRadio" id="payModeCash" value="CASH" checked onchange="changePosPaymentMode('CASH')" />
+                <label class="btn btn-outline-success fw-bold small py-2" for="payModeCash"><i class="bi bi-cash me-1"></i>Cash</label>
+
+                <input type="radio" class="btn-check" name="paymentModeRadio" id="payModeUpi" value="UPI" onchange="changePosPaymentMode('UPI')" />
+                <label class="btn btn-outline-primary fw-bold small py-2" for="payModeUpi"><i class="bi bi-qr-code-scan me-1"></i>UPI / QR</label>
+
+                <input type="radio" class="btn-check" name="paymentModeRadio" id="payModeUdhaar" value="UDHAAR" onchange="changePosPaymentMode('UDHAAR')" />
+                <label class="btn btn-outline-danger fw-bold small py-2" for="payModeUdhaar"><i class="bi bi-book me-1"></i>Udhaar</label>
+              </div>
+            </div>
+
+            <!-- Customer Selector (for Udhaar or Record) -->
+            <div class="mb-3" id="groupPosCustomerSelect">
+              <label class="form-label small fw-bold text-muted text-uppercase" id="lblPosCustomer">Select Customer (ग्राहक चुनें)</label>
+              <select class="form-select form-select-sm fw-semibold" id="selectPosCustomer">
+                <!-- Customers options -->
+              </select>
+            </div>
+
+            <!-- Action Complete Sale Button -->
+            <button onclick="processCurrentSale()" id="btnProcessSale" class="btn btn-emerald w-100 py-3 rounded-3 fw-black shadow-sm d-flex align-items-center justify-content-center gap-2">
+              <i class="bi bi-receipt fs-5"></i>
+              <span id="btnProcessSaleText">Complete Sale & Print Bill</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 4: INVENTORY MANAGEMENT ================= -->
+    <section id="viewInventory" class="d-none">
+      <div class="card-modern p-4 mb-4">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
+          <div>
+            <h4 class="fw-black mb-0 text-dark" id="txtInventoryTitle">Products & Inventory Stock</h4>
+            <div class="small text-muted" id="txtInventorySubtitle">Real-time stock tracking, cost prices, selling margins & threshold alerts</div>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-emerald fw-bold rounded-3 px-3 py-2 d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#addProductModal">
+              <i class="bi bi-plus-circle"></i>
+              <span id="btnAddProductBtn">+ Add New Item</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="row g-2 mb-3">
+          <div class="col-12 col-md-5">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+              <input type="text" id="inputInvSearch" onkeyup="renderInventoryTable()" class="form-control" placeholder="Search product name or barcode..." />
+            </div>
+          </div>
+          <div class="col-6 col-md-4">
+            <select id="selectInvCategory" onchange="renderInventoryTable()" class="form-select form-select-sm fw-semibold">
+              <option value="ALL">All Categories</option>
+              <option value="Grains & Atta">Grains & Atta</option>
+              <option value="Dairy & Eggs">Dairy & Eggs</option>
+              <option value="Oils & Ghee">Oils & Ghee</option>
+              <option value="Spices & Masala">Spices & Masala</option>
+              <option value="Snacks & Biscuits">Snacks & Biscuits</option>
+              <option value="Beverages">Beverages</option>
+              <option value="Cleaning & Household">Cleaning & Household</option>
+              <option value="Personal Care">Personal Care</option>
+            </select>
+          </div>
+          <div class="col-6 col-md-3">
+            <select id="selectInvStockFilter" onchange="renderInventoryTable()" class="form-select form-select-sm fw-semibold text-danger">
+              <option value="ALL">All Stock Levels</option>
+              <option value="LOW">Low Stock Only (कम स्टॉक)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Inventory Products Table -->
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 small">
+            <thead class="table-light">
+              <tr>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Stock Left</th>
+                <th>Cost Price</th>
+                <th>Selling Price</th>
+                <th>Profit Margin</th>
+                <th>Status</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tblInventoryBody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 5: DIGITAL KHATA ================= -->
+    <section id="viewKhata" class="d-none">
+      
+      <!-- Merchant Khata View -->
+      <div id="merchantKhataContainer">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
+          <div>
+            <h4 class="fw-black mb-0 text-dark" id="txtKhataTitle">Digital Customer Khata & Udhaar</h4>
+            <div class="small text-muted" id="txtKhataSubtitle">Transparent customer ledger, automated WhatsApp reminders, and receipt slips</div>
+          </div>
+          <button type="button" class="btn btn-sm btn-danger fw-bold rounded-3 px-3 py-2 d-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+            <i class="bi bi-person-plus"></i>
+            <span id="btnAddCustomerBtn">+ Add New Customer</span>
+          </button>
+        </div>
+
+        <!-- Total Udhaar Banner -->
+        <div class="card-modern bg-danger-subtle border-danger-subtle p-4 mb-4 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+          <div>
+            <div class="small fw-bold text-danger text-uppercase" id="lblTotalMarketCredit">Total Outstanding Market Udhaar</div>
+            <div class="fs-2 fw-black text-danger-emphasis" id="lblKhataTotalUdhaarVal">₹0</div>
+            <div class="small text-muted" id="lblKhataDebtorsSummary">0 customers currently have pending credits</div>
+          </div>
+          <div class="d-flex gap-2">
+            <button onclick="sendQuickRameshReminder()" class="btn btn-sm btn-success fw-bold rounded-3 px-3 py-2 text-nowrap d-flex align-items-center gap-1">
+              <i class="bi bi-whatsapp"></i> <span>Send Ramesh Reminder (₹850)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Split 2-Columns: Customer List & Detailed Ledger -->
+        <div class="row g-4">
+          <!-- Customers List (5 Cols) -->
+          <div class="col-12 col-lg-5">
+            <div class="card-modern p-3">
+              <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="text" id="inputCustomerSearch" onkeyup="renderCustomersList()" class="form-control" placeholder="Search customer by name or phone..." />
+              </div>
+
+              <div class="d-flex flex-column gap-2" id="khataCustomersList" style="max-height: 480px; overflow-y: auto;">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Customer Detailed Ledger (7 Cols) -->
+          <div class="col-12 col-lg-7">
+            <div class="card-modern p-4" id="activeCustomerLedgerCard">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer / Client Mode Personal Passbook View -->
+      <div id="clientKhataContainer" class="d-none">
+        <div class="client-hero-banner p-4 p-lg-5 mb-4 shadow-sm">
+          <span class="badge bg-white bg-opacity-20 text-white rounded-pill px-3 py-1.5 small fw-bold mb-2">
+            <i class="bi bi-journal-check me-1"></i> My Digital Udhaar Passbook
+          </span>
+          <h2 class="fw-black mb-1" id="txtClientPassbookGreeting">Namaste Priya Verma! 🙏</h2>
+          <p class="text-white-50 mb-0 small">Here is your verified personal ledger with <strong class="text-white">Sharma General Kirana Store</strong>. View past ration purchases and pay via UPI instantly.</p>
+        </div>
+
+        <div class="row g-4 mb-4">
+          <div class="col-12 col-md-6">
+            <div class="card-modern p-4 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <span class="small fw-bold text-muted text-uppercase">Your Current Outstanding Balance</span>
+                <div class="fs-1 fw-black text-danger mt-1" id="lblClientPersonalBalance">₹850</div>
+                <div class="small text-muted mt-1">Due with Sharma Kirana Store (Pocket B Market, Mayur Vihar)</div>
+              </div>
+              <div class="pt-3 border-top d-flex gap-2 mt-3">
+                <button type="button" onclick="openQrModal('dukaan.sharma@okaxis', 850)" class="btn btn-emerald fw-bold rounded-3 flex-grow-1 py-2.5">
+                  <i class="bi bi-qr-code me-1"></i> Pay ₹850 via UPI
+                </button>
+                <button type="button" onclick="sendClientWhatsAppSlip()" class="btn btn-outline-success fw-bold rounded-3 px-3">
+                  <i class="bi bi-whatsapp"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <div class="card-modern p-4 h-100 bg-light">
+              <span class="small fw-bold text-muted text-uppercase">Verified Kirana Merchant</span>
+              <h5 class="fw-black text-dark mt-1">Sharma General Kirana Store</h5>
+              <div class="small text-muted mb-2">📍 Shop 14, Pocket B Market, Mayur Vihar, Delhi</div>
+              <div class="small text-muted mb-3">📞 +91 98765 43210 • UPI: dukaan.sharma@okaxis</div>
+              <div class="small text-success fw-bold"><i class="bi bi-shield-check me-1"></i> End-to-end encrypted ledger sync</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Personal Transaction History -->
+        <div class="card-modern p-4">
+          <h5 class="fw-black mb-3 small text-uppercase">Passbook Transaction History</h5>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 small">
+              <thead class="table-light">
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Balance After</th>
+                </tr>
+              </thead>
+              <tbody id="tblClientPassbookBody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ================= VIEW 6: SUPPLIERS & PURCHASE ORDERS ================= -->
+    <section id="viewSuppliers" class="d-none">
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
+        <div>
+          <h4 class="fw-black mb-0 text-dark" id="txtSuppliersTitle">Wholesale Suppliers & Purchase Orders</h4>
+          <div class="small text-muted" id="txtSuppliersSubtitle">Manage grain mandis, FMCG dealers, upcoming payment dues & purchase orders</div>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-sm btn-primary fw-bold rounded-3 px-3 py-2" data-bs-toggle="modal" data-bs-target="#newPoModal">
+            <i class="bi bi-plus-circle me-1"></i> + New Purchase Order
+          </button>
+        </div>
+      </div>
+
+      <!-- Suppliers Grid -->
+      <div class="row g-3 mb-4" id="suppliersGrid">
+        <!-- Populated dynamically -->
+      </div>
+    </section>
+
+    <!-- ================= VIEW 7: NEARBY & MAP DIRECTORY ================= -->
+    <section id="viewNearby" class="d-none">
+      <div class="client-hero-banner p-4 p-lg-5 mb-4 shadow-sm">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-white bg-opacity-20 text-white rounded-pill px-3 py-1 small fw-bold">
+            <i class="bi bi-compass text-warning me-1"></i> Hyperlocal Discovery Radius
+          </span>
+          <span class="small text-white-50">📍 Current Location: Mayur Vihar, Delhi</span>
+        </div>
+        <h2 class="fw-black mb-1" id="txtNearbyTitle">Discover Neighborhood Kirana Stores & Mandis</h2>
+        <p class="text-white-50 mb-0 small" id="txtNearbySubtitle">Find verified grocery shops, wholesale distributors, check open status, and order directly over WhatsApp.</p>
+      </div>
+
+      <!-- Map & Stores Split -->
+      <div class="row g-4">
+        <!-- Radar Map Visualizer (5 Cols) -->
+        <div class="col-12 col-lg-5">
+          <div class="card-modern p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-black mb-0 small text-uppercase"><i class="bi bi-pin-map text-success me-1"></i> Live Radar Map</h5>
+              <span class="badge bg-success-subtle text-success">5 km Radius</span>
+            </div>
+            
+            <!-- Radar Canvas -->
+            <div class="radar-canvas d-flex align-items-center justify-content-center">
+              <div class="radar-sweep"></div>
+              <div class="position-absolute text-center">
+                <div class="bg-success text-white p-2 rounded-circle shadow-lg d-inline-block"><i class="bi bi-person-fill fs-5"></i></div>
+                <div class="small fw-bold text-dark mt-1">You Are Here</div>
+              </div>
+
+              <!-- Animated Pins -->
+              <div class="position-absolute" style="top: 25%; left: 30%;" title="Sharma Kirana Store">
+                <span class="badge bg-danger shadow-sm cursor-pointer" onclick="selectNearbyMerchant('merch-1')">📍 Sharma Kirana (0.3km)</span>
+              </div>
+              <div class="position-absolute" style="bottom: 30%; right: 25%;" title="Krishna Dairy">
+                <span class="badge bg-primary shadow-sm cursor-pointer" onclick="selectNearbyMerchant('merch-3')">📍 Krishna Dairy (2.4km)</span>
+              </div>
+              <div class="position-absolute" style="top: 20%; right: 20%;" title="Agrawal Wholesale Mandi">
+                <span class="badge bg-warning text-dark shadow-sm cursor-pointer" onclick="selectNearbyMerchant('supp-1')">📍 Agrawal Mandi (1.8km)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nearby Store Cards Directory (7 Cols) -->
+        <div class="col-12 col-lg-7">
+          <div class="card-modern p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-black mb-0 small text-uppercase" id="lblStoresFoundTitle">Verified Local Stores Near You</h5>
+              <span class="small text-muted" id="txtNearbyCount">4 shops nearby</span>
+            </div>
+
+            <div class="d-flex flex-column gap-3" id="nearbyStoresList">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 8: AI ASSISTANT / COPILOT ================= -->
+    <section id="viewAssistant" class="d-none">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-9">
+          <div class="card-modern border-0 shadow-md overflow-hidden d-flex flex-column" style="height: calc(100vh - 190px); min-height: 520px;">
+            
+            <!-- Header -->
+            <div class="p-3 border-bottom bg-white d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center gap-2.5">
+                <div class="ai-gradient rounded-3 p-2 text-white shadow-sm" style="width: 40px; height: 40px;">
+                  <i class="bi bi-robot fs-5"></i>
+                </div>
+                <div>
+                  <div class="d-flex align-items-center gap-2">
+                    <h5 class="fw-black mb-0 small text-dark" id="txtAiAssistantTitle">DukaanAI Munimji Copilot</h5>
+                    <span class="badge bg-success-subtle text-success badge-pill-custom">
+                      <span class="spinner-grow spinner-grow-sm me-1" style="width: 6px; height: 6px;"></span> Live Store Context
+                    </span>
+                  </div>
+                  <div class="small text-muted" style="font-size: 0.75rem;" id="txtAiAssistantSub">
+                    Hindi • Hinglish • English bolkar ya likhkar poochhein
+                  </div>
+                </div>
+              </div>
+
+              <!-- TTS Audio Controls -->
+              <div class="d-flex align-items-center gap-1.5">
+                <button type="button" onclick="stopSpeaking()" id="btnStopSpeech" class="btn btn-sm btn-outline-danger py-1 px-2.5 fw-bold d-none">
+                  <i class="bi bi-volume-mute-fill"></i> Mute
+                </button>
+              </div>
+            </div>
+
+            <!-- Chat Stream Box -->
+            <div class="flex-grow-1 p-3 p-sm-4 overflow-y-auto bg-light d-flex flex-column gap-3" id="chatStreamBox">
+              <!-- Messages populated dynamically -->
+            </div>
+
+            <!-- Prompt Quick Suggestion Chips -->
+            <div class="bg-white px-3 py-2 border-top border-bottom d-flex gap-1.5 overflow-x-auto text-nowrap" id="aiPromptChips">
+              <!-- Chips populated dynamically -->
+            </div>
+
+            <!-- Input Box -->
+            <div class="p-3 bg-white">
+              <form onsubmit="handleAiFormSubmit(event)" class="d-flex align-items-center gap-2">
+                <button type="button" id="btnVoiceToggle" onclick="toggleVoiceRecording()" class="btn btn-light border p-2.5 rounded-3 text-secondary" title="Voice Input">
+                  <i class="bi bi-mic-fill fs-5" id="iconMic"></i>
+                </button>
+                <input type="text" id="inputAiQuery" class="form-control rounded-3 py-2.5 px-3 small fw-semibold" placeholder="Ask: 'Aaj kya bik raha hai?' or 'Atta kitna bacha hai?'..." />
+                <button type="submit" id="btnSendAi" class="btn btn-emerald px-4 py-2.5 rounded-3 fw-bold">
+                  <i class="bi bi-send-fill"></i>
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 9: REPORTS & ANALYTICS ================= -->
+    <section id="viewAnalytics" class="d-none">
+      <div class="card-modern p-4 mb-4">
+        <h4 class="fw-black mb-1 text-dark" id="txtAnalyticsTitle">Store Profit & Sales Analytics</h4>
+        <p class="small text-muted mb-4" id="txtAnalyticsSubtitle">Revenue distribution by payment mode, gross profit margins, and peak turnover hours</p>
+
+        <div class="row g-4">
+          <div class="col-12 col-md-4">
+            <div class="border rounded-3 p-3 text-center">
+              <div class="small fw-bold text-muted text-uppercase mb-1">Cash Collections</div>
+              <div class="fs-4 fw-black text-success" id="valAnalyticsCash">₹0</div>
+              <div class="progress mt-2" style="height: 6px;">
+                <div class="progress-bar bg-success" id="barAnalyticsCash" style="width: 0%;"></div>
+              </div>
+              <span class="small text-muted mt-1 d-block" id="pctAnalyticsCash">0% of today's total</span>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="border rounded-3 p-3 text-center">
+              <div class="small fw-bold text-muted text-uppercase mb-1">UPI & Digital QR</div>
+              <div class="fs-4 fw-black text-primary" id="valAnalyticsUpi">₹0</div>
+              <div class="progress mt-2" style="height: 6px;">
+                <div class="progress-bar bg-primary" id="barAnalyticsUpi" style="width: 0%;"></div>
+              </div>
+              <span class="small text-muted mt-1 d-block" id="pctAnalyticsUpi">0% of today's total</span>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="border rounded-3 p-3 text-center">
+              <div class="small fw-bold text-muted text-uppercase mb-1">New Udhaar Given</div>
+              <div class="fs-4 fw-black text-danger" id="valAnalyticsUdhaar">₹0</div>
+              <div class="progress mt-2" style="height: 6px;">
+                <div class="progress-bar bg-danger" id="barAnalyticsUdhaar" style="width: 0%;"></div>
+              </div>
+              <span class="small text-muted mt-1 d-block" id="pctAnalyticsUdhaar">0% of today's total</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MOBILE FIXED BOTTOM NAVIGATION BAR ================= -->
+  <nav class="mobile-bottom-bar d-sm-none fixed-bottom py-1 border-top" id="mobileBottomNav">
+    <div class="d-flex align-items-center justify-content-around" id="mobileNavButtons">
+      <!-- Populated dynamically depending on Merchant vs Customer role -->
+    </div>
+  </nav>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Modal: Demo Flow Guide -->
+  <div class="modal fade" id="demoFlowModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 rounded-4 shadow-lg">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-black small text-uppercase"><i class="bi bi-stars text-warning me-1"></i> Hackathon Demo Flow Walkthrough</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <p class="small text-muted mb-3">Execute these 3 core actions to test the complete Indian retail AI experience:</p>
+          <div class="d-flex flex-column gap-2.5">
+            <button onclick="executeDemoStep('Aaj kya bik raha hai?')" class="btn btn-outline-success text-start p-3 rounded-3" data-bs-dismiss="modal">
+              <div class="d-flex justify-content-between fw-bold small text-dark">
+                <span>1. Sales Analysis</span>
+                <span class="badge bg-success">Step 1</span>
+              </div>
+              <div class="small text-muted">"Aaj kya bik raha hai?" &rarr; Explains fast sellers & combo display.</div>
+            </button>
+            <button onclick="executeDemoStep('Atta kitna bacha hai?')" class="btn btn-outline-warning text-dark text-start p-3 rounded-3" data-bs-dismiss="modal">
+              <div class="d-flex justify-content-between fw-bold small text-dark">
+                <span>2. Inventory Check & Restock</span>
+                <span class="badge bg-warning text-dark">Step 2</span>
+              </div>
+              <div class="small text-muted">"Atta kitna bacha hai?" &rarr; Alerts threshold and creates order proposal.</div>
+            </button>
+            <button onclick="executeDemoStep('Ramesh ka 850 rupaye udhaar hai, reminder bana do.')" class="btn btn-outline-danger text-start p-3 rounded-3" data-bs-dismiss="modal">
+              <div class="d-flex justify-content-between fw-bold small text-dark">
+                <span>3. WhatsApp Khata Reminder</span>
+                <span class="badge bg-danger">Step 3</span>
+              </div>
+              <div class="small text-muted">"Ramesh ka 850 udhaar reminder bana do" &rarr; Generates WhatsApp draft & wa.me link.</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Printable Tax Invoice Receipt -->
+  <div class="modal fade" id="invoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 rounded-4 shadow-lg p-3">
+        <div class="modal-header border-0 pb-0">
+          <h6 class="modal-title fw-bold text-muted small">TAX INVOICE BILL</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-3" id="printableReceipt">
+          <div class="text-center border-bottom pb-3 mb-3">
+            <h5 class="fw-black mb-0">Sharma General Kirana Store</h5>
+            <div class="small text-muted">Shop 14, Pocket B Market, Mayur Vihar, Delhi</div>
+            <div class="small text-muted">Phone: +91 98765 43210 • GSTIN: 07AAAAA0000A1Z5</div>
+            <div class="badge bg-light text-dark border mt-2" id="recInvoiceNo">BILL-1045</div>
+          </div>
+          <div class="table-responsive mb-2">
+            <table class="table table-sm table-borderless small mb-0">
+              <tbody id="recItemsBody"></tbody>
+            </table>
+          </div>
+          <div class="border-top pt-2 mb-3">
+            <div class="d-flex justify-content-between fw-bold"><span>Total Amount:</span><span id="recTotalAmount">₹0</span></div>
+            <div class="d-flex justify-content-between small text-muted"><span>Payment Mode:</span><span id="recPaymentMode">UPI</span></div>
+            <div class="d-flex justify-content-between small text-muted"><span>Date:</span><span id="recDate"></span></div>
+          </div>
+          <div class="text-center small text-muted fst-italic">Dhanyawad! Please visit again. 🙏</div>
+        </div>
+        <div class="modal-footer border-0 pt-0 d-flex gap-2">
+          <button type="button" class="btn btn-sm btn-outline-secondary flex-grow-1" onclick="window.print()"><i class="bi bi-printer me-1"></i>Print</button>
+          <button type="button" class="btn btn-sm btn-success flex-grow-1" onclick="shareBillOnWhatsApp()"><i class="bi bi-whatsapp me-1"></i>WhatsApp Share</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: UPI QR Code -->
+  <div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content border-0 rounded-4 shadow-lg text-center p-3">
+        <div class="modal-header border-0 pb-0">
+          <h6 class="modal-title fw-bold text-muted small w-100">UPI Instant Settlement</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-3">
+          <h5 class="fw-black mb-1" id="qrModalTitle">Pay Sharma Kirana</h5>
+          <div class="fs-3 fw-black text-success mb-3" id="qrModalAmount">₹0</div>
+          <div class="bg-light p-3 rounded-3 border d-inline-block mb-3">
+            <i class="bi bi-qr-code fs-1 text-dark" style="font-size: 8rem !important;"></i>
+          </div>
+          <div class="small font-monospace fw-bold text-muted bg-light p-2 rounded-2" id="qrUpiString">dukaan.sharma@okaxis</div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-emerald w-100 py-2 rounded-3 fw-bold" data-bs-dismiss="modal">Confirm / Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add New Product -->
+  <div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 rounded-4 shadow-lg">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-black small text-uppercase">+ Add New Item to Stock</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form onsubmit="handleAddNewProduct(event)" class="modal-body p-4">
+          <div class="mb-2.5">
+            <label class="form-label small fw-bold">Item Name (English)</label>
+            <input type="text" id="newProdName" class="form-control form-control-sm" required placeholder="e.g. Tata Tea Gold (250g)" />
+          </div>
+          <div class="mb-2.5">
+            <label class="form-label small fw-bold">Item Name (Hindi / स्थानीय नाम)</label>
+            <input type="text" id="newProdNameHindi" class="form-control form-control-sm" placeholder="e.g. टाटा चाय गोल्ड (250g)" />
+          </div>
+          <div class="row g-2 mb-2.5">
+            <div class="col-6">
+              <label class="form-label small fw-bold">Category</label>
+              <select id="newProdCategory" class="form-select form-select-sm">
+                <option value="Grains & Atta">Grains & Atta</option>
+                <option value="Dairy & Eggs">Dairy & Eggs</option>
+                <option value="Oils & Ghee">Oils & Ghee</option>
+                <option value="Spices & Masala">Spices & Masala</option>
+                <option value="Snacks & Biscuits">Snacks & Biscuits</option>
+                <option value="Beverages">Beverages</option>
+                <option value="Cleaning & Household">Cleaning & Household</option>
+                <option value="Personal Care">Personal Care</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold">Unit Type</label>
+              <select id="newProdUnit" class="form-select form-select-sm">
+                <option value="packet">packet</option>
+                <option value="kg">kg</option>
+                <option value="liter">liter</option>
+                <option value="box">box</option>
+                <option value="piece">piece</option>
+              </select>
+            </div>
+          </div>
+          <div class="row g-2 mb-2.5">
+            <div class="col-6">
+              <label class="form-label small fw-bold">Cost Price (खरीद ₹)</label>
+              <input type="number" id="newProdCost" class="form-control form-control-sm" required min="1" value="100" />
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold">Selling Price (बिक्री ₹)</label>
+              <input type="number" id="newProdSelling" class="form-control form-control-sm" required min="1" value="120" />
+            </div>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold">Initial Stock</label>
+              <input type="number" id="newProdStock" class="form-control form-control-sm" required min="1" value="20" />
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold">Min Threshold Alert</label>
+              <input type="number" id="newProdThreshold" class="form-control form-control-sm" required min="1" value="5" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-emerald w-100 py-2.5 rounded-3 fw-bold" data-bs-dismiss="modal">Save to Inventory</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add New Customer -->
+  <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 rounded-4 shadow-lg">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-black small text-uppercase">+ Add Customer to Digital Khata</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form onsubmit="handleAddNewCustomer(event)" class="modal-body p-4">
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Customer Name (ग्राहक का नाम)</label>
+            <input type="text" id="newCustName" class="form-control form-control-sm" required placeholder="e.g. Mukesh Kumar" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Mobile Number (10 Digits)</label>
+            <input type="tel" maxlength="10" id="newCustPhone" class="form-control form-control-sm" required placeholder="9811223344" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Opening Udhaar Balance (₹)</label>
+            <input type="number" id="newCustInitialUdhaar" class="form-control form-control-sm" value="0" min="0" />
+          </div>
+          <div class="mb-4">
+            <label class="form-label small fw-bold">Address / Gali / House No.</label>
+            <input type="text" id="newCustAddress" class="form-control form-control-sm" placeholder="e.g. Makan 14, Gali 2" />
+          </div>
+          <button type="submit" class="btn btn-danger w-100 py-2.5 rounded-3 fw-bold" data-bs-dismiss="modal">Add to Ledger</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Record Khata Payment -->
+  <div class="modal fade" id="recordPaymentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content border-0 rounded-4 shadow-lg">
+        <div class="modal-header border-bottom">
+          <h6 class="modal-title fw-bold small text-success">Jama Karein (Payment Received)</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form onsubmit="handleRecordKhataPayment(event)" class="modal-body p-3">
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Amount (₹)</label>
+            <input type="number" id="paymentAmountInput" class="form-control form-control-lg fw-black text-success" required min="1" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Payment Note / Method</label>
+            <input type="text" id="paymentNoteInput" class="form-control form-control-sm" value="Cash received at counter" />
+          </div>
+          <button type="submit" class="btn btn-success w-100 py-2 fw-bold" data-bs-dismiss="modal">Confirm Jama (-)</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Give Credit Udhaar -->
+  <div class="modal fade" id="giveCreditModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content border-0 rounded-4 shadow-lg">
+        <div class="modal-header border-bottom">
+          <h6 class="modal-title fw-bold small text-danger">Udhaar Likhein (Credit Given)</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form onsubmit="handleRecordKhataCredit(event)" class="modal-body p-3">
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Amount (₹)</label>
+            <input type="number" id="creditAmountInput" class="form-control form-control-lg fw-black text-danger" required min="1" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Items Description</label>
+            <input type="text" id="creditNoteInput" class="form-control form-control-sm" value="Atta 10kg + Fortune Oil" />
+          </div>
+          <button type="submit" class="btn btn-danger w-100 py-2 fw-bold" data-bs-dismiss="modal">Confirm Udhaar (+)</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: New Purchase Order to Wholesale Supplier -->
+  <div class="modal fade" id="newPoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 rounded-4 shadow-lg">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-black small text-uppercase">+ Generate Wholesale Purchase Order</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form onsubmit="handleCreatePurchaseOrder(event)" class="modal-body p-4">
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Select Wholesale Supplier</label>
+            <select id="selectPoSupplier" class="form-select form-select-sm fw-bold">
+              <option value="supp-1">Agrawal Grains & Pulses Wholesale (Krishi Upaj Mandi)</option>
+              <option value="supp-2">Delhi Dairy & Beverage Distributors (Industrial Area)</option>
+              <option value="supp-3">Gupta FMCG & Spices Traders (Khari Baoli)</option>
+              <option value="supp-4">Sharma Packaging & Bags (Okhla)</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Item & Quantity</label>
+            <input type="text" id="inputPoItemDesc" class="form-control form-control-sm" value="Aashirvaad Chakki Atta (10kg) - 20 packets" required />
+          </div>
+          <div class="mb-4">
+            <label class="form-label small fw-bold">Total Estimated Purchase Value (₹)</label>
+            <input type="number" id="inputPoTotalAmount" class="form-control form-control-sm fw-black" value="7700" required />
+          </div>
+          <button type="submit" class="btn btn-primary w-100 py-2.5 rounded-3 fw-bold" data-bs-dismiss="modal">Generate PO & Order via WhatsApp</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  
+  <!-- Modal: Guest Mode Access Restriction -->
+  <div class="modal fade" id="guestRestrictedModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 rounded-4 shadow-lg text-center p-4">
+        <div class="bg-warning-subtle text-warning rounded-circle p-3 d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 64px; height: 64px;">
+          <i class="bi bi-shield-lock-fill fs-2"></i>
+        </div>
+        <h5 class="fw-black text-dark mb-2" id="txtGuestModalTitle">Guest Access Restricted (पहुंच सीमित)</h5>
+        <p class="text-muted small mb-4" id="txtGuestModalBody">
+          You are currently browsing Vyora in <strong>Guest Mode</strong>. To process live POS sales, add product inventory, maintain customer digital khata, and access store profit analytics, please sign in with your Phone Number or Gmail.
+        </p>
+        <div class="d-flex flex-column gap-2">
+          <button type="button" class="btn btn-emerald fw-bold py-2.5 rounded-3 shadow-sm" onclick="navigateTo('login')" data-bs-dismiss="modal">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In with Phone or Gmail
+          </button>
+          <button type="button" class="btn btn-light border py-2.5 rounded-3 text-muted fw-semibold" data-bs-dismiss="modal">
+            Continue Browsing as Guest
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CORE VYORA LOGIC & LOCAL AI ENGINE ================= -->
+  <script>
+    // 1. Clean Store State - ZERO dummy data! Only manually added items!
+    let products = JSON.parse(localStorage.getItem('vyora_products_clean_v1')) || [];
+    let customers = JSON.parse(localStorage.getItem('vyora_customers_clean_v1')) || [];
+    let sales = JSON.parse(localStorage.getItem('vyora_sales_clean_v1')) || [];
+    let suppliers = JSON.parse(localStorage.getItem('vyora_suppliers_clean_v1')) || [];
+
+    const INITIAL_NEARBY = [
+      { id: 'merch-1', storeName: 'Sharma General Kirana Store', category: 'Daily Grocery & Dairy', phone: '+91 98765 43210', rating: 4.8, distanceKm: 0.3, isOpen: true, popularItems: ['Fresh Atta', 'Amul Milk', 'Refined Oil', 'Tata Salt'] },
+      { id: 'merch-2', storeName: 'Verma Provision Store', category: 'Spices, FMCG & Snacks', phone: '+91 98110 99881', rating: 4.6, distanceKm: 1.1, isOpen: true, popularItems: ['MDH Masale', 'Surf Excel', 'Maggi Noodles'] },
+      { id: 'merch-3', storeName: 'Krishna Dairy & Organic Store', category: 'Fresh Dairy, Paneer & Ghee', phone: '+91 98991 22334', rating: 4.9, distanceKm: 2.4, isOpen: true, popularItems: ['Desi Ghee', 'Fresh Paneer', 'Toned Milk'] },
+      { id: 'merch-4', storeName: 'Gupta Super Mart', category: 'Personal Care & Groceries', phone: '+91 98101 55667', rating: 4.5, distanceKm: 3.5, isOpen: false, popularItems: ['Bathing Soap', 'Toothpaste', 'Dry Fruits'] }
+    ];
+    let nearbyStores = INITIAL_NEARBY;
+
+    // 2. User Authentication State (DO NOT auto-login someone!)
+    let currentUser = JSON.parse(localStorage.getItem('vyora_user_clean_v1')) || null;
+    let language = localStorage.getItem('vyora_lang') || 'hinglish';
+    let currentTab = currentUser ? (currentUser.isLoggedIn ? (currentUser.role === 'CLIENT' ? 'nearby' : 'dashboard') : 'nearby') : 'login';
+    let cart = [];
+    let selectedCustomerId = '';
+    let selectedCategory = 'ALL';
+    let selectedPaymentMode = 'CASH';
+    let selectedLoginRoleType = 'MERCHANT';
+    let currentAuthMethod = 'phone';
+    let generatedOtp = '4582';
+    let pendingActionProposal = null;
+    let isSpeaking = false;
+    let recognition = null;
+    let isListening = false;
+
+    // 3. Centralized Translations Dictionary
+    const TRANSLATIONS = {
+      english: {
+        nav_dashboard: 'Dashboard', nav_sales: 'Sales (POS)', nav_inventory: 'Inventory', nav_khata: 'Digital Khata',
+        nav_suppliers: 'Suppliers', nav_nearby: 'Nearby Stores', nav_assistant: 'AI Assistant', nav_analytics: 'Analytics',
+        hero_greeting: 'Namaste Sethji! Store Overview', hero_desc: 'Manage live POS billing, inventory tracking, customer khata, and voice AI Munimji.',
+        today_sales: "Today's Sales", gross_profit: 'Gross Profit', low_stock: 'Low Stock Items', total_udhaar: 'Total Udhaar',
+        pos_title: 'Counter POS Billing', pos_sub: 'Fast billing, item search & cash/UPI/credit modes',
+        inv_title: 'Products & Inventory Stock', khata_title: 'Digital Customer Khata & Udhaar',
+        ai_title: 'DukaanAI Munimji Copilot', ai_sub: 'Speak or type in English, Hindi, or Hinglish'
+      },
+      hindi: {
+        nav_dashboard: 'डैशबोर्ड', nav_sales: 'नयी बिक्री (POS)', nav_inventory: 'स्टॉक / सामान', nav_khata: 'उधार खाता',
+        nav_suppliers: 'सप्लायर्स & थोक', nav_nearby: 'आस-पास की दुकानें', nav_assistant: 'AI मुनीमजी', nav_analytics: 'रिपोर्ट & मुनाफ़ा',
+        hero_greeting: 'नमस्ते सेठजी! आज की दुकान का हाल', hero_desc: 'दुकान की बिक्री, डिजिटल बिलिंग, स्टॉक अलर्ट और AI मुनीमजी की लाइव सहायता।',
+        today_sales: 'आज की कुल बिक्री', gross_profit: 'आज का मुनाफ़ा', low_stock: 'कम स्टॉक वाले सामान', total_udhaar: 'कुल बकाया उधार',
+        pos_title: 'त्वरित काउंटर बिलिंग (POS)', pos_sub: 'तेज़ सामान खोज, बारकोड स्कैनर और कई भुगतान विकल्प',
+        inv_title: 'स्टॉक एवं सामान प्रबंधन', khata_title: 'डिजिटल ग्राहक उधार खाता',
+        ai_title: 'दुकानAI मुनीमजी सहायक', ai_sub: 'हिंदी • हिंग्लिश • इंग्लिश में बोलकर या लिखकर पूछें'
+      },
+      hinglish: {
+        nav_dashboard: 'Dashboard', nav_sales: 'Sales (POS)', nav_inventory: 'Stock / Inventory', nav_khata: 'Udhaar Khata',
+        nav_suppliers: 'Suppliers & Wholesale', nav_nearby: 'Nearby Dukaan & Map', nav_assistant: 'AI Munimji Copilot', nav_analytics: 'Reports & Profit',
+        hero_greeting: 'Namaste Sethji! Aaj Ki Dukaan Ka Haal', hero_desc: 'Dukaan ki live sale, fast POS billing, inventory stock alert aur AI Munimji.',
+        today_sales: 'Aaj Ki Total Sale', gross_profit: 'Aaj Ka Munafa', low_stock: 'Stock Khatam Hone Wala', total_udhaar: 'Market Udhaar Baki',
+        pos_title: 'Fast Counter POS Billing', pos_sub: 'Quick item search, barcode scanner aur Cash/UPI/Udhaar modes',
+        inv_title: 'Stock & Inventory Management', khata_title: 'Digital Customer Udhaar Khata',
+        ai_title: 'DukaanAI Munimji Copilot', ai_sub: 'Hindi, Hinglish ya English mein bolkar ya likhkar poohein'
+      }
+    };
+
+    function t(key) {
+      return TRANSLATIONS[language]?.[key] || TRANSLATIONS['english'][key] || key;
+    }
+
+    // 4. Guest Mode Restriction Checker
+    function checkGuestAccess(actionName) {
+      if (!currentUser || currentUser.isGuest || !currentUser.isLoggedIn) {
+        const m = new bootstrap.Modal(document.getElementById('guestRestrictedModal'));
+        m.show();
+        return false;
+      }
+      return true;
+    }
+
+    // 5. Navigation & View Routing
+    function navigateTo(tabId) {
+      // If unauthenticated and trying to browse restricted area, redirect to login
+      if (!currentUser && tabId !== 'login') {
+        tabId = 'login';
+      }
+
+      currentTab = tabId;
+      const views = ['viewLogin', 'viewDashboard', 'viewSales', 'viewInventory', 'viewKhata', 'viewSuppliers', 'viewNearby', 'viewAssistant', 'viewAnalytics'];
+      views.forEach(v => {
+        const el = document.getElementById(v);
+        if (el) el.classList.add('d-none');
+      });
+
+      const activeViewId = 'view' + tabId.charAt(0).toUpperCase() + tabId.slice(1);
+      const targetEl = document.getElementById(activeViewId);
+      if (targetEl) targetEl.classList.remove('d-none');
+
+      // Update Nav active classes
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('navBtn_' + tabId);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      document.querySelectorAll('.mobile-nav-btn').forEach(btn => btn.classList.remove('active'));
+      const activeMobileBtn = document.getElementById('mobileNavBtn_' + tabId);
+      if (activeMobileBtn) activeMobileBtn.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 6. Language Switching
+    function setLanguage(lang) {
+      language = lang;
+      localStorage.setItem('vyora_lang', lang);
+
+      // Update switcher buttons
+      ['btnLangHinglish', 'btnLangHindi', 'btnLangEn'].forEach(id => {
+        const b = document.getElementById(id);
+        if (b) {
+          b.classList.remove('active', 'text-success');
+          b.classList.add('text-secondary');
+        }
+      });
+
+      if (lang === 'hinglish') document.getElementById('btnLangHinglish')?.classList.add('active', 'text-success');
+      if (lang === 'hindi') document.getElementById('btnLangHindi')?.classList.add('active', 'text-success');
+      if (lang === 'english') document.getElementById('btnLangEn')?.classList.add('active', 'text-success');
+
+      renderApp();
+    }
+
+    // 7. User Roles & Login Handlers
+    function selectLoginRole(role) {
+      selectedLoginRoleType = role;
+      const cardM = document.getElementById('cardRoleMerchant');
+      const cardC = document.getElementById('cardRoleClient');
+      const checkM = document.getElementById('checkIconMerchant');
+      const checkC = document.getElementById('checkIconClient');
+      const grpStore = document.getElementById('groupStoreName');
+
+      if (role === 'MERCHANT') {
+        cardM?.classList.add('border-success', 'bg-success-subtle');
+        cardC?.classList.remove('border-primary', 'bg-primary-subtle');
+        checkM?.classList.remove('d-none');
+        checkC?.classList.add('d-none');
+        grpStore?.classList.remove('d-none');
+        document.getElementById('txtLoginActiveRoleBadge').textContent = 'MERCHANT';
+        document.getElementById('txtLoginActiveRoleBadge').className = 'badge bg-success-subtle text-success-emphasis border px-2.5 py-1 small fw-bold';
+      } else {
+        cardC?.classList.add('border-primary', 'bg-primary-subtle');
+        cardM?.classList.remove('border-success', 'bg-success-subtle');
+        checkC?.classList.remove('d-none');
+        checkM?.classList.add('d-none');
+        grpStore?.classList.add('d-none');
+        document.getElementById('txtLoginActiveRoleBadge').textContent = 'CUSTOMER';
+        document.getElementById('txtLoginActiveRoleBadge').className = 'badge bg-primary-subtle text-primary-emphasis border px-2.5 py-1 small fw-bold';
+      }
+    }
+
+    function setAuthMethod(method) {
+      currentAuthMethod = method;
+      const tabPhone = document.getElementById('tabLoginPhone');
+      const tabGoogle = document.getElementById('tabLoginGoogle');
+      const formPhone = document.getElementById('formLoginPhone');
+      const formGoogle = document.getElementById('formLoginGoogle');
+
+      if (method === 'phone') {
+        tabPhone.classList.add('active');
+        tabPhone.classList.remove('text-dark');
+        tabGoogle.classList.remove('active');
+        tabGoogle.classList.add('text-dark');
+        formPhone.classList.remove('d-none');
+        formGoogle.classList.add('d-none');
+      } else {
+        tabGoogle.classList.add('active');
+        tabGoogle.classList.remove('text-dark');
+        tabPhone.classList.remove('active');
+        tabPhone.classList.add('text-dark');
+        formGoogle.classList.remove('d-none');
+        formPhone.classList.add('d-none');
+      }
+    }
+
+    function sendOtp() {
+      const phoneInput = document.getElementById('inputLoginPhone');
+      const phone = phoneInput.value.trim().replace(/\D/g, '');
+      if (phone.length < 10) {
+        alert('Please enter a valid 10-digit Indian mobile number');
+        phoneInput.focus();
+        return;
+      }
+
+      generatedOtp = '4582';
+      document.getElementById('sectionOtpInput').classList.remove('d-none');
+      document.getElementById('btnSendOtp').classList.add('d-none');
+      document.getElementById('btnVerifyLogin').classList.remove('d-none');
+      document.getElementById('inputLoginOtp').value = generatedOtp;
+
+      alert('SMS Verification sent to +91 ' + phone + '! Demo OTP auto-filled: ' + generatedOtp);
+    }
+
+    function resendOtp() {
+      generatedOtp = '4582';
+      document.getElementById('inputLoginOtp').value = generatedOtp;
+      alert('New OTP sent: ' + generatedOtp);
+    }
+
+    function handlePhoneLoginSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('inputLoginName').value.trim() || 'Ramesh Sharma';
+      const storeName = document.getElementById('inputLoginStoreName')?.value.trim() || (selectedLoginRoleType === 'MERCHANT' ? (name + "'s Kirana Store") : 'Hyperlocal Shopper');
+      const phone = document.getElementById('inputLoginPhone').value.trim();
+      const enteredOtp = document.getElementById('inputLoginOtp').value.trim();
+
+      if (enteredOtp !== generatedOtp && enteredOtp !== '4582') {
+        alert('Invalid OTP. Please enter the demo code 4582.');
+        return;
+      }
+
+      currentUser = {
+        id: 'user-' + Date.now(),
+        name: name,
+        phone: '+91 ' + phone,
+        role: selectedLoginRoleType,
+        isLoggedIn: true,
+        isGuest: false,
+        storeName: storeName,
+        address: 'Mayur Vihar, Delhi'
+      };
+
+      localStorage.setItem('vyora_user_clean_v1', JSON.stringify(currentUser));
+      currentTab = selectedLoginRoleType === 'MERCHANT' ? 'dashboard' : 'nearby';
+      renderApp();
+    }
+
+    function handleGoogleLoginSubmit() {
+      const email = document.getElementById('inputGoogleEmail').value.trim() || 'ramesh.kirana@gmail.com';
+      const name = document.getElementById('inputGoogleName')?.value.trim() || (email.split('@')[0].replace(/[._]/g, ' ').toUpperCase() || 'Google User');
+      const storeName = selectedLoginRoleType === 'MERCHANT' ? (name + "'s Kirana Store") : 'Hyperlocal Shopper';
+
+      currentUser = {
+        id: 'user-google-' + Date.now(),
+        name: name,
+        email: email,
+        phone: '+91 98765 00000',
+        role: selectedLoginRoleType,
+        isLoggedIn: true,
+        isGuest: false,
+        storeName: storeName,
+        address: 'Delhi NCR'
+      };
+
+      localStorage.setItem('vyora_user_clean_v1', JSON.stringify(currentUser));
+      currentTab = selectedLoginRoleType === 'MERCHANT' ? 'dashboard' : 'nearby';
+      renderApp();
+    }
+
+    // Guest Mode: allows browsing, blocks financial/billing operations
+    function loginAsGuest() {
+      currentUser = {
+        id: 'guest',
+        name: 'Guest User (अतिथि)',
+        role: 'GUEST',
+        isLoggedIn: false,
+        isGuest: true,
+        storeName: 'Guest Preview Store'
+      };
+
+      localStorage.setItem('vyora_user_clean_v1', JSON.stringify(currentUser));
+      currentTab = 'nearby';
+      renderApp();
+    }
+
+    function logoutUser() {
+      currentUser = null;
+      localStorage.removeItem('vyora_user_clean_v1');
+      currentTab = 'login';
+      navigateTo('login');
+      renderApp();
+    }
+
+    function loginAsDemo(role) {
+      if (role === 'MERCHANT') {
+        currentUser = {
+          id: 'user-demo-merchant',
+          name: 'Ramesh Sharma',
+          phone: '+91 98765 43210',
+          email: 'ramesh.sharma.kirana@gmail.com',
+          role: 'MERCHANT',
+          isLoggedIn: true,
+          isGuest: false,
+          storeName: 'Sharma General Kirana Store',
+          address: 'Shop 14, Pocket B Market, Mayur Vihar, Delhi'
+        };
+      } else {
+        currentUser = {
+          id: 'user-demo-client',
+          name: 'Priya Verma',
+          phone: '+91 98991 22334',
+          email: 'priya.verma@gmail.com',
+          role: 'CLIENT',
+          isLoggedIn: true,
+          isGuest: false,
+          storeName: 'Mayur Vihar Resident',
+          address: 'Flat 402, Rosewood Apartments, Mayur Vihar, Delhi'
+        };
+      }
+
+      localStorage.setItem('vyora_user_clean_v1', JSON.stringify(currentUser));
+      currentTab = role === 'MERCHANT' ? 'dashboard' : 'nearby';
+      renderApp();
+    }
+
+    function toggleRoleSwitch() {
+      if (!currentUser || currentUser.isGuest) {
+        navigateTo('login');
+        return;
+      }
+      currentUser.role = currentUser.role === 'MERCHANT' ? 'CLIENT' : 'MERCHANT';
+      localStorage.setItem('vyora_user_clean_v1', JSON.stringify(currentUser));
+      currentTab = currentUser.role === 'CLIENT' ? 'nearby' : 'dashboard';
+      renderApp();
+    }
+
+    // 8. POS Billing & Cart Functions
+    function selectPosCategory(cat) {
+      selectedCategory = cat;
+      renderPosCategories();
+      renderPosProducts();
+    }
+
+    function filterPosProducts() {
+      const q = document.getElementById('inputPosSearch').value.toLowerCase().trim();
+      renderPosProducts(q);
+    }
+
+    function addToCart(prodId) {
+      const p = products.find(prod => prod.id === prodId);
+      if (!p) return;
+      if (p.stock <= 0) {
+        alert('Product out of stock!');
+        return;
+      }
+
+      const existing = cart.find(item => item.product.id === prodId);
+      if (existing) {
+        if (existing.quantity >= p.stock) {
+          alert('Maximum available inventory reached (' + p.stock + ' ' + p.unit + ')');
+          return;
+        }
+        existing.quantity += 1;
+      } else {
+        cart.push({ product: p, quantity: 1 });
+      }
+      renderCart();
+    }
+
+    function updateCartItemQty(prodId, delta) {
+      const idx = cart.findIndex(item => item.product.id === prodId);
+      if (idx === -1) return;
+
+      const p = cart[idx].product;
+      const newQty = cart[idx].quantity + delta;
+
+      if (newQty <= 0) {
+        cart.splice(idx, 1);
+      } else if (newQty > p.stock) {
+        alert('Cannot exceed available stock (' + p.stock + ' ' + p.unit + ')');
+      } else {
+        cart[idx].quantity = newQty;
+      }
+      renderCart();
+    }
+
+    function clearCart() {
+      cart = [];
+      renderCart();
+    }
+
+    function changePosPaymentMode(mode) {
+      selectedPaymentMode = mode;
+      document.querySelectorAll('#posPaymentModePills button').forEach(btn => {
+        btn.classList.remove('btn-success', 'btn-primary', 'btn-danger', 'active');
+        btn.classList.add('btn-light');
+      });
+
+      const activeBtn = document.getElementById('btnPayMode_' + mode);
+      if (activeBtn) {
+        activeBtn.classList.remove('btn-light');
+        if (mode === 'CASH') activeBtn.classList.add('btn-success', 'active');
+        if (mode === 'UPI') activeBtn.classList.add('btn-primary', 'active');
+        if (mode === 'UDHAAR') activeBtn.classList.add('btn-danger', 'active');
+      }
+    }
+
+    function processCurrentSale() {
+      // Enforce Guest Mode Protection
+      if (!checkGuestAccess('process live POS billing')) return;
+
+      if (cart.length === 0) {
+        alert('Cart is empty! Add products first.');
+        return;
+      }
+
+      const selCustId = document.getElementById('selectPosCustomer')?.value;
+      let customerName = 'Walk-in Customer';
+      let selectedCust = null;
+
+      if (selCustId) {
+        selectedCust = customers.find(c => c.id === selCustId);
+        if (selectedCust) customerName = selectedCust.name;
+      }
+
+      if (selectedPaymentMode === 'UDHAAR' && !selectedCust) {
+        alert('Please select or add a registered customer to record credit (Udhaar)!');
+        return;
+      }
+
+      const totalAmount = cart.reduce((sum, i) => sum + (i.product.sellingPrice * i.quantity), 0);
+      const totalCost = cart.reduce((sum, i) => sum + ((i.product.purchasePrice || (i.product.sellingPrice * 0.85)) * i.quantity), 0);
+      const profit = totalAmount - totalCost;
+
+      const invoiceNo = 'BILL-' + (1001 + sales.length);
+
+      // Decrement inventory stock
+      cart.forEach(item => {
+        const prod = products.find(p => p.id === item.product.id);
+        if (prod) {
+          prod.stock = Math.max(0, prod.stock - item.quantity);
+        }
+      });
+
+      // If Udhaar, add to customer ledger
+      if (selectedPaymentMode === 'UDHAAR' && selectedCust) {
+        selectedCust.udhaarBalance = (selectedCust.udhaarBalance || 0) + totalAmount;
+        if (!selectedCust.transactions) selectedCust.transactions = [];
+        selectedCust.transactions.unshift({
+          id: 'tx-' + Date.now(),
+          type: 'CREDIT_GIVEN',
+          amount: totalAmount,
+          date: new Date().toLocaleString(),
+          note: 'Counter POS Bill #' + invoiceNo,
+          balanceAfter: selectedCust.udhaarBalance
+        });
+      }
+
+      const newSale = {
+        id: 'sale-' + Date.now(),
+        invoiceNo: invoiceNo,
+        items: cart.map(i => ({
+          productId: i.product.id,
+          productName: i.product.name,
+          quantity: i.quantity,
+          unitPrice: i.product.sellingPrice,
+          subtotal: i.product.sellingPrice * i.quantity
+        })),
+        totalAmount: totalAmount,
+        profit: profit,
+        paymentMode: selectedPaymentMode,
+        customerName: customerName,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      sales.unshift(newSale);
+      saveData();
+
+      // Show receipt modal
+      document.getElementById('recInvoiceNo').textContent = invoiceNo;
+      document.getElementById('recTotalAmount').textContent = '₹' + totalAmount.toLocaleString('en-IN');
+      document.getElementById('recPaymentMode').textContent = selectedPaymentMode;
+      document.getElementById('recDate').textContent = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) + ' ' + newSale.timestamp;
+
+      const recBody = document.getElementById('recItemsBody');
+      recBody.innerHTML = cart.map(i => `
+        <tr>
+          <td>${i.product.name} × ${i.quantity}</td>
+          <td class="text-end fw-bold">₹${i.product.sellingPrice * i.quantity}</td>
+        </tr>
+      `).join('');
+
+      clearCart();
+      renderApp();
+
+      const invoiceModal = new bootstrap.Modal(document.getElementById('invoiceModal'));
+      invoiceModal.show();
+    }
+
+    function shareBillOnWhatsApp() {
+      const inv = document.getElementById('recInvoiceNo').textContent;
+      const amt = document.getElementById('recTotalAmount').textContent;
+      const mode = document.getElementById('recPaymentMode').textContent;
+      const text = `Namaste! 🙏 Vyora Digital Invoice: ${inv}\nTotal Amount: ${amt}\nPayment Mode: ${mode}\nDhanyawad for shopping with us!`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function openQrModal(upiId, amount) {
+      document.getElementById('qrModalTitle').textContent = 'Pay via UPI QR';
+      document.getElementById('qrModalAmount').textContent = '₹' + amount;
+      const m = new bootstrap.Modal(document.getElementById('qrModal'));
+      m.show();
+    }
+
+    // 9. Inventory Management
+    function handleAddNewProduct(e) {
+      e.preventDefault();
+      if (!checkGuestAccess('add inventory products')) return;
+
+      const name = document.getElementById('newProdName').value.trim();
+      const nameHindi = document.getElementById('newProdNameHindi')?.value.trim() || name;
+      const category = document.getElementById('newProdCategory').value;
+      const unit = document.getElementById('newProdUnit').value;
+      const cost = parseFloat(document.getElementById('newProdCost').value) || 0;
+      const selling = parseFloat(document.getElementById('newProdSelling').value) || 0;
+      const stock = parseInt(document.getElementById('newProdStock').value) || 0;
+      const threshold = parseInt(document.getElementById('newProdThreshold').value) || 5;
+
+      const newProduct = {
+        id: 'prod-' + Date.now(),
+        name: name,
+        nameHindi: nameHindi,
+        category: category,
+        purchasePrice: cost,
+        sellingPrice: selling,
+        stock: stock,
+        minStockThreshold: threshold,
+        unit: unit
+      };
+
+      products.unshift(newProduct);
+      saveData();
+      renderApp();
+
+      e.target.reset();
+      alert('Product "' + name + '" successfully added to store inventory!');
+    }
+
+    function quickAdjustStock(prodId, delta) {
+      if (!checkGuestAccess('update inventory stock')) return;
+      const p = products.find(prod => prod.id === prodId);
+      if (!p) return;
+      p.stock = Math.max(0, p.stock + delta);
+      saveData();
+      renderApp();
+    }
+
+    // 10. Digital Khata Management
+    function handleAddNewCustomer(e) {
+      e.preventDefault();
+      if (!checkGuestAccess('add customer to khata')) return;
+
+      const name = document.getElementById('newCustName').value.trim();
+      const phone = document.getElementById('newCustPhone').value.trim();
+      const openingUdhaar = parseFloat(document.getElementById('newCustInitialUdhaar')?.value) || 0;
+      const address = document.getElementById('newCustAddress')?.value.trim() || 'Local Customer';
+
+      const newCust = {
+        id: 'cust-' + Date.now(),
+        name: name,
+        phone: phone,
+        udhaarBalance: openingUdhaar,
+        lastActive: 'Just now',
+        address: address,
+        transactions: openingUdhaar > 0 ? [{
+          id: 'tx-' + Date.now(),
+          type: 'CREDIT_GIVEN',
+          amount: openingUdhaar,
+          date: new Date().toLocaleString(),
+          note: 'Opening Udhaar Balance',
+          balanceAfter: openingUdhaar
+        }] : []
+      };
+
+      customers.unshift(newCust);
+      selectedCustomerId = newCust.id;
+      saveData();
+      renderApp();
+
+      e.target.reset();
+      alert('Customer "' + name + '" added to digital khata ledger!');
+    }
+
+    function handleRecordKhataPayment(e) {
+      e.preventDefault();
+      if (!checkGuestAccess('record customer payment')) return;
+
+      const cust = customers.find(c => c.id === selectedCustomerId);
+      if (!cust) return;
+
+      const amount = parseFloat(document.getElementById('jamaAmount').value) || 0;
+      const note = document.getElementById('jamaNote')?.value.trim() || 'Payment received';
+
+      cust.udhaarBalance = Math.max(0, (cust.udhaarBalance || 0) - amount);
+      if (!cust.transactions) cust.transactions = [];
+      cust.transactions.unshift({
+        id: 'tx-' + Date.now(),
+        type: 'PAYMENT_RECEIVED',
+        amount: amount,
+        date: new Date().toLocaleString(),
+        note: note,
+        balanceAfter: cust.udhaarBalance
+      });
+
+      saveData();
+      renderApp();
+      alert('Payment of ₹' + amount + ' recorded successfully for ' + cust.name + '!');
+    }
+
+    function handleRecordKhataCredit(e) {
+      e.preventDefault();
+      if (!checkGuestAccess('give credit to customer')) return;
+
+      const cust = customers.find(c => c.id === selectedCustomerId);
+      if (!cust) return;
+
+      const amount = parseFloat(document.getElementById('udhaarAmount').value) || 0;
+      const note = document.getElementById('udhaarNote')?.value.trim() || 'Items bought on udhaar';
+
+      cust.udhaarBalance = (cust.udhaarBalance || 0) + amount;
+      if (!cust.transactions) cust.transactions = [];
+      cust.transactions.unshift({
+        id: 'tx-' + Date.now(),
+        type: 'CREDIT_GIVEN',
+        amount: amount,
+        date: new Date().toLocaleString(),
+        note: note,
+        balanceAfter: cust.udhaarBalance
+      });
+
+      saveData();
+      renderApp();
+      alert('Credit of ₹' + amount + ' recorded for ' + cust.name + '!');
+    }
+
+    function sendCustomerWhatsAppReminder(custId) {
+      const cust = customers.find(c => c.id === custId) || customers.find(c => c.id === selectedCustomerId);
+      if (!cust) return;
+      const msg = `Namaste ${cust.name} ji! 🙏 Sharma General Kirana Store se aapka ₹${cust.udhaarBalance} ka purana udhaar balance baki hai. Kripya samay par UPI ya cash dwara bhugtan karein. Dhanyawad!`;
+      window.open(`https://wa.me/91${cust.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function sendQuickRameshReminder() {
+      const ramesh = customers.find(c => c.name.toLowerCase().includes('ramesh')) || customers[0];
+      if (!ramesh) {
+        alert('Please add a customer named Ramesh or record udhaar first.');
+        return;
+      }
+      sendCustomerWhatsAppReminder(ramesh.id);
+    }
+
+    function sendClientWhatsAppSlip() {
+      const text = 'Namaste Sharma Kirana Store! Please confirm my grocery order and share receipt on WhatsApp.';
+      window.open(`https://wa.me/919876543210?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    // 11. Wholesale Suppliers Management
+    function handleCreatePurchaseOrder(e) {
+      e.preventDefault();
+      if (!checkGuestAccess('create purchase orders')) return;
+
+      const name = document.getElementById('poSupplierName')?.value.trim() || 'Wholesale Mandi';
+      const company = document.getElementById('poCompany')?.value.trim() || name;
+      const items = document.getElementById('poItemsList')?.value.trim() || 'Grain stock';
+      const amount = parseFloat(document.getElementById('poAmount')?.value) || 0;
+      const phone = document.getElementById('poSupplierPhone')?.value.trim() || '9811234567';
+
+      const newSupp = {
+        id: 'supp-' + Date.now(),
+        name: name,
+        companyName: company,
+        category: 'Wholesale Grocery',
+        phone: '+91 ' + phone,
+        totalPendingPayment: amount,
+        nextDueDate: 'In 3 days',
+        rating: 4.8
+      };
+
+      suppliers.unshift(newSupp);
+      saveData();
+      renderApp();
+
+      const msg = `Namaste ${name} ji! Purchase Order from ${currentUser.storeName || 'Dukaan'}:\nItems: ${items}\nEstimated Amount: ₹${amount}\nPlease arrange delivery today.`;
+      window.open(`https://wa.me/91${phone.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // 12. Workable AI Copilot NLP Engine (Strictly grounded in live store data!)
+    let chatMessages = [
+      {
+        id: 'msg-welcome',
+        sender: 'ai',
+        text: 'Namaste Sethji! 🙏 Mai hoon DukaanAI Munimji, aapka digital business copilot. Aap bol kar ya likh kar dukaan ki live sale, inventory, aur udhaar ke baare mein pooch sakte hain!',
+        timestamp: '10:00 AM'
+      }
+    ];
+
+    function handleAiFormSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('inputAiQuery');
+      const query = input.value.trim();
+      if (!query) return;
+      input.value = '';
+      sendAiQuery(query);
+    }
+
+    function triggerAiQuickQuery(query) {
+      navigateTo('assistant');
+      sendAiQuery(query);
+    }
+
+    function executeDemoStep(query) {
+      navigateTo('assistant');
+      sendAiQuery(query);
+    }
+
+    function sendAiQuery(query) {
+      chatMessages.push({
+        id: 'msg-' + Date.now(),
+        sender: 'user',
+        text: query,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+      renderChatStream();
+
+      // Dynamic reply computed strictly from live manually added data
+      setTimeout(() => {
+        const response = processLocalAssistantQuery(query);
+        chatMessages.push({
+          id: 'msg-' + (Date.now() + 1),
+          sender: 'ai',
+          text: response.reply,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          actionProposal: response.actionProposal
+        });
+        renderChatStream();
+        speakText(response.reply);
+      }, 300);
+    }
+
+    function processLocalAssistantQuery(query) {
+      const q = query.toLowerCase().trim();
+      const isClient = currentUser && currentUser.role === 'CLIENT';
+      const isHi = language === 'hindi';
+      const isEn = language === 'english';
+
+      const totalRevenue = sales.reduce((sum, s) => sum + s.totalAmount, 0);
+      const totalProfit = sales.reduce((sum, s) => sum + (s.profit || 0), 0);
+      const lowStockItems = products.filter(p => p.stock <= p.minStockThreshold);
+
+      // 1. Customer Udhaar / Reminder query
+      if (q.includes('ramesh') || (q.includes('udhaar') && (q.includes('reminder') || q.includes('whatsapp') || q.includes('तगादा') || q.includes('bana do') || q.includes('create')))) {
+        let matchedCustomer = customers.find(c => q.includes(c.name.toLowerCase()));
+        if (!matchedCustomer && customers.length > 0) matchedCustomer = customers[0];
+
+        if (matchedCustomer) {
+          const amount = matchedCustomer.udhaarBalance || 0;
+          const waMsg = `Namaste ${matchedCustomer.name} ji! 🙏 ${currentUser?.storeName || 'Dukaan'} se aapka ₹${amount} ka purana udhaar baki hai. Kripya samay par UPI ya cash dwara bhugtan karein. Dhanyawad!`;
+          let reply = '';
+          if (isHi) {
+            reply = `जी सेठजी! ${matchedCustomer.name} जी का ₹${amount} का उधार बहीखाते में दर्ज है। मैंने विनम्र व्हाट्सएप भुगतान रिमाइंडर तैयार कर दिया है। पुष्टि करके तुरंत भेज सकते हैं:`;
+          } else if (isEn) {
+            reply = `Hello Sir! ${matchedCustomer.name} has an outstanding credit balance of ₹${amount} in your digital khata. I have generated a polite WhatsApp payment reminder for you. Click below to review and send:`;
+          } else {
+            reply = `Ji Sethji, ${matchedCustomer.name} ji ka ₹${amount} ka udhaar ledger mein darj hai. Maine polite WhatsApp reminder taiyar kar diya hai. Review karke confirm karein:`;
+          }
+          return {
+            reply,
+            actionProposal: {
+              id: 'act-' + Date.now(),
+              type: 'WHATSAPP_REMINDER',
+              title: isHi ? `व्हाट्सएप भुगतान तगादा: ${matchedCustomer.name}` : `WhatsApp Payment Reminder: ${matchedCustomer.name}`,
+              desc: isHi ? `${matchedCustomer.name} जी को ₹${amount} बकाया उधार का संदेश भेजें।` : `Send ₹${amount} pending credit reminder to ${matchedCustomer.name} on WhatsApp.`,
+              waLink: `https://wa.me/91${matchedCustomer.phone}?text=${encodeURIComponent(waMsg)}`
+            }
+          };
+        } else {
+          return {
+            reply: isHi
+              ? 'बहीखाते में अभी कोई ग्राहक दर्ज नहीं है। आप "उधार खाता" टैब से नया ग्राहक जोड़कर उधार दर्ज कर सकते हैं।'
+              : isEn
+              ? 'No registered customers found in your digital khata ledger. Please add a customer in the Digital Khata tab first.'
+              : 'Digital khata ledger mein abhi koi customer darj nahi hai. Aap "Khata" tab se naya customer add karke udhaar record karein.'
+          };
+        }
+      }
+
+      // 2. Atta / Product Stock Query
+      if (q.includes('atta') || q.includes('flour') || q.includes('आटा') || (q.includes('stock') && (q.includes('kitna') || q.includes('how much') || q.includes('level') || q.includes('baki')))) {
+        const atta = products.find(p => p.name.toLowerCase().includes('atta') || p.name.toLowerCase().includes('flour') || p.nameHindi?.includes('आटा')) || products[0];
+        if (atta) {
+          const isLow = atta.stock <= atta.minStockThreshold;
+          let reply = '';
+          if (isHi) {
+            reply = `${atta.name} का अभी सिर्फ **${atta.stock} ${atta.unit}** स्टॉक में बचा है। ${isLow ? '⚠️ यह न्यूनतम सीमा से कम है! रीस्टॉक आर्डर लगाने की सिफारिश की जाती है।' : 'स्टॉक फिलहाल पर्याप्त है।'}`;
+          } else if (isEn) {
+            reply = `${atta.name} currently has **${atta.stock} ${atta.unit}** remaining in inventory. ${isLow ? '⚠️ This is below your reorder threshold (' + atta.minStockThreshold + ')! Generating a restock purchase order is recommended.' : 'Stock level is currently sufficient.'}`;
+          } else {
+            reply = `${atta.name} ka abhi sirf **${atta.stock} ${atta.unit}** bacha hai. ${isLow ? '⚠️ Yeh minimum limit se kam hai! Wholesale distributor ko restock order generate karein?' : 'Stock filhal safe hai.'}`;
+          }
+          return {
+            reply,
+            actionProposal: isLow ? {
+              id: 'act-' + Date.now(),
+              type: 'RESTOCK_ORDER',
+              title: isHi ? `रीस्टॉक अलर्ट: ${atta.name}` : `Restock Alert: ${atta.name}`,
+              desc: `Generate purchase order for ${atta.name} to avoid stockouts.`
+            } : undefined
+          };
+        } else {
+          return {
+            reply: isHi
+              ? 'आपकी दुकान की इन्वेंटरी में अभी कोई आटा या सामान नहीं जोड़ा गया है। आप "+ नया सामान जोड़ें" बटन से नया उत्पाद दर्ज कर सकते हैं।'
+              : isEn
+              ? 'No Atta or matching products have been added to your store inventory yet. Please add items manually via the "+ Add New Item" button in Inventory.'
+              : 'Aapki dukaan ki inventory mein abhi koi Atta ya item add nahi hua hai. Inventory tab se "+ Add New Item" par click karke item add karein.'
+          };
+        }
+      }
+
+      // 3. Top selling / What sold today?
+      if (q.includes('selling') || q.includes('bik raha') || q.includes('top sell') || q.includes('demand') || q.includes('बिक रहा') || q.includes('popular') || q.includes('trending')) {
+        if (sales.length === 0) {
+          return {
+            reply: isHi
+              ? 'आज अभी तक कोई बिक्री दर्ज नहीं हुई है। जैसे ही आप पीओएस काउंटर से बिल काटेंगे, मुनीमजी यहाँ सबसे ज्यादा बिकने वाले सामानों की लाइव सूची दिखाएगा!'
+              : isEn
+              ? 'No sales bills have been generated yet today. Once you process bills at the POS Counter, top-selling analytics will display here!'
+              : 'Aaj abhi tak koi sale record nahi hui hai. POS Counter se pehla bill banayein, Munimji yahan sabse tez bikne wale items aur insights dikhayega!'
+          };
+        }
+
+        const itemCounts = {};
+        sales.forEach(s => {
+          s.items.forEach(i => {
+            itemCounts[i.productName] = (itemCounts[i.productName] || 0) + i.quantity;
+          });
+        });
+
+        const sorted = Object.entries(itemCounts).sort((a, b) => b[1] - a[1]);
+        const topText = sorted.map((item, idx) => `${idx + 1}. **${item[0]}**: ${item[1]} units`).join('\n');
+
+        return {
+          reply: isHi
+            ? `आज दुकान पर सबसे ज्यादा बिकने वाले उत्पाद:\n\n${topText}\n\n💡 *मुनीमजी सुझाव:* इन सामानों का डिस्प्ले काउंटर के पास आगे रखें ताकि ग्राहक आसानी से खरीद सकें!`
+            : isEn
+            ? `Today's highest demand items in your store based on live billing:\n\n${topText}\n\n💡 *Munimji Tip:* Keep high-velocity items prominently displayed near the billing counter for fast turnaround!`
+            : `Aaj live bills ke mutabiq sabse zyada demand in items ki rahi hai:\n\n${topText}\n\n💡 *Munimji Tip:* In fast moving items ka stock check rakhein!`
+        };
+      }
+
+      // 4. Sales Today / Revenue
+      if (q.includes('sale') || q.includes('kamai') || q.includes('बिक्री') || q.includes('revenue') || q.includes('profit') || q.includes('earning')) {
+        if (sales.length === 0) {
+          return {
+            reply: isHi
+              ? 'आज अभी तक कुल **₹0** की बिक्री हुई है (0 बिल)। नया बिल बनाने के लिए पीओएस काउंटर खोलें!'
+              : isEn
+              ? 'Total sales today: **₹0** across 0 bills. Open the POS Counter to cut your first invoice!'
+              : 'Aaj abhi tak kul **₹0** ki sale hui hai (0 bills). POS Counter se naya bill banayein!'
+          };
+        }
+
+        const margin = totalRevenue > 0 ? Math.round((totalProfit / totalRevenue) * 100) : 0;
+        return {
+          reply: isHi
+            ? `आज अभी तक कुल **₹${totalRevenue.toLocaleString('en-IN')}** की बिक्री हुई है (${sales.length} बिलों के साथ):\n\n• सकल मुनाफ़ा (Gross Profit): **₹${totalProfit.toLocaleString('en-IN')}** (${margin}% मार्जिन)\n• कुल बिल: ${sales.length}\n\nदुकान का खाता पूरी तरह संतुलित है! 👍`
+            : isEn
+            ? `Total sales today: **₹${totalRevenue.toLocaleString('en-IN')}** across ${sales.length} bills:\n\n• Gross Profit: **₹${totalProfit.toLocaleString('en-IN')}** (${margin}% margin)\n• Invoices Processed: ${sales.length}\n\nLive store accounting is fully up-to-date! 👍`
+            : `Aaj abhi tak kul **₹${totalRevenue.toLocaleString('en-IN')}** ki sale hui hai (${sales.length} bills ke sath):\n\n• Gross Munafa: **₹${totalProfit.toLocaleString('en-IN')}** (${margin}% margin)\n• Total Bills: ${sales.length}\n\nDukaan ki live sale update hai! 👍`
+        };
+      }
+
+      // 5. Low stock alerts
+      if (q.includes('khatam') || q.includes('low') || q.includes('कम') || q.includes('out of stock') || q.includes('reorder')) {
+        if (lowStockItems.length === 0) {
+          return {
+            reply: isHi
+              ? 'फिलहाल आपकी दुकान में सभी सामान पर्याप्त मात्रा में उपलब्ध हैं। कोई भी सामान न्यूनतम सीमा से नीचे नहीं है! 👍'
+              : isEn
+              ? 'All items in your store currently have healthy stock levels above reorder thresholds! 👍'
+              : 'Filhal sabhi items ka stock safe hai. Koi item threshold se neeche nahi hai! 👍'
+          };
+        }
+
+        const listStr = lowStockItems.map(p => `• **${p.name}**: sirf ${p.stock} ${p.unit} baki (Min: ${p.minStockThreshold})`).join('\n');
+        return {
+          reply: `⚠️ Sethji, in ${lowStockItems.length} items ka stock khatam hone ki kagaar par hai:\n\n${listStr}\n\nKripya distributor order time par lagayein!`
+        };
+      }
+
+      // 6. Supplier Dues
+      if (q.includes('supplier') || q.includes('distributor') || q.includes('सप्लायर') || q.includes('dues') || q.includes('pending') || q.includes('बकाया')) {
+        const totalPending = suppliers.reduce((sum, s) => sum + (s.totalPendingPayment || 0), 0);
+        if (suppliers.length === 0 || totalPending === 0) {
+          return {
+            reply: isHi
+              ? 'सप्लायर्स का कोई भी बकाया भुगतान लंबित नहीं है। सभी खाते साफ़ हैं! 👍'
+              : isEn
+              ? 'No pending dues to wholesale suppliers at this time. All accounts are clear! 👍'
+              : 'Suppliers ka koi pending dues nahi hai. Sabhi khate clear hain! 👍'
+          };
+        }
+
+        return {
+          reply: `Wholesale suppliers ko kul **₹${totalPending.toLocaleString('en-IN')}** ka bhugtan pending hai. Aap 'Suppliers' tab se 1-click UPI clearance record kar sakte hain.`
+        };
+      }
+
+      // 7. Client Queries
+      if (isClient) {
+        if (q.includes('udhaar') || q.includes('khata') || q.includes('mera') || q.includes('balance') || q.includes('owe')) {
+          return {
+            reply: `Namaste ${currentUser.name || 'Grahak'} ji! 🙏 Aapka current udhaar balance **₹0** hai. Aap 'My Khata' passbook tab se transactions track kar sakte hain!`
+          };
+        }
+        return {
+          reply: 'Namaste! 🙏 Aas-paas ki verified kirana dukaanein aur wholesale mandis dekhne ke liye Nearby tab explore karein.'
+        };
+      }
+
+      // Default Friendly Response
+      if (isHi) {
+        return {
+          reply: 'नमस्ते सेठजी! 🙏 मैं हूँ DukaanAI मुनीमजी। आप मुझसे अपनी लाइव दुकान के बारे में पूछ सकते हैं:\n• *"आज क्या बिक रहा है?"*\n• *"आटा कितना बचा है?"*\n• *"आज कितनी बिक्री हुई?"*\n• *"कम स्टॉक वाले सामान?"*'
+        };
+      } else if (isEn) {
+        return {
+          reply: 'Hello Sir! 🙏 I am DukaanAI Munimji Copilot. You can speak or type to ask me:\n• *"What is selling today?"*\n• *"How much Atta is left in stock?"*\n• *"What are today\'s total sales?"*\n• *"Which items are low in stock?"*'
+        };
+      } else {
+        return {
+          reply: 'Namaste Sethji! 🙏 Mai hoon DukaanAI Munimji. Aap mujhse bol kar ya likh kar live store ke baare mein poochhein:\n• *"Aaj kya bik raha hai?"*\n• *"Atta kitna bacha hai?"*\n• *"Aaj kitni sale hui?"*\n• *"Kya stock khatam hone wala hai?"*'
+        };
+      }
+    }
+
+    function confirmActionProposal(link) {
+      if (link) window.open(link, '_blank');
+      else alert('Restock order proposal created! You can view it in the Suppliers tab.');
+    }
+
+    // 13. Voice Speech Recognition & Synthesis
+    function toggleVoiceRecording() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert('Voice speech recognition is not supported in this browser. Please use Google Chrome or Edge.');
+        return;
+      }
+
+      if (isListening) {
+        if (recognition) recognition.stop();
+        isListening = false;
+        document.getElementById('btnVoiceToggle').classList.remove('btn-danger', 'text-white');
+        document.getElementById('iconMic').className = 'bi bi-mic-fill fs-5 text-secondary';
+      } else {
+        recognition = new SpeechRecognition();
+        recognition.lang = language === 'english' ? 'en-IN' : 'hi-IN';
+        recognition.interimResults = false;
+
+        recognition.onstart = () => {
+          isListening = true;
+          document.getElementById('btnVoiceToggle').classList.add('btn-danger', 'text-white');
+          document.getElementById('iconMic').className = 'bi bi-mic-fill fs-5 text-white animate-pulse';
+        };
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          document.getElementById('inputAiQuery').value = transcript;
+          sendAiQuery(transcript);
+        };
+
+        recognition.onend = () => {
+          isListening = false;
+          document.getElementById('btnVoiceToggle').classList.remove('btn-danger', 'text-white');
+          document.getElementById('iconMic').className = 'bi bi-mic-fill fs-5 text-secondary';
+        };
+
+        recognition.start();
+      }
+    }
+
+    function startVoiceInput() {
+      toggleVoiceRecording();
+    }
+
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const clean = text.replace(/[*_#`~]/g, '').replace(/\n+/g, '. ');
+      const utt = new SpeechSynthesisUtterance(clean);
+      utt.rate = 1.0;
+
+      const voices = window.speechSynthesis.getVoices();
+      const match = voices.find(v => v.lang.includes('hi') || v.lang.includes('IN') || v.name.includes('India'));
+      if (match) utt.voice = match;
+
+      utt.onstart = () => {
+        isSpeaking = true;
+        document.getElementById('btnStopSpeech')?.classList.remove('d-none');
+      };
+      utt.onend = () => {
+        isSpeaking = false;
+        document.getElementById('btnStopSpeech')?.classList.add('d-none');
+      };
+      window.speechSynthesis.speak(utt);
+    }
+
+    function stopSpeaking() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      isSpeaking = false;
+      document.getElementById('btnStopSpeech')?.classList.add('d-none');
+    }
+
+    // 14. Real-time DOM Text Updaters for Languages
+    function updateDomLanguageLabels() {
+      const isHi = language === 'hindi';
+      const isEn = language === 'english';
+
+      const setTxt = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+      };
+      const setPlaceholder = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.placeholder = text;
+      };
+
+      setTxt('txtHeroGreeting', isHi ? 'नमस्ते सेठजी! आज की दुकान का हाल' : isEn ? 'Namaste Sethji! Store Overview' : 'Namaste Sethji! Aaj Ki Dukaan Ka Haal');
+      setTxt('txtHeroDesc', isHi ? 'दुकान की बिक्री, डिजिटल बिलिंग, स्टॉक अलर्ट और AI मुनीमजी की लाइव सहायता।' : isEn ? 'Manage live POS billing, inventory tracking, customer khata, and voice AI Munimji.' : 'Dukaan ki live sale, fast POS billing, inventory stock alert aur AI Munimji.');
+      setTxt('txtAskMunimjiBtn', isHi ? 'AI मुनीमजी से पूछें' : isEn ? 'Ask DukaanAI (Voice / Text)' : 'Ask DukaanAI (Voice / Text)');
+
+      setTxt('lblMetricTodaySales', isHi ? 'आज की कुल बिक्री' : isEn ? "Today's Sales" : 'Aaj Ki Total Sale');
+      setTxt('lblMetricGrossProfit', isHi ? 'सकल मुनाफ़ा' : isEn ? 'Gross Profit' : 'Gross Munafa');
+      setTxt('lblMetricLowStock', isHi ? 'कम स्टॉक वाले सामान' : isEn ? 'Low Stock Items' : 'Stock Khatam Hone Wala');
+      setTxt('lblMetricTotalUdhaar', isHi ? 'कुल बकाया उधार' : isEn ? 'Total Udhaar' : 'Market Udhaar Baki');
+
+      setTxt('txtPosCounterTitle', isHi ? 'त्वरित काउंटर बिलिंग (POS)' : isEn ? 'Counter POS Billing' : 'Fast Counter POS Billing');
+      setTxt('txtPosCounterSub', isHi ? 'बिल में जोड़ने के लिए सामान चुनें या बारकोड खोजें' : 'Tap items to add to bill or search by barcode/name');
+      setPlaceholder('inputPosSearch', isHi ? 'सामान खोजें...' : 'Search items...');
+
+      setTxt('txtInventoryTitle', isHi ? 'स्टॉक एवं सामान प्रबंधन' : isEn ? 'Products & Inventory Stock' : 'Stock & Inventory Management');
+      setTxt('txtInventorySubtitle', isHi ? 'लाइव स्टॉक ट्रैकिंग, खरीद मूल्य, मुनाफ़ा मार्जिन और चेतावनी' : 'Real-time stock tracking, cost prices, selling margins & threshold alerts');
+      setTxt('btnAddProductBtn', isHi ? '+ नया सामान जोड़ें' : isEn ? '+ Add New Item' : '+ Naya Item Jodein');
+      setPlaceholder('inputInvSearch', isHi ? 'सामान का नाम या बारकोड खोजें...' : 'Search product name or barcode...');
+
+      setTxt('txtKhataTitle', isHi ? 'डिजिटल ग्राहक उधार खाता' : isEn ? 'Digital Customer Khata & Udhaar' : 'Digital Customer Udhaar Khata');
+      setTxt('txtKhataSubtitle', isHi ? 'पारदर्शी बहीखाता, व्हाट्सएप रिमाइंडर और भुगतान रसीद' : 'Transparent customer ledger, automated WhatsApp reminders, and receipt slips');
+      setTxt('btnAddCustomerBtn', isHi ? '+ नया ग्राहक जोड़ें' : isEn ? '+ Add New Customer' : '+ Naya Grahak Jodein');
+      setTxt('lblTotalMarketCredit', isHi ? 'कुल बाज़ार बकाया उधार' : 'Total Outstanding Market Udhaar');
+
+      setTxt('txtSuppliersTitle', isHi ? 'थोक सप्लायर्स एवं खरीद आदेश' : 'Wholesale Suppliers & Purchase Orders');
+      setTxt('txtNearbyTitle', isHi ? 'आस-पास की किराना दुकानें और अनाज मंडी' : 'Discover Neighborhood Kirana Stores & Mandis');
+      setTxt('txtAiAssistantTitle', isHi ? 'दुकानAI मुनीमजी सहायक' : 'DukaanAI Munimji Copilot');
+      setTxt('txtAiAssistantSub', isHi ? 'हिंदी • हिंग्लिश • इंग्लिश में बोलकर या लिखकर पूछें' : isEn ? 'Speak or type in English, Hindi, or Hinglish' : 'Hindi • Hinglish • English bolkar ya likhkar poochhein');
+      setPlaceholder('inputAiQuery', isHi ? "पूछें: 'आज क्या बिक रहा है?' या 'आटा कितना बचा है?'..." : isEn ? "Ask: 'What is selling today?' or 'How much Atta is left?'..." : "Poohein: 'Aaj kya bik raha hai?' ya 'Atta kitna bacha hai?'...");
+
+      setTxt('txtAnalyticsTitle', isHi ? 'दुकान मुनाफ़ा एवं बिक्री विश्लेषण' : 'Store Profit & Sales Analytics');
+    }
+
+    // 15. Master Render App Function
+    function renderApp() {
+      updateDomLanguageLabels();
+
+      const isUnauth = !currentUser;
+      const isGuest = currentUser && currentUser.isGuest;
+      const isM = currentUser && currentUser.role === 'MERCHANT';
+
+      // Top Navbar User Profile & Role Info
+      const navBadge = document.getElementById('navRoleBadge');
+      const navBadgeText = document.getElementById('navRoleBadgeText');
+      const storeSub = document.getElementById('navStoreSubtitle');
+      const userNameEl = document.getElementById('navUserName');
+      const avatarEl = document.getElementById('navUserAvatar');
+
+      if (isUnauth) {
+        navBadge.className = 'badge bg-light text-muted border badge-pill-custom';
+        navBadgeText.textContent = 'Not Signed In';
+        storeSub.textContent = 'Sign in or continue as guest';
+        userNameEl.textContent = 'Sign In';
+        avatarEl.textContent = '👤';
+      } else if (isGuest) {
+        navBadge.className = 'badge bg-secondary-subtle text-secondary border badge-pill-custom';
+        navBadgeText.textContent = 'Guest Mode';
+        storeSub.textContent = 'Limited Access • Sign In for Full Store';
+        userNameEl.textContent = 'Guest';
+        avatarEl.textContent = '🚶';
+      } else {
+        navBadge.className = isM ? 'badge bg-success-subtle text-success-emphasis border border-success-subtle badge-pill-custom' : 'badge bg-primary-subtle text-primary-emphasis border border-primary-subtle badge-pill-custom';
+        navBadgeText.textContent = isM ? 'Merchant' : 'Customer';
+        storeSub.textContent = currentUser.storeName || (isM ? 'Sharma General Kirana Store' : 'Hyperlocal Shopper');
+        userNameEl.textContent = currentUser.name || 'User';
+        avatarEl.textContent = isM ? '🏪' : '👤';
+      }
+
+      document.getElementById('dropUserName').textContent = currentUser?.name || 'Guest User';
+      document.getElementById('dropUserContact').textContent = currentUser?.phone || currentUser?.email || 'Browse Mode';
+      document.getElementById('dropUserRoleBadge').textContent = isUnauth ? 'UNAUTHENTICATED' : (isGuest ? 'GUEST PREVIEW' : (isM ? 'MERCHANT PORTAL' : 'CUSTOMER PORTAL'));
+      document.getElementById('btnSwitchRoleText').textContent = isM ? 'Switch to Customer' : 'Switch to Merchant';
+      document.getElementById('dropRoleSwitchText').textContent = isM ? 'Switch to Customer (ग्राहक)' : 'Switch to Merchant (दुकानदार)';
+
+      // Desktop Nav Tabs
+      const desktopNav = document.getElementById('desktopNavTabs');
+      if (isUnauth) {
+        desktopNav.innerHTML = `
+          <button onclick="navigateTo('login')" id="navBtn_login" class="nav-tab-btn active"><i class="bi bi-box-arrow-in-right"></i> Sign In / Register</button>
+          <button onclick="loginAsGuest()" id="navBtn_guest" class="nav-tab-btn"><i class="bi bi-person-badge"></i> Browse as Guest</button>
+        `;
+      } else if (isGuest) {
+        desktopNav.innerHTML = `
+          <button onclick="navigateTo('nearby')" id="navBtn_nearby" class="nav-tab-btn ${currentTab === 'nearby' ? 'active' : ''}"><i class="bi bi-geo-alt"></i> Nearby Stores</button>
+          <button onclick="navigateTo('sales')" id="navBtn_sales" class="nav-tab-btn ${currentTab === 'sales' ? 'active' : ''}"><i class="bi bi-cart3"></i> POS Billing (Preview)</button>
+          <button onclick="navigateTo('inventory')" id="navBtn_inventory" class="nav-tab-btn ${currentTab === 'inventory' ? 'active' : ''}"><i class="bi bi-box-seam"></i> Inventory (View Only)</button>
+          <button onclick="checkGuestAccess('khata')" class="nav-tab-btn text-muted"><i class="bi bi-lock-fill text-warning"></i> Customer Khata 🔒</button>
+          <button onclick="checkGuestAccess('suppliers')" class="nav-tab-btn text-muted"><i class="bi bi-lock-fill text-warning"></i> Suppliers 🔒</button>
+          <button onclick="navigateTo('assistant')" id="navBtn_assistant" class="nav-tab-btn ${currentTab === 'assistant' ? 'active' : ''}"><i class="bi bi-robot text-purple"></i> AI Copilot</button>
+          <button onclick="navigateTo('login')" class="btn btn-sm btn-emerald fw-bold ms-auto my-1 px-3 py-1 rounded-3"><i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Unlock</button>
+        `;
+      } else if (isM) {
+        desktopNav.innerHTML = `
+          <button onclick="navigateTo('dashboard')" id="navBtn_dashboard" class="nav-tab-btn ${currentTab === 'dashboard' ? 'active' : ''}"><i class="bi bi-speedometer2"></i> ${t('nav_dashboard')}</button>
+          <button onclick="navigateTo('sales')" id="navBtn_sales" class="nav-tab-btn ${currentTab === 'sales' ? 'active' : ''}"><i class="bi bi-cart3"></i> ${t('nav_sales')} <span class="badge bg-success badge-pill-custom ms-1 d-none" id="cartBadgeNav">0</span></button>
+          <button onclick="navigateTo('inventory')" id="navBtn_inventory" class="nav-tab-btn ${currentTab === 'inventory' ? 'active' : ''}"><i class="bi bi-box-seam"></i> ${t('nav_inventory')}</button>
+          <button onclick="navigateTo('khata')" id="navBtn_khata" class="nav-tab-btn ${currentTab === 'khata' ? 'active' : ''}"><i class="bi bi-book"></i> ${t('nav_khata')}</button>
+          <button onclick="navigateTo('suppliers')" id="navBtn_suppliers" class="nav-tab-btn ${currentTab === 'suppliers' ? 'active' : ''}"><i class="bi bi-truck"></i> ${t('nav_suppliers')}</button>
+          <button onclick="navigateTo('nearby')" id="navBtn_nearby" class="nav-tab-btn ${currentTab === 'nearby' ? 'active' : ''}"><i class="bi bi-geo-alt"></i> ${t('nav_nearby')}</button>
+          <button onclick="navigateTo('assistant')" id="navBtn_assistant" class="nav-tab-btn ${currentTab === 'assistant' ? 'active' : ''}"><i class="bi bi-robot text-purple"></i> ${t('nav_assistant')}</button>
+          <button onclick="navigateTo('analytics')" id="navBtn_analytics" class="nav-tab-btn ${currentTab === 'analytics' ? 'active' : ''}"><i class="bi bi-bar-chart"></i> ${t('nav_analytics')}</button>
+        `;
+      } else {
+        desktopNav.innerHTML = `
+          <button onclick="navigateTo('nearby')" id="navBtn_nearby" class="nav-tab-btn ${currentTab === 'nearby' ? 'active' : ''}"><i class="bi bi-geo-alt"></i> Nearby Kirana Stores</button>
+          <button onclick="navigateTo('khata')" id="navBtn_khata" class="nav-tab-btn ${currentTab === 'khata' ? 'active' : ''}"><i class="bi bi-journal-bookmark"></i> My Udhaar Passbook</button>
+          <button onclick="navigateTo('assistant')" id="navBtn_assistant" class="nav-tab-btn ${currentTab === 'assistant' ? 'active' : ''}"><i class="bi bi-robot"></i> AI Shopping Mitra</button>
+          <button onclick="navigateTo('login')" id="navBtn_login" class="nav-tab-btn ${currentTab === 'login' ? 'active' : ''}"><i class="bi bi-person"></i> My Account / Switch</button>
+        `;
+      }
+
+      // Mobile Bottom Bar
+      const mobileNav = document.getElementById('mobileNavButtons');
+      if (isUnauth) {
+        mobileNav.innerHTML = `
+          <button onclick="navigateTo('login')" class="mobile-nav-btn active"><i class="bi bi-box-arrow-in-right fs-5"></i><span class="small">Sign In</span></button>
+          <button onclick="loginAsGuest()" class="mobile-nav-btn"><i class="bi bi-person-badge fs-5"></i><span class="small">Guest</span></button>
+        `;
+      } else if (isGuest) {
+        mobileNav.innerHTML = `
+          <button onclick="navigateTo('nearby')" id="mobileNavBtn_nearby" class="mobile-nav-btn ${currentTab === 'nearby' ? 'active' : ''}"><i class="bi bi-geo-alt fs-5"></i><span class="small">Stores</span></button>
+          <button onclick="navigateTo('sales')" id="mobileNavBtn_sales" class="mobile-nav-btn ${currentTab === 'sales' ? 'active' : ''}"><i class="bi bi-cart3 fs-5"></i><span class="small">POS</span></button>
+          <button onclick="navigateTo('assistant')" id="mobileNavBtn_assistant" class="elevated-ai-btn shadow-md"><i class="bi bi-robot"></i></button>
+          <button onclick="navigateTo('login')" class="mobile-nav-btn text-success"><i class="bi bi-box-arrow-in-right fs-5"></i><span class="small">Sign In</span></button>
+        `;
+      } else if (isM) {
+        mobileNav.innerHTML = `
+          <button onclick="navigateTo('dashboard')" id="mobileNavBtn_dashboard" class="mobile-nav-btn ${currentTab === 'dashboard' ? 'active' : ''}"><i class="bi bi-speedometer2 fs-5"></i><span class="small">Home</span></button>
+          <button onclick="navigateTo('sales')" id="mobileNavBtn_sales" class="mobile-nav-btn ${currentTab === 'sales' ? 'active' : ''}"><i class="bi bi-cart3 fs-5"></i><span class="small">POS</span></button>
+          <button onclick="navigateTo('assistant')" id="mobileNavBtn_assistant" class="elevated-ai-btn shadow-md"><i class="bi bi-robot"></i></button>
+          <button onclick="navigateTo('inventory')" id="mobileNavBtn_inventory" class="mobile-nav-btn ${currentTab === 'inventory' ? 'active' : ''}"><i class="bi bi-box-seam fs-5"></i><span class="small">Stock</span></button>
+          <button onclick="navigateTo('khata')" id="mobileNavBtn_khata" class="mobile-nav-btn ${currentTab === 'khata' ? 'active' : ''}"><i class="bi bi-book fs-5"></i><span class="small">Khata</span></button>
+        `;
+      } else {
+        mobileNav.innerHTML = `
+          <button onclick="navigateTo('nearby')" id="mobileNavBtn_nearby" class="mobile-nav-btn ${currentTab === 'nearby' ? 'active' : ''}"><i class="bi bi-geo-alt fs-5"></i><span class="small">Stores</span></button>
+          <button onclick="navigateTo('assistant')" id="mobileNavBtn_assistant" class="elevated-ai-btn shadow-md"><i class="bi bi-robot"></i></button>
+          <button onclick="navigateTo('khata')" id="mobileNavBtn_khata" class="mobile-nav-btn ${currentTab === 'khata' ? 'active' : ''}"><i class="bi bi-journal-check fs-5"></i><span class="small">Passbook</span></button>
+          <button onclick="navigateTo('login')" id="mobileNavBtn_login" class="mobile-nav-btn ${currentTab === 'login' ? 'active' : ''}"><i class="bi bi-person fs-5"></i><span class="small">Account</span></button>
+        `;
+      }
+
+      // Dynamic calculation of live store insights strictly from manually entered data
+      const todayRevenue = sales.reduce((sum, s) => sum + s.totalAmount, 0);
+      const todayProfit = sales.reduce((sum, s) => sum + (s.profit || 0), 0);
+      const margin = todayRevenue > 0 ? Math.round((todayProfit / todayRevenue) * 100) : 0;
+      const lowStockCount = products.filter(p => p.stock <= p.minStockThreshold).length;
+      const totalUdhaar = customers.reduce((sum, c) => sum + (c.udhaarBalance || 0), 0);
+      const totalSupplierPending = suppliers.reduce((sum, s) => sum + (s.totalPendingPayment || 0), 0);
+
+      document.getElementById('statTodayRevenue').textContent = '₹' + todayRevenue.toLocaleString('en-IN');
+      document.getElementById('statSalesCountText').textContent = sales.length + (sales.length === 1 ? ' bill cut today' : ' bills cut today');
+      document.getElementById('statTodayProfit').textContent = '₹' + todayProfit.toLocaleString('en-IN');
+      document.getElementById('statProfitMarginText').textContent = 'Margin: ' + margin + '%';
+      document.getElementById('statLowStockCount').textContent = lowStockCount;
+      document.getElementById('statTotalUdhaar').textContent = '₹' + totalUdhaar.toLocaleString('en-IN');
+      document.getElementById('statSupplierTotalPending').textContent = '₹' + totalSupplierPending.toLocaleString('en-IN');
+      document.getElementById('lblKhataTotalUdhaarVal').textContent = '₹' + totalUdhaar.toLocaleString('en-IN');
+      document.getElementById('lblKhataDebtorsSummary').textContent = customers.filter(c => c.udhaarBalance > 0).length + ' customers currently have pending credits';
+
+      // Live Analytics progress breakdown
+      const cashTotal = sales.filter(s => s.paymentMode === 'CASH').reduce((sum, s) => sum + s.totalAmount, 0);
+      const upiTotal = sales.filter(s => s.paymentMode === 'UPI').reduce((sum, s) => sum + s.totalAmount, 0);
+      const udhaarTotal = sales.filter(s => s.paymentMode === 'UDHAAR').reduce((sum, s) => sum + s.totalAmount, 0);
+
+      const cashPct = todayRevenue > 0 ? Math.round((cashTotal / todayRevenue) * 100) : 0;
+      const upiPct = todayRevenue > 0 ? Math.round((upiTotal / todayRevenue) * 100) : 0;
+      const udhaarPct = todayRevenue > 0 ? Math.round((udhaarTotal / todayRevenue) * 100) : 0;
+
+      document.getElementById('valAnalyticsCash').textContent = '₹' + cashTotal.toLocaleString('en-IN');
+      document.getElementById('valAnalyticsUpi').textContent = '₹' + upiTotal.toLocaleString('en-IN');
+      document.getElementById('valAnalyticsUdhaar').textContent = '₹' + udhaarTotal.toLocaleString('en-IN');
+
+      const pCash = document.getElementById('pctAnalyticsCash');
+      const pUpi = document.getElementById('pctAnalyticsUpi');
+      const pUdh = document.getElementById('pctAnalyticsUdhaar');
+      if (pCash) pCash.textContent = cashPct + "% of today's total";
+      if (pUpi) pUpi.textContent = upiPct + "% of today's total";
+      if (pUdh) pUdh.textContent = udhaarPct + "% of today's total";
+
+      const bCash = document.getElementById('barAnalyticsCash');
+      const bUpi = document.getElementById('barAnalyticsUpi');
+      const bUdh = document.getElementById('barAnalyticsUdhaar');
+      if (bCash) bCash.style.width = cashPct + '%';
+      if (bUpi) bUpi.style.width = upiPct + '%';
+      if (bUdh) bUdh.style.width = udhaarPct + '%';
+
+      // Khata container toggle for Merchant vs Client
+      if (isM) {
+        document.getElementById('merchantKhataContainer')?.classList.remove('d-none');
+        document.getElementById('clientKhataContainer')?.classList.add('d-none');
+        renderKhataMerchantView();
+      } else {
+        document.getElementById('merchantKhataContainer')?.classList.add('d-none');
+        document.getElementById('clientKhataContainer')?.classList.remove('d-none');
+        renderKhataClientView();
+      }
+
+      // Render individual subviews
+      renderDashboardRecentSales();
+      renderPosCategories();
+      renderPosProducts();
+      renderCart();
+      renderInventoryTable();
+      renderSuppliers();
+      renderNearbyStores();
+      renderChatStream();
+      renderAiPromptChips();
+
+      navigateTo(currentTab);
+    }
+
+    function renderDashboardRecentSales() {
+      const tbody = document.getElementById('tblRecentSalesBody');
+      if (sales.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="text-center py-4 text-muted">
+              <i class="bi bi-receipt fs-3 d-block mb-1 text-secondary opacity-50"></i>
+              <div class="small fw-semibold">No sales invoices recorded yet today</div>
+              <div class="text-muted" style="font-size: 0.72rem;">Start billing in the POS Counter to track real-time sales and profits.</div>
+            </td>
+          </tr>
+        `;
+      } else {
+        tbody.innerHTML = sales.slice(0, 5).map(s => `
+          <tr>
+            <td class="fw-bold font-monospace text-success">${s.invoiceNo}</td>
+            <td>${s.items.map(i => i.productName).join(', ')}</td>
+            <td><span class="badge ${s.paymentMode === 'CASH' ? 'bg-success' : s.paymentMode === 'UPI' ? 'bg-primary' : 'bg-danger'}">${s.paymentMode}</span></td>
+            <td class="fw-black">₹${s.totalAmount}</td>
+            <td class="text-muted">${s.timestamp}</td>
+          </tr>
+        `).join('');
+      }
+
+      const lowList = document.getElementById('listLowStockAlerts');
+      const lowItems = products.filter(p => p.stock <= p.minStockThreshold);
+
+      if (lowItems.length === 0) {
+        lowList.innerHTML = `
+          <div class="p-3 bg-light rounded-3 text-center text-muted small">
+            <i class="bi bi-check-circle-fill text-success fs-4 d-block mb-1"></i>
+            ${products.length === 0 ? 'No products added yet. Add items in Inventory.' : 'All stock levels are currently healthy!'}
+          </div>
+        `;
+      } else {
+        lowList.innerHTML = lowItems.slice(0, 4).map(p => `
+          <div class="p-2.5 bg-danger-subtle rounded-3 d-flex justify-content-between align-items-center">
+            <div>
+              <div class="fw-bold text-danger-emphasis small">${p.name}</div>
+              <div class="small text-muted">Stock: <strong class="text-danger">${p.stock} ${p.unit}</strong> (Min: ${p.minStockThreshold})</div>
+            </div>
+            <button onclick="quickAdjustStock('${p.id}', 10)" class="btn btn-sm btn-outline-danger fw-bold py-1.5 px-2.5 rounded-2 d-inline-flex align-items-center gap-1">Restock +10</button>
+          </div>
+        `).join('');
+      }
+    }
+
+    function renderPosCategories() {
+      const categorySet = new Set(['ALL']);
+      products.forEach(p => { if (p.category) categorySet.add(p.category); });
+      const categories = Array.from(categorySet);
+
+      const cont = document.getElementById('posCategoryPills');
+      cont.innerHTML = categories.map(cat => `
+        <button onclick="selectPosCategory('${cat}')" class="btn btn-sm ${selectedCategory === cat ? 'btn-success fw-bold' : 'btn-light border'} rounded-pill text-nowrap px-3 py-1.5">
+          ${cat}
+        </button>
+      `).join('');
+    }
+
+    function renderPosProducts(searchQuery = '') {
+      const grid = document.getElementById('posProductsGrid');
+      let filtered = products;
+
+      if (selectedCategory !== 'ALL') {
+        filtered = filtered.filter(p => p.category === selectedCategory);
+      }
+      if (searchQuery) {
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(searchQuery) || (p.nameHindi && p.nameHindi.toLowerCase().includes(searchQuery)));
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-12 text-center py-5">
+            <div class="bg-light rounded-circle p-3 d-inline-flex align-items-center justify-content-center mb-2" style="width: 56px; height: 56px;">
+              <i class="bi bi-box-seam fs-3 text-muted"></i>
+            </div>
+            <h6 class="fw-bold text-dark mb-1">No products available</h6>
+            <p class="text-muted small mb-3">Add items in the Inventory tab to start billing at the POS counter.</p>
+            <button type="button" onclick="navigateTo('inventory')" class="btn btn-sm btn-emerald fw-bold rounded-3 px-3.5 py-2">
+              <i class="bi bi-plus-circle me-1"></i> + Add New Item
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => `
+        <div class="col-6 col-sm-4">
+          <div class="card-modern p-3 h-100 d-flex flex-column justify-content-between cursor-pointer" onclick="addToCart('${p.id}')">
+            <div>
+              <span class="badge bg-light text-muted border mb-1" style="font-size: 0.65rem;">${p.category || 'General'}</span>
+              <div class="fw-bold text-dark small leading-tight mb-1">${p.name}</div>
+              <div class="small text-muted" style="font-size: 0.72rem;">${p.nameHindi || ''}</div>
+            </div>
+            <div class="pt-2 border-top mt-2 d-flex align-items-center justify-content-between">
+              <div>
+                <span class="fw-black text-dark fs-6">₹${p.sellingPrice}</span>
+                <span class="text-muted small">/${p.unit || 'unit'}</span>
+              </div>
+              <button class="btn btn-sm btn-emerald py-1.5 px-3 rounded-2 fw-bold d-flex align-items-center gap-1">
+                <i class="bi bi-plus-lg"></i> <span>Add</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderCart() {
+      const list = document.getElementById('cartItemsList');
+      const totalAmountEl = document.getElementById('lblCartTotalAmount');
+      const profitAmountEl = document.getElementById('lblCartProfitAmount');
+      const badgeNav = document.getElementById('cartBadgeNav');
+      const subtitle = document.getElementById('cartItemCountSubtitle');
+
+      const count = cart.reduce((sum, i) => sum + i.quantity, 0);
+      subtitle.textContent = count + ' items in bill';
+
+      if (badgeNav) {
+        badgeNav.textContent = count;
+        if (count > 0) badgeNav.classList.remove('d-none');
+        else badgeNav.classList.add('d-none');
+      }
+
+      if (cart.length === 0) {
+        list.innerHTML = `
+          <div class="text-center text-muted py-4 small" id="txtCartEmptyMsg">
+            <i class="bi bi-cart3 fs-2 text-muted d-block mb-1 opacity-50"></i>
+            Cart is empty. Tap products on the left to add to bill.
+          </div>
+        `;
+        totalAmountEl.textContent = '₹0';
+        profitAmountEl.textContent = '+₹0';
+      } else {
+        let total = 0;
+        let profit = 0;
+
+        list.innerHTML = cart.map(item => {
+          const itemTotal = item.product.sellingPrice * item.quantity;
+          const cost = item.product.purchasePrice || (item.product.sellingPrice * 0.85);
+          const itemProfit = (item.product.sellingPrice - cost) * item.quantity;
+          total += itemTotal;
+          profit += itemProfit;
+
+          return `
+            <div class="d-flex align-items-center justify-content-between p-2 border-bottom">
+              <div class="text-truncate me-2" style="max-width: 150px;">
+                <div class="fw-bold text-dark small text-truncate">${item.product.name}</div>
+                <div class="text-muted" style="font-size: 0.7rem;">₹${item.product.sellingPrice} × ${item.quantity} ${item.product.unit}</div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <div class="btn-group btn-group-sm border rounded-2" role="group">
+                  <button onclick="updateCartItemQty('${item.product.id}', -1)" class="btn btn-sm btn-light border-0 fw-bold d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 1rem; line-height: 1; padding: 0;">-</button>
+                  <span class="px-2.5 py-1 small fw-bold d-inline-flex align-items-center">${item.quantity}</span>
+                  <button onclick="updateCartItemQty('${item.product.id}', 1)" class="btn btn-sm btn-light border-0 fw-bold d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 1rem; line-height: 1; padding: 0;">+</button>
+                </div>
+                <div class="fw-black text-dark small" style="min-width: 50px; text-align: right;">₹${itemTotal}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        totalAmountEl.textContent = '₹' + total;
+        profitAmountEl.textContent = '+₹' + Math.round(profit);
+      }
+
+      const sel = document.getElementById('selectPosCustomer');
+      if (customers.length === 0) {
+        sel.innerHTML = '<option value="">Walk-in Customer (नकद ग्राहक - No Udhaar)</option>';
+      } else {
+        sel.innerHTML = '<option value="">Walk-in Customer (नकद ग्राहक)</option>' + customers.map(c => `<option value="${c.id}">${c.name} (${c.phone}) - Udhaar: ₹${c.udhaarBalance || 0}</option>`).join('');
+      }
+    }
+
+    function renderInventoryTable() {
+      const tbody = document.getElementById('tblInventoryBody');
+      const search = document.getElementById('inputInvSearch')?.value.toLowerCase() || '';
+      const cat = document.getElementById('selectInvCategory')?.value || 'ALL';
+      const stockF = document.getElementById('selectInvStockFilter')?.value || 'ALL';
+
+      let filtered = products;
+      if (search) filtered = filtered.filter(p => p.name.toLowerCase().includes(search) || (p.nameHindi && p.nameHindi.toLowerCase().includes(search)));
+      if (cat !== 'ALL') filtered = filtered.filter(p => p.category === cat);
+      if (stockF === 'LOW') filtered = filtered.filter(p => p.stock <= p.minStockThreshold);
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center py-5">
+              <div class="bg-success-subtle text-success rounded-circle p-3 d-inline-flex align-items-center justify-content-center mb-2" style="width: 56px; height: 56px;">
+                <i class="bi bi-box-seam fs-3"></i>
+              </div>
+              <h6 class="fw-bold text-dark mb-1">No Products in Inventory</h6>
+              <p class="text-muted small mb-3">Your inventory is currently empty. Click "+ Add New Item" above to add your first grocery product.</p>
+              <button type="button" class="btn btn-emerald fw-bold rounded-3 px-3.5 py-2" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                <i class="bi bi-plus-circle me-1"></i> + Add First Product
+              </button>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p => {
+        const isLow = p.stock <= p.minStockThreshold;
+        const margin = p.sellingPrice > 0 ? Math.round(((p.sellingPrice - (p.purchasePrice || (p.sellingPrice * 0.85))) / p.sellingPrice) * 100) : 0;
+        return `
+          <tr>
+            <td>
+              <div class="fw-bold text-dark small">${p.name}</div>
+              <div class="small text-muted">${p.nameHindi || ''}</div>
+            </td>
+            <td><span class="badge bg-light text-muted border">${p.category || 'General'}</span></td>
+            <td>₹${p.purchasePrice || 0}</td>
+            <td class="fw-bold text-dark">₹${p.sellingPrice}</td>
+            <td><span class="badge bg-success-subtle text-success">${margin}%</span></td>
+            <td>
+              <span class="badge ${isLow ? 'bg-danger text-white' : 'bg-success-subtle text-success'}">
+                ${p.stock} ${p.unit || 'unit'} ${isLow ? '(Low)' : ''}
+              </span>
+            </td>
+            <td>
+              <div class="btn-group btn-group-sm">
+                <button onclick="quickAdjustStock('${p.id}', 10)" class="btn btn-sm btn-outline-success fw-bold py-1.5 px-2.5 rounded-2 d-inline-flex align-items-center gap-1">+10</button>
+                <button onclick="quickAdjustStock('${p.id}', -1)" class="btn btn-sm btn-outline-danger fw-bold py-1.5 px-2.5 rounded-2 ms-1 d-inline-flex align-items-center gap-1">-1</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // 16. Khata Views
+    function renderKhataMerchantView() {
+      renderCustomersList();
+    }
+
+    function renderCustomersList() {
+      const listEl = document.getElementById('khataCustomersList');
+      const search = document.getElementById('inputCustomerSearch')?.value.toLowerCase() || '';
+      let filtered = customers;
+      if (search) {
+        filtered = filtered.filter(c => c.name.toLowerCase().includes(search) || c.phone.includes(search));
+      }
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `
+          <div class="text-center py-4 text-muted">
+            <i class="bi bi-people fs-2 d-block mb-1 text-secondary opacity-50"></i>
+            <div class="small fw-semibold">No customers in Khata yet</div>
+            <div class="text-muted mb-3" style="font-size: 0.72rem;">Add customers to track udhaar balances and send WhatsApp payment slips.</div>
+            <button class="btn btn-sm btn-danger fw-bold rounded-3 px-3 py-1.5" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+              + Add First Customer
+            </button>
+          </div>
+        `;
+        document.getElementById('khataSelectedCustomerCard')?.classList.add('d-none');
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(c => `
+        <div class="p-3 border rounded-3 mb-2 cursor-pointer transition ${selectedCustomerId === c.id ? 'bg-danger-subtle border-danger' : 'bg-white'}" onclick="selectActiveCustomer('${c.id}')">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="fw-bold text-dark small">${c.name}</div>
+              <div class="small text-muted">${c.phone}</div>
+            </div>
+            <div class="text-end">
+              <div class="fw-black ${c.udhaarBalance > 0 ? 'text-danger' : 'text-success'}">₹${c.udhaarBalance || 0}</div>
+              <div class="text-muted" style="font-size: 0.68rem;">${c.udhaarBalance > 0 ? 'Udhaar Baki' : 'All Clear'}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      renderActiveCustomerLedger();
+    }
+
+    function selectActiveCustomer(id) {
+      selectedCustomerId = id;
+      renderCustomersList();
+    }
+
+    function renderActiveCustomerLedger() {
+      const card = document.getElementById('khataSelectedCustomerCard');
+      if (!card) return;
+
+      const cust = customers.find(c => c.id === selectedCustomerId) || customers[0];
+      if (!cust) {
+        card.classList.add('d-none');
+        return;
+      }
+      card.classList.remove('d-none');
+
+      document.getElementById('khataActiveCustName').textContent = cust.name;
+      document.getElementById('khataActiveCustPhone').textContent = cust.phone;
+      document.getElementById('khataActiveCustBalance').textContent = '₹' + (cust.udhaarBalance || 0);
+
+      const txTable = document.getElementById('tblCustomerTransactionsBody');
+      const txs = cust.transactions || [];
+
+      if (txs.length === 0) {
+        txTable.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted small">No transactions recorded yet.</td></tr>';
+      } else {
+        txTable.innerHTML = txs.map(t => `
+          <tr>
+            <td class="small text-muted">${t.date}</td>
+            <td class="small">${t.note || ''}</td>
+            <td><span class="badge ${t.type === 'CREDIT_GIVEN' ? 'bg-danger' : 'bg-success'}">${t.type === 'CREDIT_GIVEN' ? 'Udhaar (+)' : 'Jama (-)'}</span></td>
+            <td class="fw-bold ${t.type === 'CREDIT_GIVEN' ? 'text-danger' : 'text-success'}">₹${t.amount}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function renderKhataClientView() {
+      const clientBalanceEl = document.getElementById('clientPassbookBalance');
+      if (clientBalanceEl) clientBalanceEl.textContent = '₹0';
+    }
+
+    // 17. Suppliers & Nearby Store Cards
+    function renderSuppliers() {
+      const grid = document.getElementById('suppliersGrid');
+      if (suppliers.length === 0) {
+        grid.innerHTML = `
+          <div class="col-12 text-center py-5">
+            <div class="bg-primary-subtle text-primary rounded-circle p-3 d-inline-flex align-items-center justify-content-center mb-2" style="width: 56px; height: 56px;">
+              <i class="bi bi-truck fs-3"></i>
+            </div>
+            <h6 class="fw-bold text-dark mb-1">No Wholesale Suppliers Added</h6>
+            <p class="text-muted small mb-3">Add wholesale distributors, grain mandis, and FMCG dealers to manage upcoming dues and orders.</p>
+            <button type="button" class="btn btn-primary fw-bold rounded-3 px-3.5 py-2" data-bs-toggle="modal" data-bs-target="#newPoModal">
+              <i class="bi bi-plus-circle me-1"></i> + Add Supplier / Create PO
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = suppliers.map(s => `
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="card-modern p-3 h-100 d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge bg-light text-dark border">${s.category || 'Wholesale'}</span>
+                <span class="badge bg-warning-subtle text-warning-emphasis">★ ${s.rating || '4.8'}</span>
+              </div>
+              <h6 class="fw-bold text-dark mb-0">${s.companyName}</h6>
+              <div class="small text-muted mb-2">Contact: ${s.name}</div>
+            </div>
+            <div class="pt-2 border-top mt-2">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small text-muted">Pending Due:</span>
+                <span class="fw-black text-danger">₹${s.totalPendingPayment || 0}</span>
+              </div>
+              <div class="d-flex gap-1.5">
+                <button onclick="window.open('https://wa.me/${s.phone.replace(/\\D/g, '')}?text=Namaste!%20Sharma%20Kirana%20Store%20se%20order%20status%20poochna%20hai.', '_blank')" class="btn btn-sm btn-outline-success fw-bold rounded-3 flex-grow-1 py-1.5 px-2">
+                  <i class="bi bi-whatsapp"></i> WhatsApp
+                </button>
+                <button onclick="openQrModal('supp.upi@axis', ${s.totalPendingPayment || 1000})" class="btn btn-sm btn-primary fw-bold rounded-3 py-1.5 px-3">Pay</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderNearbyStores() {
+      const list = document.getElementById('nearbyStoresList');
+      list.innerHTML = nearbyStores.map(store => `
+        <div class="card-modern p-3">
+          <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <h6 class="fw-bold text-dark mb-0">${store.storeName}</h6>
+                <span class="badge ${store.isOpen ? 'bg-success' : 'bg-secondary'}">${store.isOpen ? 'Open Now' : 'Closed'}</span>
+                <span class="badge bg-light text-dark border">★ ${store.rating}</span>
+              </div>
+              <div class="small text-muted mb-1">${store.category} • 📍 ${store.distanceKm} km away</div>
+              <div class="d-flex flex-wrap gap-1">
+                ${store.popularItems.map(item => `<span class="badge bg-light text-muted border" style="font-size: 0.65rem;">${item}</span>`).join('')}
+              </div>
+            </div>
+            <div class="d-flex gap-2 align-self-start align-self-sm-center">
+              <button onclick="window.open('tel:${store.phone}', '_self')" class="btn btn-sm btn-outline-secondary fw-bold rounded-3 py-1.5 px-3">
+                <i class="bi bi-telephone-fill me-1"></i> Call
+              </button>
+              <button onclick="window.open('https://wa.me/${store.phone.replace(/\\D/g, '')}?text=Namaste!%20Aapki%20dukaan%20Vyora%20par%20dekhi.%20Grocery%20items%20order%20karne%20hain.', '_blank')" class="btn btn-sm btn-success fw-bold rounded-3 py-1.5 px-3">
+                <i class="bi bi-whatsapp me-1"></i> Order
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderChatStream() {
+      const box = document.getElementById('chatStreamBox');
+      box.innerHTML = chatMessages.map(msg => {
+        const isAi = msg.sender === 'ai';
+        return `
+          <div class="d-flex flex-column ${isAi ? 'align-items-start' : 'align-items-end'} mb-2">
+            <div class="p-3 rounded-4 ${isAi ? 'bg-white shadow-xs border text-dark' : 'bg-success text-white'} position-relative" style="max-width: 85%;">
+              <div class="d-flex align-items-center justify-content-between mb-1 gap-2">
+                <span class="fw-black ${isAi ? 'text-success' : 'text-white-50'}" style="font-size: 0.75rem;">
+                  ${isAi ? '🤖 DukaanAI Munimji' : '👤 You'}
+                </span>
+                <span class="text-muted" style="font-size: 0.68rem; opacity: 0.8;">${msg.timestamp}</span>
+              </div>
+              <div class="small leading-relaxed" style="white-space: pre-line;">${msg.text}</div>
+              ${isAi ? `
+                <div class="mt-2 pt-2 border-top d-flex gap-2 justify-content-end">
+                  <button onclick="speakText('${msg.text.replace(/'/g, "\\'")}')" class="btn btn-sm btn-link text-muted p-0" title="Listen aloud"><i class="bi bi-volume-up fs-6"></i></button>
+                  <button onclick="navigator.clipboard.writeText('${msg.text.replace(/'/g, "\\'")}'); alert('Copied to clipboard!');" class="btn btn-sm btn-link text-muted p-0" title="Copy text"><i class="bi bi-copy fs-6"></i></button>
+                </div>
+              ` : ''}
+            </div>
+
+            ${msg.actionProposal ? `
+              <div class="card-modern p-3 mt-2 border-success bg-success-subtle shadow-xs" style="max-width: 85%;">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <span class="badge bg-success text-white">Action Proposal</span>
+                  <strong class="small text-success-emphasis">${msg.actionProposal.title}</strong>
+                </div>
+                <div class="small text-muted mb-2">${msg.actionProposal.desc}</div>
+                <button onclick="confirmActionProposal('${msg.actionProposal.waLink || ''}')" class="btn btn-sm btn-success fw-bold rounded-3 px-3.5 py-2 text-nowrap">
+                  ${msg.actionProposal.type === 'WHATSAPP_REMINDER' ? '<i class="bi bi-whatsapp me-1"></i> Send WhatsApp Reminder' : '<i class="bi bi-truck me-1"></i> Order from Wholesale Mandi'}
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function renderAiPromptChips() {
+      const isM = currentUser && currentUser.role === 'MERCHANT';
+      const isHi = language === 'hindi';
+      const isEn = language === 'english';
+
+      let chips = [];
+      if (isM) {
+        if (isHi) {
+          chips = [
+            'आज क्या बिक रहा है?', 'आटा कितना बचा है?', 'रमेश का 850 रुपये उधार रिमाइंडर बना दो',
+            'आज कितनी बिक्री हुई?', 'कम स्टॉक वाले सामान?', 'सप्लायर्स का कितना बकाया है?'
+          ];
+        } else if (isEn) {
+          chips = [
+            'What is selling today?', 'How much Atta is left in stock?', 'Ramesh owes 850, create reminder',
+            'What are today sales?', 'Which items are low in stock?', 'How much do I owe suppliers?'
+          ];
+        } else {
+          chips = [
+            'Aaj kya bik raha hai?', 'Atta kitna bacha hai?', 'Ramesh ka 850 rupaye udhaar hai, reminder bana do.',
+            'Aaj kitni sale hui?', 'Kya stock khatam hone wala hai?', 'Suppliers ka kitna payment baki hai?'
+          ];
+        }
+      } else {
+        if (isHi) {
+          chips = [
+            'आस-पास कौन सी किराना दुकानें खुली हैं?', 'आशीर्वाद आटा और दूध का दाम क्या है?',
+            'मेरा कितना उधार बाकी है?', 'शर्मा किराना स्टोर से 10kg आटा आर्डर करना है'
+          ];
+        } else if (isEn) {
+          chips = [
+            'Which kirana stores are open nearby?', 'What is the price of Atta and milk?',
+            'How much do I owe?', 'Order 10kg Atta from Sharma Kirana Store'
+          ];
+        } else {
+          chips = [
+            'Aas-paas konsi kirana dukaanein khuli hain?', 'Aashirvaad Atta aur doodh ka price kya hai?',
+            'Mera kitna udhaar baki hai?', 'Sharma Kirana Store se 10kg Atta order karna hai'
+          ];
+        }
+      }
+
+      const cont = document.getElementById('aiPromptChips');
+      if (cont) {
+        cont.innerHTML = chips.map(chip => `
+          <button onclick="triggerAiQuickQuery('${chip.replace(/'/g, "\\'")}')" class="btn btn-sm btn-light border fw-semibold text-dark rounded-pill px-3 py-1.5 text-nowrap">
+            "${chip}"
+          </button>
+        `).join('');
+      }
+    }
+
+    function selectNearbyMerchant(id) {
+      alert('Selected location: ' + id + '. You can call or order directly via WhatsApp.');
+    }
+
+    function saveData() {
+      localStorage.setItem('vyora_products_clean_v1', JSON.stringify(products));
+      localStorage.setItem('vyora_customers_clean_v1', JSON.stringify(customers));
+      localStorage.setItem('vyora_sales_clean_v1', JSON.stringify(sales));
+      localStorage.setItem('vyora_suppliers_clean_v1', JSON.stringify(suppliers));
+    }
+
+    // Initialize application on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      selectLoginRole(currentUser ? (currentUser.role || 'MERCHANT') : 'MERCHANT');
+      renderApp();
+    });
+  </script>
+</body>
+</html>
