@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "npx serve .",
-    "build": "echo 'Vyora HTML static deployment ready'",
-    "start": "npx serve .",
-    "preview": "npx serve ."
+    "build": "node build.cjs",
+    "start": "npx serve dist",
+    "preview": "npx serve dist"
   },
   "dependencies": {},
   "devDependencies": {}
